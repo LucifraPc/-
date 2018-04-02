@@ -40,21 +40,57 @@ export const constantRouterMap = [
   {
     path: '/customer-management',
     component: Layout,
-    redirect: '/customer-management/table',
+    redirect: '/customer-management',
     name: '客户管理',
     meta: { title: '客户管理', icon: 'example' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
+        path: '1',
+        name: '新客户',
         component: () => import('@/views/CustomerManagement/table'),
-        meta: { title: 'Table', icon: 'table' }
+        meta: { title: '新客户', icon: 'tree' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/CustomerManagement/tree'),
-        meta: { title: 'Tree', icon: 'tree' }
+        path: '2',
+        name: '高意向',
+        component: () => import('@/views/CustomerManagement/table'),
+        meta: { title: '高意向', icon: 'tree' }
+      },
+      {
+        path: '3',
+        name: '可跟进',
+        component: () => import('@/views/CustomerManagement/table'),
+        meta: { title: '可跟进', icon: 'tree' }
+      },
+      {
+        path: '4',
+        name: '成交客户',
+        component: () => import('@/views/CustomerManagement/table'),
+        meta: { title: '成交客户', icon: 'tree' }
+      },
+      {
+        path: '5',
+        name: '即将到期客户',
+        component: () => import('@/views/CustomerManagement/table'),
+        meta: { title: '即将到期客户', icon: 'tree' }
+      },
+      {
+        path: '6',
+        name: '到期未续费',
+        component: () => import('@/views/CustomerManagement/table'),
+        meta: { title: '到期未续费', icon: 'tree' }
+      },
+      {
+        path: '7',
+        name: '无法接通',
+        component: () => import('@/views/CustomerManagement/table'),
+        meta: { title: '无法接通', icon: 'tree' }
+      },
+      {
+        path: '8',
+        name: '无效线索',
+        component: () => import('@/views/CustomerManagement/table'),
+        meta: { title: '无效线索', icon: 'tree' }
       }
     ]
   },
