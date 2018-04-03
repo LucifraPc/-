@@ -42,7 +42,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/customer-management/newCustomer',
     name: '客户管理',
-    meta: { title: '客户管理', icon: 'example' },
+    meta: { title: '客户管理', icon: 'cm' },
     children: [
       {
         path: 'newCustomer',
@@ -139,7 +139,7 @@ export const constantRouterMap = [
         path: 'index',
         name: '系统设置',
         component: () => import('@/views/SystemSettings/404'),
-        meta: { title: '系统设置', icon: 'form' }
+        meta: { title: '系统设置', icon: 'setting' }
       }
     ]
   },
@@ -151,7 +151,7 @@ export const constantRouterMap = [
         path: 'index',
         name: '数据报表',
         component: () => import('@/views/DataReport/index'),
-        meta: { title: '数据报表', icon: 'form' }
+        meta: { title: '数据报表', icon: 'datareport' }
       }
     ]
   },
