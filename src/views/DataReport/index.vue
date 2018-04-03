@@ -1,85 +1,87 @@
 <template>
-  <div class="app-container">
-    <el-form ref="form" :model="form" label-width="120px">
-      <el-form-item label="Activity name">
-        <el-input v-model="form.name"></el-input>
-      </el-form-item>
-      <el-form-item label="Activity zone">
-        <el-select v-model="form.region" placeholder="please select your zone">
-          <el-option label="Zone one" value="shanghai"></el-option>
-          <el-option label="Zone two" value="beijing"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="Activity time">
-        <el-col :span="11">
-          <el-date-picker type="date" placeholder="Pick a date" v-model="form.date1" style="width: 100%;"></el-date-picker>
-        </el-col>
-        <el-col class="line" :span="2">-</el-col>
-        <el-col :span="11">
-          <el-time-picker type="fixed-time" placeholder="Pick a time" v-model="form.date2" style="width: 100%;"></el-time-picker>
-        </el-col>
-      </el-form-item>
-      <el-form-item label="Instant delivery">
-        <el-switch v-model="form.delivery"></el-switch>
-      </el-form-item>
-      <el-form-item label="Activity type">
-        <el-checkbox-group v-model="form.type">
-          <el-checkbox label="Online activities" name="type"></el-checkbox>
-          <el-checkbox label="Promotion activities" name="type"></el-checkbox>
-          <el-checkbox label="Offline activities" name="type"></el-checkbox>
-          <el-checkbox label="Simple brand exposure" name="type"></el-checkbox>
-        </el-checkbox-group>
-      </el-form-item>
-      <el-form-item label="Resources">
-        <el-radio-group v-model="form.resource">
-          <el-radio label="Sponsor"></el-radio>
-          <el-radio label="Venue"></el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="Activity form">
-        <el-input type="textarea" v-model="form.desc"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">Create</el-button>
-        <el-button @click="onCancel">Cancel</el-button>
-      </el-form-item>
-    </el-form>
-  </div>
+    <div class="app-container cursorterBox">
+      <el-row>
+          <breadcrumb style="float:left;line-height:40px"></breadcrumb>
+          <!-- 时间条件 -->
+          <el-col :span="24">
+              <div class="inline">
+                  <span class="demonstration">下单时间：</span>
+                  <el-date-picker
+                    v-model="orderTime"
+                    type="daterange"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期">
+                  </el-date-picker>
+              </div>
+              <div class="inline"><el-button type="primary">查询</el-button></div>
+              <div class="inline" style="float: right;margin-top:30px;margin-right:20px"><i class="el-icon-sold-out" style="color:green"></i><span class="operationBtn">导出Excel</span></div>
+          </el-col>
+
+      </el-row>
+
+      <!-- 表格数据 -->
+      <el-table
+          ref="multipleTable"
+          :data="tableData3"
+          tooltip-effect="dark"
+          style="width: 100%">
+          <el-table-column label="客户姓名" prop="passpost"  show-overflow-tooltip></el-table-column>
+          <el-table-column prop="name" label="员工姓名" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="phone" label="订单号"  show-overflow-tooltip></el-table-column>
+          <el-table-column label="下单时间"  show-overflow-tooltip>
+            <template slot-scope="scope">{{ scope.row.registrationTime }}</template>
+          </el-table-column>
+          <el-table-column prop="userSerive" label="订单金额"  show-overflow-tooltip></el-table-column>
+          <el-table-column prop="status" label="购买内容"  show-overflow-tooltip></el-table-column>
+          <el-table-column label="支付方式" prop="followUpTime" show-overflow-tooltip></el-table-column>
+      </el-table>
+    </div>
 </template>
 
 <script>
+import Breadcrumb from '@/components/Breadcrumb'
+
 export default {
+  components: {
+      Breadcrumb
+  },
   data() {
     return {
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      }
+      orderTime:'',
+
+      // 列表数据
+      tableData3: [{
+          id:11,
+          name: '胡彦斌',
+          passpost: 'Hulk111',
+          phone: '15721143333',
+          QQ: '12345698745',
+          registrationTime: '2017-10-01 12：00',
+          userSerive: '辛元忠',
+          status: '无人接听',
+          followUpTime: '2017-10-01 12：00',
+        },{
+          id:22,
+          name: '胡彦斌',
+          passpost: 'Hulk111',
+          phone: '15721143333',
+          QQ: '12345698745',
+          registrationTime: '2017-10-01 12：00',
+          userSerive: '辛元忠',
+          status: '无人接听',
+          followUpTime: '2017-10-01 12：00',
+        }],
     }
   },
+  created() {
+  },
+  watch: {
+  },
   methods: {
-    onSubmit() {
-      this.$message('submit!')
-    },
-    onCancel() {
-      this.$message({
-        message: 'cancel!',
-        type: 'warning'
-      })
-    }
   }
 }
 </script>
 
-<style scoped>
-.line{
-  text-align: center;
-}
-</style>
+
 

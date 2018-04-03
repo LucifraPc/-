@@ -138,7 +138,7 @@ export const constantRouterMap = [
       {
         path: 'index',
         name: '系统设置',
-        component: () => import('@/views/SystemSettings/404'),
+        component: () => import('@/views/SystemSettings/index'),
         meta: { title: '系统设置', icon: 'setting' }
       }
     ]
