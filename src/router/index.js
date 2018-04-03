@@ -40,54 +40,54 @@ export const constantRouterMap = [
   {
     path: '/customer-management',
     component: Layout,
-    redirect: '/customer-management',
+    redirect: '/customer-management/newCustomer',
     name: '客户管理',
     meta: { title: '客户管理', icon: 'example' },
     children: [
       {
-        path: '1',
+        path: 'newCustomer',
         name: '新客户',
         component: () => import('@/views/CustomerManagement/table'),
         meta: { title: '新客户', icon: 'tree' }
       },
       {
-        path: '2',
+        path: 'highIntention',
         name: '高意向',
         component: () => import('@/views/CustomerManagement/table'),
         meta: { title: '高意向', icon: 'tree' }
       },
       {
-        path: '3',
+        path: 'followUp',
         name: '可跟进',
         component: () => import('@/views/CustomerManagement/table'),
         meta: { title: '可跟进', icon: 'tree' }
       },
       {
-        path: '4',
+        path: 'tradingCustomers',
         name: '成交客户',
         component: () => import('@/views/CustomerManagement/table'),
         meta: { title: '成交客户', icon: 'tree' }
       },
       {
-        path: '5',
+        path: 'expiringClient',
         name: '即将到期客户',
         component: () => import('@/views/CustomerManagement/table'),
         meta: { title: '即将到期客户', icon: 'tree' }
       },
       {
-        path: '6',
+        path: 'overdueFee',
         name: '到期未续费',
         component: () => import('@/views/CustomerManagement/table'),
         meta: { title: '到期未续费', icon: 'tree' }
       },
       {
-        path: '7',
+        path: 'unableToConnect',
         name: '无法接通',
         component: () => import('@/views/CustomerManagement/table'),
         meta: { title: '无法接通', icon: 'tree' }
       },
       {
-        path: '8',
+        path: 'invalidClues',
         name: '无效线索',
         component: () => import('@/views/CustomerManagement/table'),
         meta: { title: '无效线索', icon: 'tree' }

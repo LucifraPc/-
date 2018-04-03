@@ -21,7 +21,7 @@
     },
     watch: {
       $route() {
-        this.getBreadcrumb()
+        this.getBreadcrumb();
       }
     },
     methods: {
