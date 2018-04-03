@@ -1,6 +1,8 @@
 <template>
     <div class="app-container cursorterBox">
       <el-row>
+
+          <!-- 搜索 -->
           <el-col :span="24">
               <breadcrumb style="float:left;line-height:40px"></breadcrumb>
               <el-checkbox-group v-model="searchAll" style="float:right;margin-left:20px;margin-top:10px">
@@ -12,6 +14,8 @@
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
               </el-input>
           </el-col>
+
+          <!-- 时间条件 -->
           <el-col :span="24">
               <div class="inline">
                   <span class="demonstration">注册时间：</span>
@@ -34,7 +38,9 @@
                   </el-date-picker>
               </div>
           </el-col>
-          <el-col :span="24">
+
+          <!-- 成交客户  即将到期  到期未续费显示此时间 -->
+          <el-col :span="24" v-if="$route.name=='成交客户' || $route.name=='即将到期客户' || $route.name=='到期未续费' ">
               <div class="inline">
                   <span class="demonstration">成交时间：</span>
                   <el-date-picker
@@ -58,6 +64,7 @@
           </el-col>
       </el-row>
 
+      <!-- 表格数据 -->
       <el-table
           ref="multipleTable"
           :data="tableData3"
@@ -86,7 +93,7 @@
           </el-table-column>
       </el-table>
 
-
+      <!-- 全选操作之后显示 -->
       <div class="selectionBox" v-show="multipleSelection.length>0">
           <i class="el-icon-info" style="color:#1890FF"></i>
           <span style="color:#666;margin-left:5px">已选择 {{multipleSelection.length}} 项</span>
@@ -94,6 +101,7 @@
           <span class="operationBtn" @click="assignedAllCustomerBtn">客户指派</span>
       </div>
 
+      <!-- 分页 -->
       <div class="block" style="text-align: center;margin-top:20px">
           <el-pagination
             @size-change="handleSizeChange"
@@ -106,6 +114,13 @@
           </el-pagination>
       </div>
 
+      <!-- 详情弹窗 -->
+      <transition name="slide-fade">
+          <div id="slide-window" v-if="showDetialBox">
+              <i class="el-icon-close" @click="showDetialBox=!showDetialBox"></i>
+          </div>
+      </transition>
+      
     </div>
 </template>
 
@@ -128,6 +143,8 @@ export default {
       followUpTime:'',//最新跟进时间
       ClinchAdealTime:'',//成交时间
       expireTime:'',//到期时间
+
+      showDetialBox:false,
 
       // 列表数据
       tableData3: [{
@@ -174,6 +191,15 @@ export default {
     // 检测路由切换页面
     $route() {
       console.log(this.$route.name)
+      this.registrationTime='';
+      this.followUpTime='';
+      this.ClinchAdealTime='';
+      this.expireTime='';
+      this.searcKey='';
+      this.searchAll=false;
+      this.multipleSelection=[];
+      this.currentPage=1;
+      this.showDetialBox=false;
     },
     // 检测搜索全部操作
     'searchAll'(){
@@ -212,10 +238,29 @@ export default {
     // 单个删除操作
     delCustomerBtn(id){
       console.log(id)
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     },
     // 单个跟进操作
     followCustomerBtn(id){
-      console.log(id)
+      console.log(id);
+      this.showDetialBox=!this.showDetialBox;
+      // $("#slide-window").animate({width:'600px',opacity:'1'});
+      // $("#slide-window").animate({width:'0px',opacity:'0'});
     },
     // 批量删除操作
     delAllCustomerBtn(){
@@ -228,6 +273,3 @@ export default {
   }
 }
 </script>
-<style>
-  
-</style>

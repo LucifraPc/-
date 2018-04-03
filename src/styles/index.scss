@@ -128,3 +128,53 @@ a:hover {
           color:#363636;
       }
   } 
+
+
+
+//详情弹窗样式
+  #slide-window{
+      position: fixed!important;
+      top: 50px;
+      bottom: 6px;
+      background: #f5f8fc;
+      width:650px;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      z-index: 200;
+      box-shadow: -7px 0 10px #edeff2;
+      overflow: hidden;
+      overflow-y: auto;
+      .el-icon-close{
+          font-size:22px;
+          color:#000;
+          float:right;
+          margin:10px;
+          cursor: pointer;
+          &:hover{
+              color:#1890FF;
+          }
+      }
+  }
+  .slide-fade-enter-active {
+    transition: all .3s ease;
+    width:650px;
+    opacity: 1;
+  }
+  .slide-fade-leave-active {
+    transition: all .3s cubic-bezier(1.0, 0.5, 0.5, 1.0);
+    width:0px;
+    opacity:0;
+  }
+  .slide-fade-enter, .slide-fade-leave-to
+  /* .slide-fade-leave-active for below version 2.1.8 */ {
+    transform: translateX(10px);
+    opacity: 0;
+  }
+
+
+  .label-top{
+      .el-form-item__label{
+          margin-top:14px;
+      }
+  }
