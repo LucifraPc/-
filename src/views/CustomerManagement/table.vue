@@ -3,8 +3,8 @@
       <el-row>
           <el-col :span="24">
               <breadcrumb style="float:left;line-height:40px"></breadcrumb>
-              <el-checkbox-group v-model="type" style="float:right;margin-left:20px;margin-top:10px">
-                  <el-checkbox label="搜全部" name="type" ></el-checkbox>
+              <el-checkbox-group v-model="searchAll" style="float:right;margin-left:20px;margin-top:10px">
+                  <el-checkbox label="搜全部" name="searchAll" ></el-checkbox>
               </el-checkbox-group>
               <el-input class="search-input-box"
                 placeholder="请输入内容"
@@ -55,17 +55,17 @@
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <span>删除</span><span>跟进</span>
+              <span class="operationBtn" @click="delCustomerBtn(scope.row.id)">删除</span><span class="operationBtn" @click="followCustomerBtn(scope.row.id)">跟进</span>
             </template>
           </el-table-column>
       </el-table>
 
 
-      <div class="selectionBox">
+      <div class="selectionBox" v-show="multipleSelection.length>0">
           <i class="el-icon-info" style="color:#1890FF"></i>
           <span style="color:#666;margin-left:5px">已选择 {{multipleSelection.length}} 项</span>
-          <span>批量删除</span>
-          <span>客户指派</span>
+          <span class="operationBtn" @click="delAllCustomerBtn">批量删除</span>
+          <span class="operationBtn" @click="assignedAllCustomerBtn">客户指派</span>
       </div>
 
       <div class="block" style="text-align: center;margin-top:20px">
@@ -95,12 +95,15 @@ export default {
     return {
       list: null,
       listLoading: true,
-      searcKey:'',
-      type:false,
-      registrationTime:'',
-      followUpTime:'',
 
+      searcKey:'',//搜索值
+      searchAll:false,//搜索全部
+      registrationTime:'',//注册时间
+      followUpTime:'',//最新跟进时间
+
+      // 列表数据
       tableData3: [{
+          id:11,
           name: '胡彦斌',
           passpost: 'Hulk111',
           phone: '15721143333',
@@ -110,6 +113,7 @@ export default {
           status: '无人接听',
           followUpTime: '2017-10-01 12：00',
         },{
+          id:22,
           name: '胡彦斌',
           passpost: 'Hulk111',
           phone: '15721143333',
@@ -119,7 +123,8 @@ export default {
           status: '无人接听',
           followUpTime: '2017-10-01 12：00',
         }],
-      multipleSelection: [],
+
+      multipleSelection: [], //选中数据
 
       currentPage:1,
     }
@@ -138,11 +143,13 @@ export default {
     this.fetchData()
   },
   watch: {
+    // 检测路由切换页面
     $route() {
       console.log(this.$route.name)
     },
-    'type'(){
-       console.log(this.type)
+    // 检测搜索全部操作
+    'searchAll'(){
+       console.log(this.searchAll)
     }
   },
   methods: {
@@ -162,17 +169,33 @@ export default {
           this.$refs.multipleTable.clearSelection();
         }
     },
+
+    // 列表选择操作
     handleSelectionChange(val) {
       this.multipleSelection = val;
-      if(val.length>0){
-
-      }
     },
+    // 分页操作
     handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
+      console.log(`每页 ${val} 条`);
+    },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+    },
+    // 单个删除操作
+    delCustomerBtn(id){
+      console.log(id)
+    },
+    // 单个跟进操作
+    followCustomerBtn(id){
+      console.log(id)
+    },
+    // 批量删除操作
+    delAllCustomerBtn(){
+      console.log(this.multipleSelection)
+    },
+    // 批量指派操作
+    assignedAllCustomerBtn(){
+      console.log(this.multipleSelection)
     }
   }
 }
@@ -213,7 +236,7 @@ export default {
     width:calc(100% - 280px);*/
   }
   .selectionBox span{
-    margin-right:30px;
+    margin-right:20px;
     color:#1890FF;
   }
   /*html,body,#app{
@@ -221,4 +244,9 @@ export default {
       width:100%;
       position:relative;
   }*/
+  .operationBtn{
+    color:#1890FF;
+    padding:0px 5px;
+    cursor:pointer;
+  }
 </style>
