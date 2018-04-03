@@ -57,3 +57,74 @@ a:hover {
 .app-container {
   padding: 20px;
 }
+
+
+
+//客户管理样式
+.el-input--prefix.search-input-box .el-input__inner{
+      padding-left:10px!important;
+  }
+  .search-input-box{
+      max-width:350px;
+      float:right;
+      .el-input__prefix{
+          left:initial;
+          right:5px;
+          cursor: pointer;
+      }
+  }
+  .inline{
+    display:inline-block;
+    font-size:14px;
+    margin-left:30px;
+    margin-top:15px;
+    margin-bottom:15px;
+  }
+  .selectionBox{
+    height:30px;
+    line-height:30px;
+    background:#E6F7FF;
+    border: 1px solid #91D5FF;
+    border-radius:4px;
+    margin-top:40px;
+    font-size:12px;
+    box-sizing:border-box;
+    padding:0px 20px;
+    /*position:absolute;
+    bottom:20px;
+    box-sizing:border-box;
+    width:calc(100% - 280px);*/
+    span{
+      margin-right:20px;
+      color:#1890FF;
+    }
+  }
+  /*html,body,#app{
+      height: 100%;
+      width:100%;
+      position:relative;
+  }*/
+  .operationBtn{
+      color:#1890FF;
+      padding:0px 5px;
+      cursor:pointer;
+  }
+  .cursorterBox{
+      .demonstration{
+          width:110px;
+          text-align:right;
+          display:inline-block;
+      }
+      .el-date-editor{
+          .el-range-separator{
+              padding:0px;
+          }
+      }
+  }
+  .el-table{
+      margin-top:20px;
+      .has-gutter tr{
+          background:#f5f8fd;
+          color:#363636;
+      }
+  } 

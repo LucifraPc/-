@@ -1,5 +1,5 @@
 <template>
-    <div class="app-container">
+    <div class="app-container cursorterBox">
       <el-row>
           <el-col :span="24">
               <breadcrumb style="float:left;line-height:40px"></breadcrumb>
@@ -17,16 +17,42 @@
                   <span class="demonstration">注册时间：</span>
                   <el-date-picker
                     v-model="registrationTime"
-                    type="date"
-                    placeholder="选择日期">
+                    type="daterange"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期">
                   </el-date-picker>
               </div>
               <div class="inline">
                   <span class="demonstration">最新跟进时间：</span>
                   <el-date-picker
                     v-model="followUpTime"
-                    type="date"
-                    placeholder="选择日期">
+                    type="daterange"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期">
+                  </el-date-picker>
+              </div>
+          </el-col>
+          <el-col :span="24">
+              <div class="inline">
+                  <span class="demonstration">成交时间：</span>
+                  <el-date-picker
+                    v-model="ClinchAdealTime"
+                    type="daterange"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期">
+                  </el-date-picker>
+              </div>
+              <div class="inline">
+                  <span class="demonstration">到期时间：</span>
+                  <el-date-picker
+                    v-model="expireTime"
+                    type="daterange"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期">
                   </el-date-picker>
               </div>
           </el-col>
@@ -100,6 +126,8 @@ export default {
       searchAll:false,//搜索全部
       registrationTime:'',//注册时间
       followUpTime:'',//最新跟进时间
+      ClinchAdealTime:'',//成交时间
+      expireTime:'',//到期时间
 
       // 列表数据
       tableData3: [{
@@ -201,52 +229,5 @@ export default {
 }
 </script>
 <style>
-  .search-input-box .el-input__prefix{
-      left:initial;
-      right:5px;
-      cursor: pointer;
-  }
-  .el-input--prefix.search-input-box .el-input__inner{
-      padding-left:10px!important;
-  }
-  .search-input-box{
-      max-width:350px;
-      float:right;
-  }
-  .inline{
-    display:inline-block;
-    font-size:14px;
-    margin-left:30px;
-    margin-top:15px;
-    margin-bottom:15px;
-  }
-  .selectionBox{
-    height:30px;
-    line-height:30px;
-    background:#E6F7FF;
-    border: 1px solid #91D5FF;
-    border-radius:4px;
-    margin-top:40px;
-    font-size:12px;
-    box-sizing:border-box;
-    padding:0px 20px;
-    /*position:absolute;
-    bottom:20px;
-    box-sizing:border-box;
-    width:calc(100% - 280px);*/
-  }
-  .selectionBox span{
-    margin-right:20px;
-    color:#1890FF;
-  }
-  /*html,body,#app{
-      height: 100%;
-      width:100%;
-      position:relative;
-  }*/
-  .operationBtn{
-    color:#1890FF;
-    padding:0px 5px;
-    cursor:pointer;
-  }
+  
 </style>
