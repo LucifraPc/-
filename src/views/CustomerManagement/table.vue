@@ -234,7 +234,6 @@ export default {
     }
   },
   methods: {
-    
     // 列表选择操作
     handleSelectionChange(val) {
       this.multipleSelection = val;
