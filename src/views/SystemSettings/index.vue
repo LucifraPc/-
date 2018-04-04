@@ -1,9 +1,9 @@
 <template>
     <div class="app-container cursorterBox">
-          <div class="backgroundFFF padding0">
-              <breadcrumb></breadcrumb>
+          <div class="background-FFF padding-0">
+              <bread-crumb></bread-crumb>
           </div>
-          <el-card class="box-card margin-15">
+          <el-card class="box-card margin-top-15">
               <div slot="header" class="clearfix">
                   <span>客户总数上限设置</span>
                   <el-button style="float: right; padding: 3px 0" type="text">保存</el-button>
@@ -22,7 +22,7 @@
               </el-form>
           </el-card>
 
-          <el-card class="box-card margin-15">
+          <el-card class="box-card margin-top-15">
               <div slot="header" class="clearfix">
                   <span>到期时间设置</span>
                   <el-button style="float: right; padding: 3px 0" type="text">保存</el-button>
@@ -39,12 +39,8 @@
 </template>
 
 <script>
-import Breadcrumb from '@/components/Breadcrumb'
 const cityOptions = ['新客户', '高意向', '可跟进', '成交客户','即将到期客户', '到期未续费', '无人接听', '无法接通', '无效线索'];
 export default {
-  components: {
-      Breadcrumb
-  },
   data() {
     return {
       form: {

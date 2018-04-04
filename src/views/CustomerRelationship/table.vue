@@ -1,9 +1,9 @@
 <template>
     <div class="app-container cursorterBox">
-      <el-row class="backgroundFFF padding10">
+      <el-row class="background-FFF padding-10">
           <!-- 搜索 -->
           <el-col :span="24">
-              <breadcrumb style="float:left;line-height:40px"></breadcrumb>
+              <bread-crumb style="float:left;line-height:40px"></bread-crumb>
               <el-input class="search-input-box"
                 placeholder="请输入通行证/姓名/手机号/QQ号搜索"
                 v-model="searcKey">
@@ -12,7 +12,7 @@
               </el-input>
           </el-col>
       </el-row>
-      <el-row class="backgroundFFF height100 padding20 margin-15">
+      <el-row class="background-FFF height-100 padding-20 margin-top-15">
           <!-- 表格数据 -->
           <el-table
               ref="multipleTable"
@@ -78,12 +78,7 @@
 </template>
 
 <script>
-import Breadcrumb from '@/components/Breadcrumb'
-
 export default {
-  components: {
-    Breadcrumb
-  },
   data() {
     return {
       searcKey:'',//搜索值
