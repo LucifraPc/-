@@ -82,7 +82,18 @@
               <el-table-column label="注册时间"  show-overflow-tooltip>
                 <template slot-scope="scope">{{ scope.row.registrationTime }}</template>
               </el-table-column>
-              <el-table-column prop="userSerive" label="客服专员"  show-overflow-tooltip></el-table-column>
+              <el-table-column
+                  show-overflow-tooltip
+                  prop="userSerive"
+                  label="客服专员"
+                  width="100"
+                  :filters="followResultUser"
+                  :filter-method="filterTagUser"
+                  filter-placement="bottom-end">
+                  <template slot-scope="scope">
+                    <el-tag close-transition>{{scope.row.userSerive}}</el-tag>
+                  </template>
+              </el-table-column>
               <el-table-column
                   prop="tag"
                   label="跟进结果"
@@ -157,7 +168,7 @@ export default {
       // 列表数据
       tableData3: [{
           id:11,
-          name: '胡彦斌',
+          name: '胡彦斌1',
           passpost: 'Hulk111',
           phone: '15721143333',
           QQ: '12345698745',
@@ -168,12 +179,12 @@ export default {
           tag: '关机'
         },{
           id:22,
-          name: '胡彦斌',
+          name: '胡彦斌2',
           passpost: 'Hulk111',
           phone: '15721143333',
           QQ: '12345698745',
           registrationTime: '2017-10-01 12：00',
-          userSerive: '辛元忠',
+          userSerive: '裴奇致',
           status: '无人接听',
           followUpTime: '2017-10-01 12：00',
           tag: '高意向'
@@ -191,6 +202,15 @@ export default {
                     { text: '未拨打', value: '未拨打' }, 
                     { text: '用其他软件', value: '用其他软件' }
                   ],//跟进结果
+    followResultUser:[
+                    { text: '辛元忠', value: '辛元忠' },
+                    { text: '裴奇致', value: '裴奇致' }, 
+                    { text: '纪乐容', value: '纪乐容' },
+                    { text: '赵国安', value: '赵国安' }, 
+                    { text: '郭博超', value: '郭博超' },
+                    { text: '明宏阔', value: '明宏阔' }, 
+                    { text: '封安民', value: '封安民' }, 
+                  ],//客服专员
 
       multipleSelection: [], //选中数据
 
@@ -275,6 +295,9 @@ export default {
     filterHandler(value, row, column) {
       const property = column['property'];
       return row[property] === value;
+    },
+    filterTagUser(value, row) {
+      return row.userSerive === value;
     }
   }
 }
