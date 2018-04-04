@@ -9,10 +9,16 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+  width:100%;
+  height:100%;
+  background:#F0F2F5;
 }
 
 html {
   box-sizing: border-box;
+  width:100%;
+  height:100%;
+  background:#F0F2F5;
 }
 
 *,
@@ -134,7 +140,7 @@ a:hover {
 //详情弹窗样式
   #slide-window{
       position: fixed!important;
-      top: 50px;
+      top: 65px;
       bottom: 6px;
       background: #f5f8fc;
       width:650px;
@@ -177,4 +183,26 @@ a:hover {
       .el-form-item__label{
           margin-top:14px;
       }
+  }
+
+  .backgroundFFF{
+      background:#fff;
+  } 
+  .padding20{
+    padding:10px 20px 20px 20px;
+  }
+  .padding10{
+    padding:10px 20px;
+  }
+  .padding0{
+    padding:0px 10px;
+  }
+  .height100{
+    height:calc(100vh - 180px);
+    box-sizing: border-box;
+    overflow-y:auto;
+  }
+
+  .margin-15{
+      margin-top:15px;
   }

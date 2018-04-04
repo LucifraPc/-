@@ -1,7 +1,9 @@
 <template>
     <div class="app-container cursorterBox">
-          <breadcrumb></breadcrumb>
-          <el-card class="box-card">
+          <div class="backgroundFFF padding0">
+              <breadcrumb></breadcrumb>
+          </div>
+          <el-card class="box-card margin-15">
               <div slot="header" class="clearfix">
                   <span>客户总数上限设置</span>
                   <el-button style="float: right; padding: 3px 0" type="text">保存</el-button>
@@ -20,7 +22,7 @@
               </el-form>
           </el-card>
 
-          <el-card class="box-card" style="margin-top: 30px">
+          <el-card class="box-card margin-15">
               <div slot="header" class="clearfix">
                   <span>到期时间设置</span>
                   <el-button style="float: right; padding: 3px 0" type="text">保存</el-button>

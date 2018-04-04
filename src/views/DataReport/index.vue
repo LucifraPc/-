@@ -1,7 +1,9 @@
 <template>
     <div class="app-container cursorterBox">
-      <el-row>
+      <el-row class="backgroundFFF padding10">
           <breadcrumb style="float:left;line-height:40px"></breadcrumb>
+      </el-row>
+      <el-row class="backgroundFFF height100 padding20 margin-15">
           <!-- 时间条件 -->
           <el-col :span="24">
               <div class="inline">
@@ -17,25 +19,24 @@
               <div class="inline"><el-button type="primary">查询</el-button></div>
               <div class="inline" style="float: right;margin-top:30px;margin-right:20px"><i class="el-icon-sold-out" style="color:green"></i><span class="operationBtn">导出Excel</span></div>
           </el-col>
-
+      
+          <!-- 表格数据 -->
+          <el-table
+              ref="multipleTable"
+              :data="tableData3"
+              tooltip-effect="dark"
+              style="width: 100%">
+              <el-table-column label="客户姓名" prop="passpost"  show-overflow-tooltip></el-table-column>
+              <el-table-column prop="name" label="员工姓名" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="phone" label="订单号"  show-overflow-tooltip></el-table-column>
+              <el-table-column label="下单时间"  show-overflow-tooltip>
+                <template slot-scope="scope">{{ scope.row.registrationTime }}</template>
+              </el-table-column>
+              <el-table-column prop="userSerive" label="订单金额"  show-overflow-tooltip></el-table-column>
+              <el-table-column prop="status" label="购买内容"  show-overflow-tooltip></el-table-column>
+              <el-table-column label="支付方式" prop="followUpTime" show-overflow-tooltip></el-table-column>
+          </el-table>
       </el-row>
-
-      <!-- 表格数据 -->
-      <el-table
-          ref="multipleTable"
-          :data="tableData3"
-          tooltip-effect="dark"
-          style="width: 100%">
-          <el-table-column label="客户姓名" prop="passpost"  show-overflow-tooltip></el-table-column>
-          <el-table-column prop="name" label="员工姓名" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="phone" label="订单号"  show-overflow-tooltip></el-table-column>
-          <el-table-column label="下单时间"  show-overflow-tooltip>
-            <template slot-scope="scope">{{ scope.row.registrationTime }}</template>
-          </el-table-column>
-          <el-table-column prop="userSerive" label="订单金额"  show-overflow-tooltip></el-table-column>
-          <el-table-column prop="status" label="购买内容"  show-overflow-tooltip></el-table-column>
-          <el-table-column label="支付方式" prop="followUpTime" show-overflow-tooltip></el-table-column>
-      </el-table>
     </div>
 </template>
 

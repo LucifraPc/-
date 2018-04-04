@@ -1,7 +1,6 @@
 <template>
     <div class="app-container cursorterBox">
-      <el-row>
-
+      <el-row class="backgroundFFF padding10">
           <!-- 搜索 -->
           <el-col :span="24">
               <breadcrumb style="float:left;line-height:40px"></breadcrumb>
@@ -13,59 +12,60 @@
               </el-input>
           </el-col>
       </el-row>
+      <el-row class="backgroundFFF height100 padding20 margin-15">
+          <!-- 表格数据 -->
+          <el-table
+              ref="multipleTable"
+              :data="tableData3"
+              tooltip-effect="dark"
+              style="width: 100%"
 
-      <!-- 表格数据 -->
-      <el-table
-          ref="multipleTable"
-          :data="tableData3"
-          tooltip-effect="dark"
-          style="width: 100%"
+              @selection-change="handleSelectionChange">
+              <el-table-column type="selection" width="55" align="center"></el-table-column>
+              <el-table-column label="通行证账号"  show-overflow-tooltip align="center">
+                <template slot-scope="scope">{{ scope.row.passpost }}</template>
+              </el-table-column>
+              <el-table-column prop="name" label="客户姓名" show-overflow-tooltip align="center"></el-table-column>
+              <el-table-column label="注册时间"  show-overflow-tooltip align="center">
+                <template slot-scope="scope">{{ scope.row.registrationTime }}</template>
+              </el-table-column>
+              <el-table-column label="入海时间"  show-overflow-tooltip align="center">
+                <template slot-scope="scope">{{ scope.row.registrationTime }}</template>
+              </el-table-column>
+              <el-table-column prop="userSerive" label="使用云功能次数" align="center" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="status" label="使用BIM应用次数" align="center" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="userSerive" label="有效云套餐(个人/企业)" width="200" align="center"  show-overflow-tooltip></el-table-column>
+              <el-table-column prop="status" label="有效BIM套餐(个人/企业)" width="200" align="center" show-overflow-tooltip></el-table-column>
+              <el-table-column label="最新跟进时间"  show-overflow-tooltip align="center">
+                <template slot-scope="scope">{{ scope.row.followUpTime }}</template>
+              </el-table-column>
+              <el-table-column label="操作" align="center">
+                <template slot-scope="scope">
+                  <span class="operationBtn" @click="claimCustomerBtn(scope.row.id)">认领</span><span class="operationBtn" @click="viewCustomerBtn(scope.row.id)">查看</span>
+                </template>
+              </el-table-column>
+          </el-table>
 
-          @selection-change="handleSelectionChange">
-          <el-table-column type="selection" width="55" align="center"></el-table-column>
-          <el-table-column label="通行证账号"  show-overflow-tooltip align="center">
-            <template slot-scope="scope">{{ scope.row.passpost }}</template>
-          </el-table-column>
-          <el-table-column prop="name" label="客户姓名" show-overflow-tooltip align="center"></el-table-column>
-          <el-table-column label="注册时间"  show-overflow-tooltip align="center">
-            <template slot-scope="scope">{{ scope.row.registrationTime }}</template>
-          </el-table-column>
-          <el-table-column label="入海时间"  show-overflow-tooltip align="center">
-            <template slot-scope="scope">{{ scope.row.registrationTime }}</template>
-          </el-table-column>
-          <el-table-column prop="userSerive" label="使用云功能次数" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="status" label="使用BIM应用次数" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="userSerive" label="有效云套餐(个人/企业)" width="200" align="center"  show-overflow-tooltip></el-table-column>
-          <el-table-column prop="status" label="有效BIM套餐(个人/企业)" width="200" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column label="最新跟进时间"  show-overflow-tooltip align="center">
-            <template slot-scope="scope">{{ scope.row.followUpTime }}</template>
-          </el-table-column>
-          <el-table-column label="操作" align="center">
-            <template slot-scope="scope">
-              <span class="operationBtn" @click="claimCustomerBtn(scope.row.id)">认领</span><span class="operationBtn" @click="viewCustomerBtn(scope.row.id)">查看</span>
-            </template>
-          </el-table-column>
-      </el-table>
+          <!-- 全选操作之后显示 -->
+          <div class="selectionBox" v-show="multipleSelection.length>0">
+              <i class="el-icon-info" style="color:#1890FF"></i>
+              <span style="color:#666;margin-left:5px">已选择 {{multipleSelection.length}} 项</span>
+              <span class="operationBtn" @click="claimAllCustomerBtn">批量认领</span>
+          </div>
 
-      <!-- 全选操作之后显示 -->
-      <div class="selectionBox" v-show="multipleSelection.length>0">
-          <i class="el-icon-info" style="color:#1890FF"></i>
-          <span style="color:#666;margin-left:5px">已选择 {{multipleSelection.length}} 项</span>
-          <span class="operationBtn" @click="claimAllCustomerBtn">批量认领</span>
-      </div>
-
-      <!-- 分页 -->
-      <div class="block" style="text-align: center;margin-top:20px">
-          <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-sizes="[10, 20, 50, 100]"
-            :page-size="100"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="400">
-          </el-pagination>
-      </div>
+          <!-- 分页 -->
+          <div class="block" style="text-align: center;margin-top:20px">
+              <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="currentPage"
+                :page-sizes="[10, 20, 50, 100]"
+                :page-size="100"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="400">
+              </el-pagination>
+          </div>
+      </el-row>
 
       <!-- 详情弹窗 -->
       <transition name="slide-fade">
