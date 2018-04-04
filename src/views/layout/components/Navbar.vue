@@ -2,19 +2,19 @@
   <el-menu class="navbar" mode="horizontal">
     <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
     <!-- <breadcrumb></breadcrumb> -->
-    <el-dropdown class="avatar-container" trigger="click">
+    <el-dropdown class="avatar-container">
       <div class="avatar-wrapper">
         <img class="user-avatar" :src="avatar+'?imageView2/1/w/80/h/80'">
-        <i class="el-icon-caret-bottom"></i>
+        <!-- <i class="el-icon-caret-bottom"></i> -->
       </div>
       <el-dropdown-menu class="user-dropdown" slot="dropdown">
         <router-link class="inlineBlock" to="/">
           <el-dropdown-item>
-            Home
+            首页
           </el-dropdown-item>
         </router-link>
         <el-dropdown-item divided>
-          <span @click="logout" style="display:block;">LogOut</span>
+          <span @click="logout" style="display:block;">退出</span>
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -52,12 +52,12 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .navbar {
-  height: 50px;
-  line-height: 50px;
+  height: 65px;
+  line-height: 65px;
   border-radius: 0px !important;
   .hamburger-container {
-    line-height: 58px;
-    height: 50px;
+    line-height: 75px;
+    height: 65px;
     float: left;
     padding: 0 10px;
   }
@@ -71,15 +71,15 @@ export default {
     height: 50px;
     display: inline-block;
     position: absolute;
-    right: 35px;
+    right: 55px;
     .avatar-wrapper {
       cursor: pointer;
-      margin-top: 5px;
+      margin-top: 13px;
       position: relative;
       .user-avatar {
         width: 40px;
         height: 40px;
-        border-radius: 10px;
+        border-radius: 50%;
       }
       .el-icon-caret-bottom {
         position: absolute;
