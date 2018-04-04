@@ -120,7 +120,7 @@
               <i class="el-icon-info" style="color:#1890FF"></i>
               <span style="color:#666;margin-left:5px">已选择 {{multipleSelection.length}} 项</span>
               <span class="operationBtn" @click="delAllCustomerBtn">批量删除</span>
-              <span class="operationBtn" @click="assignedAllCustomerBtn">客户指派</span>
+              <span class="operationBtn" @click="assignedAllCustomerBtn();dialogVisible=true;">客户指派</span>
           </div>
 
           <!-- 分页 -->
@@ -142,6 +142,53 @@
               <i class="el-icon-close" @click="showDetialBox=!showDetialBox"></i>
           </div>
       </transition>
+
+      <!-- 批量指派弹窗 -->
+      <el-dialog
+          title="客户指派"
+          :visible.sync="dialogVisible"
+          class="dialog770">
+          <div>
+              <h4 style="margin:0px;">部分指派：</h4>
+              <p style="padding-left:40px;margin:10px 0px;">
+                  已选择 {{multipleSelection.length}} 个客户，所属 {{assignedCount.length}} 个成员 <span style="color:#1890FF" v-for="item in assignedCount">{{item}} </span>
+                  <el-select v-model="assignedOptionsValue" placeholder="请选择指派给谁">
+                      <el-option
+                        v-for="item in assignedOptions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                      </el-option>
+                  </el-select>
+              </p>
+          </div>
+          <div>
+              <h4 style="margin:0px;">全部指派：</h4>
+              <p style="padding-left:40px;margin:10px 0px;">
+                  指派
+                  <el-select v-model="fromOptionsValue" placeholder="请选择转走谁的">
+                    <el-option
+                      v-for="item in fromOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select> 的全部 {{fromOptionsCount}} 个客户
+                  <el-select v-model="gotoOptionsValue" placeholder="请选择给谁">
+                    <el-option
+                      v-for="item in gotoOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select> 
+              </p>
+          </div>
+          <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+          </span>
+      </el-dialog>
       
     </div>
 </template>
@@ -210,6 +257,19 @@ export default {
       multipleSelection: [], //选中数据
 
       currentPage:1,
+
+      dialogVisible:false,//指派弹窗控制器
+      assignedCount:[],//所属几个成员
+      assignedOptions:[],//部分指派给谁
+      fromOptions:[],//全部转走谁的
+      gotoOptions:[],//全部转给谁
+      assignedOptionsValue:null,//部分指派给谁
+      fromOptionsValue:null,//全部转走谁的
+      gotoOptionsValue:null,//全部转给谁
+      fromOptionsCount:null,//全部转走谁的客户数
+
+
+
     }
   },
   created() {
@@ -234,6 +294,14 @@ export default {
     }
   },
   methods: {
+    // 去重
+    setArrRep(arr){
+      var obj = {}
+      for(var i  in arr){
+         obj[arr[i]] = true;
+      }
+      console.log(obj);
+    },
     // 列表选择操作
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -274,11 +342,17 @@ export default {
     },
     // 批量删除操作
     delAllCustomerBtn(){
-      console.log(this.multipleSelection)
+      // console.log(this.multipleSelection)
+     
     },
     // 批量指派操作
     assignedAllCustomerBtn(){
-      console.log(this.multipleSelection)
+      // console.log(this.multipleSelection)
+      let vm = this ;
+      vm.multipleSelection.forEach((item,index,arr) => {
+          vm.assignedCount.push(item.userSerive)
+      })
+      vm.assignedCount=Array.from(new Set(vm.assignedCount));
     },
     formatter(row, column) {
       return row.address;
