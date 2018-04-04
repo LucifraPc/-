@@ -1,9 +1,9 @@
 <template>
     <div class="app-container cursorterBox">
-      <el-row class="backgroundFFF padding10">
-          <breadcrumb style="float:left;line-height:40px"></breadcrumb>
+      <el-row class="background-FFF padding-10">
+          <bread-crumb style="float:left;line-height:40px"></bread-crumb>
       </el-row>
-      <el-row class="backgroundFFF height100 padding20 margin-15">
+      <el-row class="background-FFF height-100 padding-20 margin-top-15">
           <!-- 时间条件 -->
           <el-col :span="24">
               <div class="inline">
@@ -41,12 +41,7 @@
 </template>
 
 <script>
-import Breadcrumb from '@/components/Breadcrumb'
-
 export default {
-  components: {
-      Breadcrumb
-  },
   data() {
     return {
       orderTime:'',

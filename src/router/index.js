@@ -98,21 +98,21 @@ export const constantRouterMap = [
   {
     path: '/resource-allocation',
     component: Layout,
-    redirect: '/resource-allocation/table',
+    redirect: '/resource-allocation/to-be-allocated',
     name: '资源分配',
     meta: { title: '资源分配', icon: 'example' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/ResourceAllocation/table'),
-        meta: { title: 'Table', icon: 'table' }
+        path: 'to-be-allocated',
+        name: '待分配资源',
+        component: () => import('@/views/ResourceAllocation/ToBeAllocated'),
+        meta: { title: '待分配资源', icon: 'table' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
+        path: 'data-mining',
+        name: '数据挖掘',
         component: () => import('@/views/ResourceAllocation/tree'),
-        meta: { title: 'Tree', icon: 'tree' }
+        meta: { title: '数据挖掘', icon: 'tree' }
       }
     ]
   },

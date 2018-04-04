@@ -1,9 +1,9 @@
 <template>
     <div class="app-container cursorterBox">
-      <el-row style="margin-bottom:15px;" class="backgroundFFF padding10">
+      <el-row style="margin-bottom:15px;" class="background-FFF padding-10">
           <!-- 搜索 -->
           <el-col :span="24">
-              <breadcrumb style="float:left;line-height:40px"></breadcrumb>
+              <bread-crumb style="float:left;line-height:40px"></bread-crumb>
               <el-checkbox-group v-model="searchAll" style="float:right;margin-left:20px;margin-top:10px">
                   <el-checkbox label="搜全部" name="searchAll" ></el-checkbox>
               </el-checkbox-group>
@@ -15,7 +15,7 @@
               </el-input>
           </el-col>
       </el-row>
-      <el-row class="backgroundFFF height100 padding20">
+      <el-row class="background-FFF height-100 padding-20">
           <!-- 时间条件 -->
           <el-col :span="24">
               <div class="inline">
@@ -136,12 +136,7 @@
 </template>
 
 <script>
-import Breadcrumb from '@/components/Breadcrumb'
-
 export default {
-  components: {
-    Breadcrumb
-  },
   data() {
     return {
 

@@ -11,13 +11,13 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import router from './router'
 import store from './store'
-
+import BreadCrumb from './components/Breadcrumb'
 import '@/icons' // icon
 import '@/permission' // permission control
 
 Vue.use(ElementUI)
+Vue.component('bread-crumb',BreadCrumb);
 // Vue.use(ElementUI, { locale })
-
 Vue.config.productionTip = false
 
 new Vue({
