@@ -9,8 +9,9 @@
                   <el-checkbox label="搜全部" name="searchAll" ></el-checkbox>
               </el-checkbox-group>
               <el-input class="search-input-box"
-                placeholder="请输入内容"
+                placeholder="请输入通行证/姓名/手机号/QQ号搜索"
                 v-model="searcKey">
+                <i slot="prefix" class="el-input__icon el-icon-circle-close" v-show="searcKey" @click="searcKey=''"></i>
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
               </el-input>
           </el-col>
@@ -82,7 +83,17 @@
             <template slot-scope="scope">{{ scope.row.registrationTime }}</template>
           </el-table-column>
           <el-table-column prop="userSerive" label="客服专员"  show-overflow-tooltip></el-table-column>
-          <el-table-column prop="status" label="跟进结果"  show-overflow-tooltip></el-table-column>
+          <el-table-column
+              prop="tag"
+              label="跟进结果"
+              width="100"
+              :filters="followResult"
+              :filter-method="filterTag"
+              filter-placement="bottom-end">
+              <template slot-scope="scope">
+                <el-tag close-transition>{{scope.row.tag}}</el-tag>
+              </template>
+          </el-table-column>
           <el-table-column label="最新跟进时间"  show-overflow-tooltip>
             <template slot-scope="scope">{{ scope.row.followUpTime }}</template>
           </el-table-column>
@@ -125,7 +136,6 @@
 </template>
 
 <script>
-import { getList } from '@/api/table'
 import Breadcrumb from '@/components/Breadcrumb'
 
 export default {
@@ -134,8 +144,6 @@ export default {
   },
   data() {
     return {
-      list: null,
-      listLoading: true,
 
       searcKey:'',//搜索值
       searchAll:false,//搜索全部
@@ -157,6 +165,7 @@ export default {
           userSerive: '辛元忠',
           status: '无人接听',
           followUpTime: '2017-10-01 12：00',
+          tag: '关机'
         },{
           id:22,
           name: '胡彦斌',
@@ -167,25 +176,28 @@ export default {
           userSerive: '辛元忠',
           status: '无人接听',
           followUpTime: '2017-10-01 12：00',
+          tag: '高意向'
         }],
+
+
+      followResult:[{ text: '可跟进', value: '可跟进' },
+                    { text: '高意向', value: '高意向' }, 
+                    { text: '关机', value: '关机' },
+                    { text: '无法接通', value: '无法接通' }, 
+                    { text: '已成交', value: '已成交' },
+                    { text: '停机', value: '停机' }, 
+                    { text: '空号', value: '空号' }, 
+                    { text: '错号', value: '错号' },
+                    { text: '未拨打', value: '未拨打' }, 
+                    { text: '用其他软件', value: '用其他软件' }
+                  ],//跟进结果
 
       multipleSelection: [], //选中数据
 
       currentPage:1,
     }
   },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'gray',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    }
-  },
   created() {
-    this.fetchData()
   },
   watch: {
     // 检测路由切换页面
@@ -207,23 +219,7 @@ export default {
     }
   },
   methods: {
-    fetchData() {
-      this.listLoading = true
-      getList(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.listLoading = false
-      })
-    },
-    toggleSelection(rows) {
-        if (rows) {
-          rows.forEach(row => {
-            this.$refs.multipleTable.toggleRowSelection(row);
-          });
-        } else {
-          this.$refs.multipleTable.clearSelection();
-        }
-    },
-
+    
     // 列表选择操作
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -269,6 +265,16 @@ export default {
     // 批量指派操作
     assignedAllCustomerBtn(){
       console.log(this.multipleSelection)
+    },
+    formatter(row, column) {
+      return row.address;
+    },
+    filterTag(value, row) {
+      return row.tag === value;
+    },
+    filterHandler(value, row, column) {
+      const property = column['property'];
+      return row[property] === value;
     }
   }
 }
