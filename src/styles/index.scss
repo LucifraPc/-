@@ -155,11 +155,55 @@ a:hover {
           font-size:22px;
           color:#000;
           float:right;
-          margin:10px;
+          margin-top:15px;
           cursor: pointer;
           &:hover{
               color:#1890FF;
           }
+      }
+      .slide-window-header{
+        padding:0px 20px;
+        border-bottom:1px solid #e4e7ed;
+        h4{
+          display:inline-block;
+          margin:15px 0px;
+        }
+      }
+      .el-tabs{
+        padding:10px 20px
+      }
+      .el-tabs__nav{
+        width:100%;
+      }
+      .el-tabs__item{
+        width:20%;
+        text-align:center;
+      }
+      .el-radio{
+        height:40px;
+        line-height:40px;
+        margin-left:0px;
+        width:100px;
+      }
+      .historyBox{
+        font-size:14px;
+        p span{
+          display:inline-block;
+          margin-right:40px;
+        }
+        div{
+          margin-bottom:30px;
+        }
+      }
+      .mealAllowancebox{
+        font-size:14px;
+        span{
+          display:inline-block;
+          margin-right:15px;
+        }
+        div{
+          padding:5px 0px 0px 20px;
+        }
       }
   }
   .slide-fade-enter-active {

@@ -136,13 +136,8 @@
               </el-pagination>
           </div>
       </el-row>
-      <!-- 详情弹窗 -->
-      <transition name="slide-fade">
-          <div id="slide-window" v-if="showDetialBox">
-              <i class="el-icon-close" @click="showDetialBox=!showDetialBox"></i>
-          </div>
-      </transition>
-
+      <!-- 跟进详情弹窗 -->
+      <slide-view :showDetialBox="showDetialBox" v-on:showDetialBoxConfalse="showDetialBoxConfalse"></slide-view>
       <!-- 批量指派弹窗 -->
       <el-dialog
           title="客户指派"
@@ -195,7 +190,11 @@
 </template>
 
 <script>
+import slideView from '../../components/slideView/slideView'
 export default {
+  components: {
+    slideView
+  },
   data() {
     return {
 
@@ -351,10 +350,13 @@ export default {
     },
     // 单个跟进操作
     followCustomerBtn(id){
-      console.log(id);
+      // console.log(id);
       this.showDetialBox=!this.showDetialBox;
-      // $("#slide-window").animate({width:'600px',opacity:'1'});
-      // $("#slide-window").animate({width:'0px',opacity:'0'});
+    },
+    // 单个跟进组件传值
+    showDetialBoxConfalse(value){
+      console.log(value)
+      this.showDetialBox=value;
     },
     // 批量删除操作
     delAllCustomerBtn(){
