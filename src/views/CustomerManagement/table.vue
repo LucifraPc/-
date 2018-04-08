@@ -70,6 +70,7 @@
               ref="multipleTable"
               :data="tableData3"
               tooltip-effect="dark"
+              @filter-change="filterChange"
               style="width: 100%;padding-top:10px"
               @selection-change="handleSelectionChange">
               <el-table-column type="selection" width="55"></el-table-column>
@@ -87,9 +88,8 @@
                   prop="userSerive"
                   label="客服专员"
                   width="100"
-                  :filters="followResultUser"
-                  :filter-method="filterTagUser"
-                  filter-placement="bottom-end">
+                  column-key="userSerive"
+                  :filters="followResultUser">
                   <template slot-scope="scope">
                     <el-tag close-transition>{{scope.row.userSerive}}</el-tag>
                   </template>
@@ -98,9 +98,8 @@
                   prop="tag"
                   label="跟进结果"
                   width="100"
-                  :filters="followResult"
-                  :filter-method="filterTag"
-                  filter-placement="bottom-end">
+                  column-key="tag"
+                  :filters="followResult">
                   <template slot-scope="scope">
                     <el-tag close-transition>{{scope.row.tag}}</el-tag>
                   </template>
@@ -110,10 +109,11 @@
               </el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
-                  <span class="operationBtn" @click="delCustomerBtn(scope.row.id)">删除</span><span class="operationBtn" @click="followCustomerBtn(scope.row.id)">跟进</span>
+                    <span class="operationBtn" @click="delCustomerBtn(scope.row.id)">删除</span><span class="operationBtn" @click="followCustomerBtn(scope.row.id)">跟进</span>
                 </template>
               </el-table-column>
           </el-table>
+          
 
           <!-- 全选操作之后显示 -->
           <div class="selectionBox" v-show="multipleSelection.length>0">
@@ -161,6 +161,7 @@
                       </el-option>
                   </el-select>
               </p>
+              <el-button type="primary">主要按钮</el-button>
           </div>
           <div>
               <h4 style="margin:0px;">全部指派：</h4>
@@ -220,6 +221,17 @@ export default {
           followUpTime: '2017-10-01 12：00',
           tag: '关机'
         },{
+          id:11,
+          name: '胡彦斌1',
+          passpost: 'Hulk111',
+          phone: '15721143333',
+          QQ: '12345698745',
+          registrationTime: '2017-10-01 12：00',
+          userSerive: '辛元忠',
+          status: '无人接听',
+          followUpTime: '2017-10-01 12：00',
+          tag: '关机'
+        },{
           id:22,
           name: '胡彦斌2',
           passpost: 'Hulk111',
@@ -267,6 +279,10 @@ export default {
       fromOptionsValue:null,//全部转走谁的
       gotoOptionsValue:null,//全部转给谁
       fromOptionsCount:null,//全部转走谁的客户数
+
+
+      userSerive:[],//客服专员筛选
+      tag:[],//跟进结果筛选
 
 
 
@@ -354,19 +370,24 @@ export default {
       })
       vm.assignedCount=Array.from(new Set(vm.assignedCount));
     },
-    formatter(row, column) {
-      return row.address;
-    },
-    filterTag(value, row) {
-      return row.tag === value;
-    },
-    filterHandler(value, row, column) {
-      const property = column['property'];
-      return row[property] === value;
-    },
-    filterTagUser(value, row) {
-      return row.userSerive === value;
+    filterChange(filters){
+      if(filters.userSerive){
+        this.userSerive=filters.userSerive;
+      }
+      if(filters.tag){
+        this.tag=filters.tag;
+      }
+      console.log(this.userSerive)
+      console.log(this.tag)
     }
   }
 }
 </script>
+<style>
+  .cursorter-table.el-table::before{
+    height:0px;
+  }
+  .cursorter-table.el-table thead>tr>th{
+    border-bottom: 1px solid #ebeef5;
+  }
+</style>
