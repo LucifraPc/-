@@ -4,8 +4,8 @@
       <!-- 搜索 -->
       <el-col :span="24">
         <bread-crumb style="float:left;line-height:40px"></bread-crumb>
-        <el-input class="search-input-box" placeholder="请输入通行证/姓名/手机号/QQ号搜索">
-          <i slot="prefix" class="el-input__icon el-icon-circle-close"></i>
+        <el-input class="search-input-box" placeholder="请输入通行证/姓名/手机号/QQ号搜索" v-model="searchValue">
+          <i slot="prefix" class="el-input__icon el-icon-circle-close" v-show="searchValue" @click="searchValue=''"></i>
           <i slot="prefix" class="el-input__icon el-icon-search"></i>
         </el-input>
       </el-col>
@@ -43,15 +43,15 @@
           <el-tab-pane label="按资源分配" name="second">
             <div style="text-align:right;padding:15px 0">
               <el-select v-model="value" placeholder="请选择" style="margin-right:68px">
-                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
               </el-select>
-              <el-button type="text" >提交分配数据</el-button>
+              <el-button type="text">提交分配数据</el-button>
             </div>
             <el-table :data="allocationMemberData" style="width: 100%">
               <el-table-column prop="date" label="通行证账号">
               </el-table-column>
-              <el-table-column prop="name" label="手机号码" >
+              <el-table-column prop="name" label="手机号码">
               </el-table-column>
               <el-table-column prop="address" label="挖掘任务名称">
               </el-table-column>
@@ -85,6 +85,7 @@
   export default {
     data() {
       return {
+        searchValue:'',
         form: {
           name: '',
           region: '',
@@ -171,6 +172,4 @@
     margin-top: 20px;
     text-align: center
   }
-  
-
 </style>

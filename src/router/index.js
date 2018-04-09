@@ -111,8 +111,29 @@ export const constantRouterMap = [
       {
         path: 'data-mining',
         name: '数据挖掘',
-        component: () => import('@/views/ResourceAllocation/tree'),
+        component: () => import('@/views/ResourceAllocation/DataMining'),
         meta: { title: '数据挖掘', icon: 'tree' }
+      },
+      {
+        path: 'get-mining-conditions/:id',
+        name: '查看挖掘条件',
+        component: () => import('@/views/ResourceAllocation/GetMiningConditions'),
+        meta: { title: '查看挖掘条件', icon: 'tree' },
+        hidden: true,//不需要渲染在菜单栏
+      },
+      {
+        path: 'get-results/:id',
+        name: '查看挖掘结果',
+        component: () => import('@/views/ResourceAllocation/GetResults'),
+        meta: { title: '查看挖掘结果', icon: 'tree' },
+        hidden: true,//不需要渲染在菜单栏
+      },
+      {
+        path: 'remining/:id',
+        name: '重新挖掘',
+        component: () => import('@/views/ResourceAllocation/Remining'),
+        meta: { title: '重新挖掘', icon: 'tree' },
+        hidden: true,//不需要渲染在菜单栏
       }
     ]
   },
