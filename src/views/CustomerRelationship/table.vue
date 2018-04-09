@@ -67,18 +67,18 @@
           </div>
       </el-row>
 
-      <!-- 详情弹窗 -->
-      <transition name="slide-fade">
-          <div id="slide-window" v-if="showDetialBox">
-              <i class="el-icon-close" @click="showDetialBox=!showDetialBox"></i>
-          </div>
-      </transition>
+      <!-- 查看详情弹窗 -->
+      <slide-view :showDetialBox="showDetialBox" v-on:showDetialBoxConfalse="showDetialBoxConfalse"></slide-view>
       
     </div>
 </template>
 
 <script>
+import slideView from '../../components/slideView/slideView'
 export default {
+  components: {
+    slideView
+  },
   data() {
     return {
       searcKey:'',//搜索值
@@ -167,12 +167,15 @@ export default {
         });
       });
     },
-    // 单个跟进操作
+    // 单个查看操作
     viewCustomerBtn(id){
-      console.log(id);
+      // console.log(id);
       this.showDetialBox=!this.showDetialBox;
-      // $("#slide-window").animate({width:'600px',opacity:'1'});
-      // $("#slide-window").animate({width:'0px',opacity:'0'});
+    },
+    // 单个查看组件传值
+    showDetialBoxConfalse(value){
+      console.log(value)
+      this.showDetialBox=value;
     },
     // 批量认领操作
     claimAllCustomerBtn(){

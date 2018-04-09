@@ -175,6 +175,7 @@
 	    },
 	    data() {
 	      return {
+	      	input5:'',
 	        showDetialBoxCon:false,
 	        activeName: 'first',
 
