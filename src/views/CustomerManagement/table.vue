@@ -155,8 +155,9 @@
                         :value="item.value">
                       </el-option>
                   </el-select>
+                  <el-button type="primary" style="float:right;" @click="dialogVisible = false">提 交</el-button>
               </p>
-              <el-button type="primary">主要按钮</el-button>
+              
           </div>
           <div>
               <h4 style="margin:0px;">全部指派：</h4>
@@ -178,11 +179,12 @@
                       :value="item.value">
                     </el-option>
                   </el-select> 
+                  <el-button type="primary" style="float:right;" @click="dialogVisible = false">提 交</el-button>
               </p>
           </div>
           <span slot="footer" class="dialog-footer">
               <el-button @click="dialogVisible = false">取 消</el-button>
-              <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+              <!-- <el-button type="primary" @click="dialogVisible = false">确 定</el-button> -->
           </span>
       </el-dialog>
       
