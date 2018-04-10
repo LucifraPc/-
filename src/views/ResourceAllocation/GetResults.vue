@@ -50,12 +50,12 @@
         </el-table-column>
         <el-table-column prop="address" label="使用BIM应用次数">
           <template slot-scope="scope">
-            <el-button type="text" size="small">{{scope.row.address}}</el-button>
+            <el-button type="text" size="small" @click="cloudCountDialogVisible=true">{{scope.row.address}}</el-button>
           </template>
         </el-table-column>
         <el-table-column prop="follow" label="跟进">
           <template slot-scope="scope">
-            <el-button type="text" size="small">{{scope.row.address}}</el-button>
+            <el-button type="text" size="small" @click="followUpDialogVisible=true">{{scope.row.address}}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -120,14 +120,37 @@
     <el-dialog title="云功能使用记录" :visible.sync="cloudCountDialogVisible">
       <el-table :data="cloudCountData" style="margin-top:-30px" class="cloud-count-table">
         <el-table-column property="name" label="套餐"></el-table-column>
-        <el-table-column property="address" label="状态"></el-table-column>
         <el-table-column property="date" label="服务时间"></el-table-column>
+        <el-table-column property="area" label="服务时间"></el-table-column>
+        <el-table-column property="address" label="状态"></el-table-column>
       </el-table>
       <div class="block">
-        <i class="el-icon-circle-check-outline"> 表示符合挖掘条件的套餐</i>
+        <!-- <i class="el-icon-circle-check-outline"> 表示符合挖掘条件的套餐</i> -->
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[100, 200, 300, 400]"
           :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
         </el-pagination>
+      </div>
+    </el-dialog>
+    <el-dialog title="跟进记录(建设监理002)" :visible.sync="followUpDialogVisible">
+      <el-table :data="followUpData" style="margin-top:-30px">
+        <el-table-column property="date" label="跟进时间"></el-table-column>
+        <el-table-column property="name" label="跟进任务"></el-table-column>
+        <el-table-column property="address" label="跟进情况"></el-table-column>
+        <el-table-column property="area" label="跟进人"></el-table-column>
+      </el-table>
+      <div class="block" v-show="followUpData.length==0">
+        <el-button type="text" size="small" @click="showFollowUpTxt=true" v-show="!showFollowUpTxt">增加记录</el-button>
+
+        <div v-show="showFollowUpTxt">
+          <el-input type="textarea" :rows="6" placeholder="请输入内容" v-model="textarea">
+          </el-input>
+          <div style="margin-top:20px">
+            <el-button type="primary" @click="showFollowUpTxt = false;followUpDialogVisible=false">确 定</el-button>
+            <el-button @click="showFollowUpTxt = false;followUpDialogVisible=false">取 消</el-button>
+          </div>
+        </div>
+
+
       </div>
     </el-dialog>
   </div>
@@ -138,7 +161,10 @@
       return {
         userDialogVisible: false,
         cloudPackageDialogVisible: false,
-        cloudCountDialogVisible:false,
+        cloudCountDialogVisible: false,
+        followUpDialogVisible: false,
+        showFollowUpTxt: false,
+        textarea: '',
         currentPage4: 4,
         value: "",
         value4: "",
@@ -212,28 +238,42 @@
         ],
         cloudCountData: [{
             date: "2018-01-24 20:14:56",
-            area:'鲁班钢筋',
+            area: '鲁班钢筋',
             name: "江苏省(153.37.198.174)",
             address: "骨架图"
           },
           {
-            date: "服务时间：	2017-08-07~2018-09-19(超过30天)",
-            area:'鲁班钢筋',
+            date: "2017-08-07~2018-09-19",
+            area: '鲁班钢筋',
             name: "江苏省(153.37.198.174)",
             address: "骨架图"
           },
           {
-            date: "服务时间：	2017-08-07~2018-09-19(超过30天)",
-            area:'鲁班钢筋',
+            date: "2017-08-07~2018-09-19",
+            area: '鲁班钢筋',
             name: "江苏省(153.37.198.174)",
             address: "骨架图"
           },
           {
-            date: "服务时间：	2017-08-07~2018-09-19(超过30天)",
-            area:'鲁班钢筋',
+            date: "2017-08-07~2018-09-19",
+            area: '鲁班钢筋',
             name: "江苏省(153.37.198.174)",
             address: "骨架图"
           }
+        ],
+        followUpData: [
+          //   {
+          //     date: "2018-01-24 20:14:56",
+          //     area: 'admin1',
+          //     name: "江苏省(153.37.198.174)",
+          //     address: "骨架图"
+          //   },
+          //   {
+          //     date: "2018-01-24 20:14:56",
+          //     area: 'admin2',
+          //     name: "江苏省(153.37.198.174)",
+          //     address: "骨架图"
+          //   }
         ]
 
       };
