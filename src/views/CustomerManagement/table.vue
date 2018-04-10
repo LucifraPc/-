@@ -68,46 +68,46 @@
           <!-- 表格数据 -->
           <el-table
               ref="multipleTable"
-              :data="tableData3"
+              :data="customerData"
               tooltip-effect="dark"
               @filter-change="filterChange"
               style="width: 100%;padding-top:10px"
               @selection-change="handleSelectionChange">
-              <el-table-column type="selection" width="55"></el-table-column>
-              <el-table-column label="通行证账号"  show-overflow-tooltip>
-                <template slot-scope="scope">{{ scope.row.passpost }}</template>
+              <el-table-column type="selection" width="55" align="center"></el-table-column>
+              <el-table-column label="通行证账号" align="center" show-overflow-tooltip>
+                <template slot-scope="scope">{{ scope.row.password}}</template>
               </el-table-column>
-              <el-table-column prop="name" label="姓名" show-overflow-tooltip></el-table-column>
-              <el-table-column prop="phone" label="手机号码"  show-overflow-tooltip></el-table-column>
-              <el-table-column prop="QQ" label="QQ号"  show-overflow-tooltip></el-table-column>
-              <el-table-column label="注册时间"  show-overflow-tooltip>
-                <template slot-scope="scope">{{ scope.row.registrationTime }}</template>
+              <el-table-column prop="userName" label="姓名" align="center" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="mobile" label="手机号码" align="center" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="qq" label="QQ号" align="center" show-overflow-tooltip></el-table-column>
+              <el-table-column label="注册时间" align="center" show-overflow-tooltip>
+                <template slot-scope="scope">{{ scope.row.registerDate/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
               <el-table-column
                   show-overflow-tooltip
-                  prop="userSerive"
+                  align="center"
+                  prop="serviceName"
                   label="客服专员"
-                  width="100"
-                  column-key="userSerive"
+                  column-key="serviceName"
                   :filters="followResultUser">
                   <template slot-scope="scope">
-                    <el-tag close-transition>{{scope.row.userSerive}}</el-tag>
+                    <el-tag close-transition>{{scope.row.serviceName}}</el-tag>
                   </template>
               </el-table-column>
               <el-table-column
                   prop="tag"
                   label="跟进结果"
-                  width="100"
                   column-key="tag"
+                  align="center"
                   :filters="followResult">
                   <template slot-scope="scope">
-                    <el-tag close-transition>{{scope.row.tag}}</el-tag>
+                    <el-tag close-transition>{{scope.row.followupResult}}</el-tag>
                   </template>
               </el-table-column>
-              <el-table-column label="最新跟进时间"  show-overflow-tooltip>
-                <template slot-scope="scope">{{ scope.row.followUpTime }}</template>
+              <el-table-column label="最新跟进时间" align="center" show-overflow-tooltip>
+                <template slot-scope="scope">{{ scope.row.lastFollowupDate  }}</template>
               </el-table-column>
-              <el-table-column label="操作">
+              <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
                     <span class="operationBtn" @click="delCustomerBtn(scope.row.id)">删除</span><span class="operationBtn" @click="followCustomerBtn(scope.row.id)">跟进</span>
                 </template>
@@ -128,11 +128,11 @@
               <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentPage"
+                :current-page="customerParam.page"
                 :page-sizes="[10, 20, 50, 100]"
-                :page-size="100"
+                :page-size="customerParam.size"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="totalElements">
               </el-pagination>
           </div>
       </el-row>
@@ -193,6 +193,11 @@
 
 <script>
 import slideView from '../../components/slideView/slideView'
+
+
+import {getCustomerManagementList} from '@/api/table.js'
+
+
 export default {
   components: {
     slideView
@@ -210,40 +215,7 @@ export default {
       showDetialBox:false,
 
       // 列表数据
-      tableData3: [{
-          id:11,
-          name: '胡彦斌1',
-          passpost: 'Hulk111',
-          phone: '15721143333',
-          QQ: '12345698745',
-          registrationTime: '2017-10-01 12：00',
-          userSerive: '辛元忠',
-          status: '无人接听',
-          followUpTime: '2017-10-01 12：00',
-          tag: '关机'
-        },{
-          id:11,
-          name: '胡彦斌1',
-          passpost: 'Hulk111',
-          phone: '15721143333',
-          QQ: '12345698745',
-          registrationTime: '2017-10-01 12：00',
-          userSerive: '辛元忠',
-          status: '无人接听',
-          followUpTime: '2017-10-01 12：00',
-          tag: '关机'
-        },{
-          id:22,
-          name: '胡彦斌2',
-          passpost: 'Hulk111',
-          phone: '15721143333',
-          QQ: '12345698745',
-          registrationTime: '2017-10-01 12：00',
-          userSerive: '裴奇致',
-          status: '无人接听',
-          followUpTime: '2017-10-01 12：00',
-          tag: '高意向'
-        }],
+      customerData: [],
 
 
       followResult:[{ text: '可跟进', value: '可跟进' },
@@ -257,7 +229,7 @@ export default {
                     { text: '未拨打', value: '未拨打' }, 
                     { text: '用其他软件', value: '用其他软件' }
                   ],//跟进结果
-    followResultUser:[
+      followResultUser:[
                     { text: '辛元忠', value: '辛元忠' },
                     { text: '裴奇致', value: '裴奇致' }, 
                     { text: '纪乐容', value: '纪乐容' },
@@ -269,7 +241,7 @@ export default {
 
       multipleSelection: [], //选中数据
 
-      currentPage:1,
+      totalElements:0,
 
       dialogVisible:false,//指派弹窗控制器
       assignedCount:[],//所属几个成员
@@ -282,14 +254,43 @@ export default {
       fromOptionsCount:null,//全部转走谁的客户数
 
 
-      userSerive:[],//客服专员筛选
+      serviceName:[],//客服专员筛选
       tag:[],//跟进结果筛选
 
-
+      customerParam:{
+        "dealDateSort": 0,//成交时间排序
+        "endDealDate": "2018-04-10",//截止成交时间
+        "endExpireDate": "2018-04-10",//结束到期时间 
+        "endFollowupDate": "2018-04-10",//截止跟进时间 
+        "endRegisterDate": "2018-04-10",//截止注册时间 
+        "expireDateSort": 0,//到期时间排序
+        "followupDateSort": 0,//按跟进时间排序 
+        "followupResult": 0,//跟进结果条件
+        "isAll": "string",//是否搜全部:1/2 
+        "orders": [//排序条件,为null或长度为0表示不用排序 
+          {
+            "direction": 0,//排序方式 0 ASC 1 DESC
+            "ignoreCase": false,//
+            "order": {},
+            "property": "string"//要排序的字段名
+          }
+        ],
+        "page": 1,// 请求的页码，从1开始
+        "pageRequest": {},
+        "registerDateSort": 0,//
+        "searchCondition": "string",//
+        "servceName": "string",//客户专员,姓名 
+        "size": 10,//每页的记录数,不指定表示不分页 ,
+        "startDealDate": "2018-04-10",//起始成交时间 
+        "startExpireDate": "2018-04-10",//开始到期时间
+        "startFollowupDate": "2018-04-10",//起始跟进时间 
+        "startRegisterDate": "2018-04-10"//起始注册时间
+      },
 
     }
   },
   created() {
+    this.getCustomerList();
   },
   watch: {
     // 检测路由切换页面
@@ -311,6 +312,17 @@ export default {
     }
   },
   methods: {
+    // 初始化获取列表
+    getCustomerList(){
+        let vthis=this;
+        getCustomerManagementList(vthis.customerParam).then((res)=>{
+          console.log(res.data)
+            if(res.msg=='success'){
+                vthis.customerData=res.data.content;
+                vthis.totalElements=res.data.totalElements;
+            }
+        })
+    },
     // 去重
     setArrRep(arr){
       var obj = {}
@@ -325,10 +337,14 @@ export default {
     },
     // 分页操作
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
+      this.customerParam.size=val;
+      this.getCustomerList();
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
+      this.customerParam.page=val;
+      this.getCustomerList();
     },
     // 单个删除操作
     delCustomerBtn(id){
@@ -370,20 +386,24 @@ export default {
       // console.log(this.multipleSelection)
       let vm = this ;
       vm.multipleSelection.forEach((item,index,arr) => {
-          vm.assignedCount.push(item.userSerive)
+          vm.assignedCount.push(item.serviceName)
       })
       vm.assignedCount=Array.from(new Set(vm.assignedCount));
     },
     filterChange(filters){
-      if(filters.userSerive){
-        this.userSerive=filters.userSerive;
+      if(filters.serviceName){
+        this.serviceName=filters.serviceName;
       }
       if(filters.tag){
         this.tag=filters.tag;
       }
-      console.log(this.userSerive)
+      console.log(this.serviceName)
       console.log(this.tag)
-    }
+    },
+    // 格式化时间
+    setTime(time){
+      return moment(time).format("YYYY.MM.DD HH:mm:ss")
+    },
   }
 }
 </script>

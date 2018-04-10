@@ -1,0 +1,1 @@
+global.baseHost = 'http://172.16.21.142:8080/LubanTeleSales/';
