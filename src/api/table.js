@@ -107,7 +107,7 @@ export const getCustomerMining = (customerId) => { return axios.get(`${base}rest
 
 
 
-// ---查询跟进结果集
+// ---查询跟进结果集 / 拨打
 // export function getCustomerFollowUpResult(params) {
 //   return request({
 //     url: 'rest/customer/detail/queryFollowResult',
@@ -131,12 +131,12 @@ export const deleteCustomer = customerId => { return axios.get(`${base}rest/cust
 // ---客户指派  获取销售人员查询下拉列表  客户专员
 // export function getCommissionerList(params) {
 //   return request({
-//     url: 'rest/customer/queryCustomeNumbers',
+//     url: 'rest/customer/querySales',
 //     method: 'post',
 //     params
 //   })
 // }
-export const getCommissionerList = customerState => { return axios.post(`${base}rest/customer/queryCustomeNumbers`,customerState).then(res => res.data); };
+export const getCommissionerList = customerState => { return axios.post(`${base}rest/customer/querySales/${customerState}`).then(res => res.data); };
 
 
 // ---客户指派  客户专员手下客户量查询

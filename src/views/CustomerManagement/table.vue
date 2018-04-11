@@ -89,8 +89,16 @@
               </el-table-column>
               <el-table-column prop="userName" label="姓名" align="center" show-overflow-tooltip></el-table-column>
               <el-table-column prop="mobile" label="手机号码" align="center" show-overflow-tooltip></el-table-column>
-              <el-table-column prop="qq" label="QQ号" align="center" show-overflow-tooltip></el-table-column>
+              <el-table-column v-if="$route.name=='新客户' || $route.name=='高意向' || $route.name=='可跟进'|| $route.name=='无法接通'|| $route.name=='无效线索' " label="QQ号" align="center" show-overflow-tooltip>
+                <template slot-scope="scope">{{ scope.row.qq}}</template>
+              </el-table-column>
               <el-table-column label="注册时间" align="center" show-overflow-tooltip>
+                <template slot-scope="scope">{{ scope.row.registerDate/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
+              </el-table-column>
+              <el-table-column label="成交时间" v-if="$route.name=='成交客户' || $route.name=='即将到期客户' || $route.name=='到期未续费' " align="center" show-overflow-tooltip>
+                <template slot-scope="scope">{{ scope.row.registerDate/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
+              </el-table-column>
+              <el-table-column label="到期时间" v-if="$route.name=='成交客户' || $route.name=='即将到期客户' || $route.name=='到期未续费' " align="center" show-overflow-tooltip>
                 <template slot-scope="scope">{{ scope.row.registerDate/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
               <el-table-column
@@ -111,15 +119,15 @@
                   align="center"
                   :filters="followResult">
                   <template slot-scope="scope">
-                    <el-tag close-transition>{{scope.row.followupResult}}</el-tag>
+                    <el-tag close-transition>{{callResult[scope.row.followupResult]}}</el-tag>
                   </template>
               </el-table-column>
               <el-table-column label="最新跟进时间" align="center" show-overflow-tooltip>
-                <template slot-scope="scope">{{ scope.row.lastFollowupDate  }}</template>
+                <template slot-scope="scope">{{ scope.row.lastFollowupDate/1000 |moment("YYYY-MM-DD HH:mm:ss")  }}</template>
               </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
-                    <span class="operationBtn" @click="delCustomerBtn(scope.row.id)">删除</span><span class="operationBtn" @click="followCustomerBtn(scope.row.id)">跟进</span>
+                    <span class="operationBtn" @click="delCustomerBtn(scope.row.password)">删除</span><span class="operationBtn" @click="followCustomerBtn(scope.row.password)">跟进</span>
                 </template>
               </el-table-column>
           </el-table>
@@ -205,7 +213,7 @@
 import slideView from '../../components/slideView/slideView'
 
 
-import {getCustomerManagementList} from '@/api/table.js'
+import {getCustomerManagementList,getCustomerFollowUpResult,getCommissionerList,deleteCustomer} from '@/api/table.js'
 
 
 export default {
@@ -229,25 +237,26 @@ export default {
       customerData: [],
 
 
-      followResult:[{ text: '可跟进', value: '可跟进' },
-                    { text: '高意向', value: '高意向' }, 
-                    { text: '关机', value: '关机' },
-                    { text: '无法接通', value: '无法接通' }, 
-                    { text: '已成交', value: '已成交' },
-                    { text: '停机', value: '停机' }, 
-                    { text: '空号', value: '空号' }, 
-                    { text: '错号', value: '错号' },
-                    { text: '未拨打', value: '未拨打' }, 
-                    { text: '用其他软件', value: '用其他软件' }
+      followResult:[
+                    // { text: '可跟进', value: '可跟进' },
+                    // { text: '高意向', value: '高意向' }, 
+                    // { text: '关机', value: '关机' },
+                    // { text: '无法接通', value: '无法接通' }, 
+                    // { text: '已成交', value: '已成交' },
+                    // { text: '停机', value: '停机' }, 
+                    // { text: '空号', value: '空号' }, 
+                    // { text: '错号', value: '错号' },
+                    // { text: '未拨打', value: '未拨打' }, 
+                    // { text: '用其他软件', value: '用其他软件' }
                   ],//跟进结果
       followResultUser:[
-                    { text: '辛元忠', value: '辛元忠' },
-                    { text: '裴奇致', value: '裴奇致' }, 
-                    { text: '纪乐容', value: '纪乐容' },
-                    { text: '赵国安', value: '赵国安' }, 
-                    { text: '郭博超', value: '郭博超' },
-                    { text: '明宏阔', value: '明宏阔' }, 
-                    { text: '封安民', value: '封安民' }, 
+                    // { text: '辛元忠', value: '辛元忠' },
+                    // { text: '裴奇致', value: '裴奇致' }, 
+                    // { text: '纪乐容', value: '纪乐容' },
+                    // { text: '赵国安', value: '赵国安' }, 
+                    // { text: '郭博超', value: '郭博超' },
+                    // { text: '明宏阔', value: '明宏阔' }, 
+                    // { text: '封安民', value: '封安民' }, 
                   ],//客服专员
 
       multipleSelection: [], //选中数据
@@ -269,6 +278,7 @@ export default {
       tag:[],//跟进结果筛选
 
       customerParam:{
+        "customerClass":0,
         "dealDateSort": 0,//成交时间排序
         "endDealDate": "",//截止成交时间
         "endExpireDate": "",//结束到期时间 
@@ -276,37 +286,64 @@ export default {
         "endRegisterDate": "",//截止注册时间 
         "expireDateSort": 0,//到期时间排序
         "followupDateSort": 0,//按跟进时间排序 
-        "followupResult": 0,//跟进结果条件
-        "isAll": "2",//是否搜全部:1/2 
+        "followupResult": [],//拨打结果条件
+        "isAll": "2",//是否搜全部:1部分范围搜索/2全部范围搜索
         "orders": [//排序条件,为null或长度为0表示不用排序 
           {
             "direction": 0,//排序方式 0 ASC 1 DESC
             "ignoreCase": false,//
             "order": {},
-            "property": ""//要排序的字段名
+            "property": "string"//要排序的字段名
           }
         ],
         "page": 1,// 请求的页码，从1开始
         "pageRequest": {},
         "registerDateSort": 0,//
         "searchCondition": "",//搜索值
-        "servceName": "",//客户专员,姓名 
+        "servceName": [],//客户专员,姓名 
         "size": 10,//每页的记录数,不指定表示不分页 ,
         "startDealDate": "",//起始成交时间 
         "startExpireDate": "",//开始到期时间
         "startFollowupDate": "",//起始跟进时间 
         "startRegisterDate": ""//起始注册时间
       },
+      
+      type:{// 客户分类结果集
+        "新客户": 0,
+        "高意向": 1,
+        "可跟进": 2,
+        "成交客户": 3,
+        "即将到期客户": -1,
+        "到期未续费": -2,
+        "无法接通": 4,
+        "无效线索": 5
+      },
+      callResult:{// 客户分类结果集
+        "null": "无",
+        "1": "接通",
+        "2": "未接",
+        "3": "关机",
+        "4": "无人接听",
+        "5": "停机",
+        "6": "空号",
+        "7": "使用其他软件",
+      },
 
     }
   },
   created() {
-    this.getCustomerList();
+      // 初始化获取列表
+      this.getCustomerList();
+      // 初始化获取客户专员筛选
+      this.getCommissionerList();
+      // 初始化获取拨打结果筛选
+      this.getCallList();
   },
   watch: {
     // 检测路由切换页面
     $route() {
-      console.log(this.$route.name)
+      // console.log(this.$route.name)
+      // 路由切换 初始化数据
       this.registrationTime='';
       this.followUpTime='';
       this.ClinchAdealTime='';
@@ -317,29 +354,44 @@ export default {
       this.currentPage=1;
       this.showDetialBox=false;
       this.loading=true;
-      let type = {
-        "新客户": "",
-        "高意向": "",
-        "可跟进": "",
-        "成交客户": "",
-        "即将到期客户": "",
-        "到期未续费": "",
-        "无法接通": "",
-        "无效线索": ""
-      };
+      this.customerParam.page=1;
+      this.customerParam.size=10;
+      // 初始化获取列表
       this.getCustomerList();
+      // 初始化获取客户专员筛选
+      this.getCommissionerList();
+      // 初始化获取拨打结果筛选
+      this.getCallList();
     },
     // 检测搜索全部操作
     'searchAll'(){
-       this.searchAll?this.customerParam.isAll=1:this.customerParam.isAll=2;
+       this.searchAll?this.customerParam.isAll="2":this.customerParam.isAll="1";
        this.getCustomerList();
     }
   },
   methods: {
+    // 初始化获取客户专员筛选
+    getCommissionerList(){
+        let customerState = this.type[this.$route.name];
+        getCommissionerList(customerState).then((res)=>{
+            if(res.msg=='success'){
+                this.followResultUser=res.data;
+            }
+        })
+    },
+    // 初始化获取拨打结果筛选
+    getCallList(){
+        getCustomerFollowUpResult().then((res)=>{
+            if(res.msg=='success'){
+                this.followResult=res.data;
+            }
+        })
+    },
     // 初始化获取列表
     getCustomerList(){
         let vthis=this;
         // console.log(vthis.customerParam)
+        vthis.customerParam.customerClass=vthis.type[vthis.$route.name];
         getCustomerManagementList(vthis.customerParam).then((res)=>{
             if(res.msg=='success'){
                 vthis.loading=false;
@@ -373,22 +425,28 @@ export default {
     },
     // 单个删除操作
     delCustomerBtn(id){
-      console.log(id)
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+      // console.log(id)
+      this.$confirm('是否将客户转入公海?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
         center: true
       }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        });
+        deleteCustomer(id).then((res)=>{
+            if(res.msg=='success'){
+                this.$message({
+                  type: 'success',
+                  message: '转入成功!'
+                });
+            }else{
+                this.$message({
+                  type: 'errow',
+                  message: '转入失败!'
+                });
+            }
+        })
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });
+        
       });
     },
     // 单个跟进操作
@@ -403,7 +461,11 @@ export default {
     },
     // 批量删除操作
     delAllCustomerBtn(){
-      // console.log(this.multipleSelection)
+      // deleteCustomer
+      let id = this.multipleSelection.map(v => {return v.password}).join()
+      console.log(id)
+
+      // delCustomerBtn(id);
      
     },
     // 批量指派操作
@@ -415,15 +477,13 @@ export default {
       })
       vm.assignedCount=Array.from(new Set(vm.assignedCount));
     },
+    // 表头筛选  专员   拨打
     filterChange(filters){
-      if(filters.serviceName){
-        this.serviceName=filters.serviceName;
-      }
-      if(filters.tag){
-        this.tag=filters.tag;
-      }
-      console.log(this.serviceName)
-      console.log(this.tag)
+        filters.serviceName?this.customerParam.servceName=filters.serviceName:this.customerParam.servceName=[];
+        filters.tag?this.customerParam.followupResult=filters.tag:this.customerParam.followupResult=[];
+        console.log(this.customerParam.servceName)
+        console.log(this.customerParam.followupResult)
+        this.getCustomerList();
     },
     // 格式化时间
     setTime(time){
