@@ -134,6 +134,13 @@ export const constantRouterMap = [
         component: () => import('@/views/ResourceAllocation/Remining'),
         meta: { title: '重新挖掘', icon: 'tree' },
         hidden: true,//不需要渲染在菜单栏
+      },
+      {
+        path: 'startmining',
+        name: '开始挖掘',
+        component: () => import('@/views/ResourceAllocation/StartMining'),
+        meta: { title: '开始挖掘', icon: 'tree' },
+        hidden: true,//不需要渲染在菜单栏
       }
     ]
   },

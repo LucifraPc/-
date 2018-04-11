@@ -5,7 +5,9 @@
       <el-button size="small" round @click="backToPrevious" style="float:right;margin-top:5px">返回</el-button>
     </el-row>
     <el-row class="el-row-wrap">
-      稍后放置筛选条件
+      <iframe id="mainFrame" name="mainFrame" scrolling="no" src="../../../static/dataMining/showCondition.html"
+            frameborder="0" style="padding: 0px; width: 100%;"></iframe>
+       <!-- <iframe src="../../../static/dataMining/showCondition.html" frameborder="0" style="width:100%"></iframe> -->
     </el-row>
     <el-row class="el-row-wrap">
       <span>用户名：</span>

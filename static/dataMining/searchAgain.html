@@ -1,0 +1,52 @@
+
+        <html>
+
+        <head>
+            <link href="My97DatePicker/skin/WdatePicker.css" rel="stylesheet" type="text/css">
+            <script language="javascript" type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+            <script src="http://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+                crossorigin="anonymous"></script>
+            <script type="text/javascript" src="common.js"></script>
+            <script type="text/javascript" src="searchAgain.js"></script>
+            <script type="text/javascript" src="conditionSelect.js"></script>
+        </head>
+
+        <body>
+            <div style=" margin-top: 0px; height: 90px;">
+                <div style="width:100%;border-bottom: 1px solid">
+                    <!-- <a href="essencesale/requestMiningTaskPage.htm" style="color: #06b;">&lt;&lt;返回</a>
+                    <br/> -->
+                    <span style="font-size: 16px;font-weight: bold;line-height: 30px;">以相同条件发起新挖掘</span>
+                    <input type="hidden" id="mid" value="${miningtaskInfo.id}" />
+                    <div style="float:right;margin-right:6%;">时间范围限制:
+                        <input type="text" id="timeLimit" value="180" maxlength='9' size="4" onkeyup="value=value.replace(/[^\d]/g,'')"
+                            onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
+                        />天</div>
+                </div>
+                <div>
+                    <input type="hidden" value="1" id="tr_count" />
+                    <table id="cenditionList" class="timeMenuAds" style="width: 100%;margin-top: 10px;border-collapse:collapse">
+                        <tr>
+                            <td colspan="3" style="text-align: left;">任务名称：
+                                <input type="text" style="width:875px;" maxlength="50" id="task_name" />
+                            </td>
+                        </tr>
+
+                    </table>
+
+                </div>
+                <div style="margin-top: 20px;">
+                    <input type="button" id="add" value="增加条件" />
+                    <input type="button" id="start" value="开始挖掘" />
+                    <input type="button" id="reset" value="重置条件" />
+                </div>
+                <div id="test">
+
+
+                </div>
+            </div>
+
+
+        </body>
+
+        </html>

@@ -26,7 +26,7 @@
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
             </el-option>
           </el-select>
-          <el-button>发起挖掘</el-button>
+          <el-button @click="startMining">发起挖掘</el-button>
         </div>
       </div>
     </el-row>
@@ -111,6 +111,11 @@
       reMining(row){
         this.$router.push({
           path: `/resource-allocation/remining/${row.date}`
+        });
+      },
+      startMining(){
+        this.$router.push({
+          path: `/resource-allocation/startmining`
         });
       }
     }

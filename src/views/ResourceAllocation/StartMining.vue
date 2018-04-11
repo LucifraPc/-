@@ -2,9 +2,9 @@
   <div class="app-container">
     <el-row class="el-row-wrap">
       <el-button size="small" round @click="backToPrevious" style="float:right;margin-top:5px">返回</el-button>
-      <iframe id="mainFrame" name="mainFrame" scrolling="no" src="../../../static/dataMining/showCondition.html"
-            frameborder="0" style="padding: 0px; width: 100%;"></iframe>
+      <iframe src="../../../static/dataMining/searchStart.html" frameborder="0" style="width:100%;height:80vh"></iframe>
     </el-row>
+
   </div>
 </template>
 <script>

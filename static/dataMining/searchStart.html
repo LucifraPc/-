@@ -1,0 +1,78 @@
+
+<html>
+<head>
+    <link href="My97DatePicker/skin/WdatePicker.css" rel="stylesheet" type="text/css">
+    <!-- My97Date 时间控件 -->
+    <script language="javascript" type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+    <script src="http://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="conditionSelect.js"></script>
+    <script type="text/javascript" src="common.js"></script>
+    <title></title>
+</head>
+
+<body >
+    <div style="width:100%; margin-top: 0px; height: 90px;">
+        <div style="width:100%;border-bottom: 1px solid">
+            <!-- <a href="essencesale/requestMiningTaskPage.htm" style="color: #06b;">&lt;&lt;返回</a>
+            <br/> -->
+            <span style="font-size: 16px;font-weight: bold;line-height: 30px;">发起挖掘</span>
+            <div style="float:right;margin-right:6%;">时间范围限制:
+                <input type="text" id="timeLimit" maxlength='9' value="180" size="4" onkeyup="value=value.replace(/[^\d]/g,'')" onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
+                />天</div>
+        </div>
+        <div>
+            <input type="hidden" value="1" id="tr_count" />
+            <table id="cenditionList" class="timeMenuAds" style="width: 100%;margin-top: 10px;border-collapse:collapse;">
+                <tr>
+                    <td colspan="3" style="text-align: left;">任务名称：
+                        <input type="text" style="width:875px;" maxlength="50" id="task_name" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='3' style='height:10px;background: #EEEFF4'></td>
+                </tr>
+                <tr style="line-height: 20px" id="ctr0" class='ctr'>
+                    <td width="14%" style="background: white;border: 1px solid #C7C7C7;">
+                        <select class="condition" id="condition_id0" onchange="cdnChange(this,0)">
+                            <option value="product" selected="select">登录产品</option>
+                            <option value="userRegisterTime">用户注册时间</option>
+                            <option value="useArea">登录地区</option>
+                            <option value="buyType">个人套餐购买情况</option>
+                            <option value="functionUseTimes">功能使用情况</option>
+                            <option value="loginCount">账号登陆次数</option>
+                            <option value="onlineTime">账号在线时长</option>
+                        </select>
+
+                    </td>
+                    <td width="80%" style="background: white;border: 1px solid #C7C7C7;text-align: left;">
+                        时间范围：
+                        <input class="Wdate startDate" type="text" size="12" id='sd0' onClick="WdatePicker({errDealMode:1,readOnly:true,isShowClear:false,maxDate:'#F{$dp.$D(\'ed0\')||\'%y-%M-%d\'}'})"> ~
+                        <input class="Wdate endDate" type="text" size="12" id='ed0' onClick="WdatePicker({isShowClear:false,readOnly:true,errDealMode:4,minDate:'#F{$dp.$D(\'sd0\')}',maxDate:'%y-%M-%d'})">
+                        <br/>
+                        <input type='checkbox' name='pdt_checkbox0' onclick='checkAll(this.name)' value=''>全部 &nbsp;&nbsp;
+                        <input type='checkbox' name='pdt_checkbox0' value='3'>土建 &nbsp;&nbsp;
+                        <input type='checkbox' name='pdt_checkbox0' value='2'>钢筋 &nbsp;&nbsp;
+                        <input type='checkbox' name='pdt_checkbox0' value='5'>安装
+                    </td>
+                    <td width="6%">
+                        <input type='button' onclick='cdndelete(this)' class='fdd' value='删除' />
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+        <div style="margin-top: 20px;">
+            <input type="button" id="add" value="增加条件" />
+            <input type="button" id="start" value="开始挖掘" />
+            <input type="button" id="reset" value="重置条件" />
+        </div>
+        <div id="test">
+
+
+        </div>
+    </div>
+
+
+</body>
+
+</html>
