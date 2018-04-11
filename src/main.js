@@ -1,5 +1,5 @@
 import Vue from 'vue'
-
+import '../static/baseUrl.js'; 
 import 'normalize.css/normalize.css'// A modern alternative to CSS resets
 
 import ElementUI from 'element-ui'
@@ -13,6 +13,7 @@ import '@/icons' // icon
 import '@/permission' // permission control
 import $ from "jquery";
 Vue.use(ElementUI)
+Vue.use(require('vue-moment'));
 Vue.component('bread-crumb',BreadCrumb);
 Vue.config.productionTip = false
 
