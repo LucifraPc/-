@@ -11,7 +11,6 @@ import store from './store'
 import BreadCrumb from './components/Breadcrumb'
 import '@/icons' // icon
 import '@/permission' // permission control
-import $ from "jquery";
 Vue.use(ElementUI)
 Vue.use(require('vue-moment'));
 Vue.component('bread-crumb',BreadCrumb);
