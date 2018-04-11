@@ -10,8 +10,8 @@
               <el-input class="search-input-box"
                 placeholder="请输入通行证/姓名/手机号/QQ号搜索"
                 v-model="searcKey">
-                <i slot="prefix" class="el-input__icon el-icon-circle-close" v-show="searcKey" @click="searcKey=''"></i>
-                <i slot="prefix" class="el-input__icon el-icon-search"></i>
+                <i slot="prefix" class="el-input__icon el-icon-circle-close" v-show="searcKey" @click="searcKey='';searchBtn()"></i>
+                <i slot="prefix" class="el-input__icon el-icon-search" @click="searchBtn"></i>
               </el-input>
           </el-col>
       </el-row>
@@ -21,6 +21,8 @@
               <div class="inline">
                   <span class="demonstration">注册时间：</span>
                   <el-date-picker
+                    @change="changeRegist"
+                    value-format="yyyy-MM-dd"
                     v-model="registrationTime"
                     type="daterange"
                     range-separator="至"
@@ -31,6 +33,8 @@
               <div class="inline">
                   <span class="demonstration">最新跟进时间：</span>
                   <el-date-picker
+                    @change="changeFollow"
+                    value-format="yyyy-MM-dd"
                     v-model="followUpTime"
                     type="daterange"
                     range-separator="至"
@@ -45,6 +49,8 @@
               <div class="inline">
                   <span class="demonstration">成交时间：</span>
                   <el-date-picker
+                    @change="changeClinchAdeal"
+                    value-format="yyyy-MM-dd"
                     v-model="ClinchAdealTime"
                     type="daterange"
                     range-separator="至"
@@ -55,6 +61,8 @@
               <div class="inline">
                   <span class="demonstration">到期时间：</span>
                   <el-date-picker
+                    @change="changeExpire"
+                    value-format="yyyy-MM-dd"
                     v-model="expireTime"
                     type="daterange"
                     range-separator="至"
@@ -67,6 +75,8 @@
 
           <!-- 表格数据 -->
           <el-table
+              v-loading="loading"
+              element-loading-text="拼命加载中..."
               ref="multipleTable"
               :data="customerData"
               tooltip-effect="dark"
@@ -96,7 +106,7 @@
               </el-table-column>
               <el-table-column
                   prop="tag"
-                  label="跟进结果"
+                  label="拨打结果"
                   column-key="tag"
                   align="center"
                   :filters="followResult">
@@ -124,7 +134,7 @@
           </div>
 
           <!-- 分页 -->
-          <div class="block" style="text-align: center;margin-top:20px">
+          <div class="block" v-show="customerData.length>0" style="text-align: center;margin-top:20px">
               <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
@@ -204,6 +214,7 @@ export default {
   },
   data() {
     return {
+      loading:true,
 
       searcKey:'',//搜索值
       searchAll:false,//搜索全部
@@ -259,32 +270,32 @@ export default {
 
       customerParam:{
         "dealDateSort": 0,//成交时间排序
-        "endDealDate": "2018-04-10",//截止成交时间
-        "endExpireDate": "2018-04-10",//结束到期时间 
-        "endFollowupDate": "2018-04-10",//截止跟进时间 
-        "endRegisterDate": "2018-04-10",//截止注册时间 
+        "endDealDate": "",//截止成交时间
+        "endExpireDate": "",//结束到期时间 
+        "endFollowupDate": "",//截止跟进时间 
+        "endRegisterDate": "",//截止注册时间 
         "expireDateSort": 0,//到期时间排序
         "followupDateSort": 0,//按跟进时间排序 
         "followupResult": 0,//跟进结果条件
-        "isAll": "string",//是否搜全部:1/2 
+        "isAll": "2",//是否搜全部:1/2 
         "orders": [//排序条件,为null或长度为0表示不用排序 
           {
             "direction": 0,//排序方式 0 ASC 1 DESC
             "ignoreCase": false,//
             "order": {},
-            "property": "string"//要排序的字段名
+            "property": ""//要排序的字段名
           }
         ],
         "page": 1,// 请求的页码，从1开始
         "pageRequest": {},
         "registerDateSort": 0,//
-        "searchCondition": "string",//
-        "servceName": "string",//客户专员,姓名 
+        "searchCondition": "",//搜索值
+        "servceName": "",//客户专员,姓名 
         "size": 10,//每页的记录数,不指定表示不分页 ,
-        "startDealDate": "2018-04-10",//起始成交时间 
-        "startExpireDate": "2018-04-10",//开始到期时间
-        "startFollowupDate": "2018-04-10",//起始跟进时间 
-        "startRegisterDate": "2018-04-10"//起始注册时间
+        "startDealDate": "",//起始成交时间 
+        "startExpireDate": "",//开始到期时间
+        "startFollowupDate": "",//起始跟进时间 
+        "startRegisterDate": ""//起始注册时间
       },
 
     }
@@ -305,19 +316,33 @@ export default {
       this.multipleSelection=[];
       this.currentPage=1;
       this.showDetialBox=false;
+      this.loading=true;
+      let type = {
+        "新客户": "",
+        "高意向": "",
+        "可跟进": "",
+        "成交客户": "",
+        "即将到期客户": "",
+        "到期未续费": "",
+        "无法接通": "",
+        "无效线索": ""
+      };
+      this.getCustomerList();
     },
     // 检测搜索全部操作
     'searchAll'(){
-       console.log(this.searchAll)
+       this.searchAll?this.customerParam.isAll=1:this.customerParam.isAll=2;
+       this.getCustomerList();
     }
   },
   methods: {
     // 初始化获取列表
     getCustomerList(){
         let vthis=this;
+        // console.log(vthis.customerParam)
         getCustomerManagementList(vthis.customerParam).then((res)=>{
-          console.log(res.data)
             if(res.msg=='success'){
+                vthis.loading=false;
                 vthis.customerData=res.data.content;
                 vthis.totalElements=res.data.totalElements;
             }
@@ -404,6 +429,41 @@ export default {
     setTime(time){
       return moment(time).format("YYYY.MM.DD HH:mm:ss")
     },
+
+    // 改变时间
+    // 改变注册时间
+    changeRegist(val){
+      console.log(val)
+      val?this.customerParam.startRegisterDate=val[0]:this.customerParam.startRegisterDate='';//起始注册时间
+      val?this.customerParam.endRegisterDate=val[1]:this.customerParam.endRegisterDate='';//截止注册时间
+      this.getCustomerList();
+    },
+    // 改变跟进时间
+    changeFollow(val){
+      console.log(val)
+      val?this.customerParam.startFollowupDate=val[0]:this.customerParam.startFollowupDate='';//起始跟进时间
+      val?this.customerParam.endFollowupDate=val[1]:this.customerParam.endFollowupDate='';//截止跟进时间 
+      this.getCustomerList();
+    },
+    // 改变成交时间
+    changeClinchAdeal(val){
+      console.log(val)
+      val?this.customerParam.startDealDate=val[0]:this.customerParam.startDealDate='';//起始成交时间 
+      val?this.customerParam.endDealDate=val[1]:this.customerParam.endDealDate='';//截止成交时间
+      this.getCustomerList();
+    },
+    // 改变到期时间
+    changeExpire(val){
+        val?this.customerParam.startExpireDate=val[0]:this.customerParam.startExpireDate='';//开始到期时间
+        val?this.customerParam.endExpireDate=val[1]:this.customerParam.endExpireDate='';//结束到期时间 
+        this.getCustomerList();
+    },
+    // 搜索
+    searchBtn(){
+      this.customerParam.searchCondition=this.searchAll;
+      this.customerParam.page=1;
+      this.getCustomerList();
+    }
   }
 }
 </script>

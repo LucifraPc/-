@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+// import request from '@/utils/request'
 
 let base = global.baseHost;
 import axios from 'axios'
@@ -56,13 +56,13 @@ export const getCustomerDetailSubmint = params => { return axios.post(`${base}re
 export const getCustomerPackage = customerId => { return axios.get(`${base}rest/customer/detail/queryComboMargin/${customerId}`).then(res => res.data); };
 
 // ---获取客户详情--功能使用
-export function getCustomerFun(params) {
-  return request({
-    url: '/table/list',
-    method: 'get',
-    params
-  })
-}
+// export function getCustomerFun(params) {
+//   return request({
+//     url: '/table/list',
+//     method: 'get',
+//     params
+//   })
+// }
 
 // ---获取客户详情--查询功能使用次数
 // export function getCustomerFunCount(params) {
@@ -87,13 +87,13 @@ export const getCustomerOrder = (customerId) => { return axios.get(`${base}rest/
 
 
 // ---获取客户详情--订单记录--编号搜索
-export function getCustomerOrderSearchNumber(params) {
-  return request({
-    url: '/table/list',
-    method: 'get',
-    params
-  })
-}
+// export function getCustomerOrderSearchNumber(params) {
+//   return request({
+//     url: '/table/list',
+//     method: 'get',
+//     params
+//   })
+// }
 
 // ---获取客户详情--客户详情挖掘记录
 // export function getCustomerMining(params) {
@@ -177,22 +177,22 @@ export const getSubmitAssignment = param=> { return axios.post(`${base}rest/cust
 // ------客户公海------
 
 // ---列表获取
-export function getCustomerPublicList(params) {
-  return request({
-    url: '/table/list',
-    method: 'get',
-    params
-  })
-}
+// export function getCustomerPublicList(params) {
+//   return request({
+//     url: '/table/list',
+//     method: 'get',
+//     params
+//   })
+// }
 
 // ---客户认领
-export function getCustomerClaim(params) {
-  return request({
-    url: '/table/list',
-    method: 'get',
-    params
-  })
-}
+// export function getCustomerClaim(params) {
+//   return request({
+//     url: '/table/list',
+//     method: 'get',
+//     params
+//   })
+// }
 
 
 
@@ -203,24 +203,24 @@ export function getCustomerClaim(params) {
 // ------系统设置------
 
 // ---详情获取
-export function getSystemSettingsDetail(params) {
-  return request({
-    url: 'rest/tsConfig/querytsConfig',
-    method: 'post',
-    data:params
-  })
-}
-// export const getSystemSettingsDetail = params => { return axios.post(`${base}rest/tsConfig/querytsConfig`,params).then(res => res.data); };
+// export function getSystemSettingsDetail(params) {
+//   return request({
+//     url: 'rest/tsConfig/querytsConfig',
+//     method: 'post',
+//     data:params
+//   })
+// }
+export const getSystemSettingsDetail = params => { return axios.post(`${base}rest/tsConfig/querytsConfig`,params).then(res => res.data); };
 
 // ---设置保存
-export function getSystemSettingsSave(params) {
-  return request({
-    url: 'rest/tsConfig/saveConfig',
-    method: 'post',
-    data:params
-  })
-}
-// export const getSystemSettingsSave = params => { return axios.post(`${base}rest/tsConfig/saveConfig`,params).then(res => res.data); };
+// export function getSystemSettingsSave(params) {
+//   return request({
+//     url: 'rest/tsConfig/saveConfig',
+//     method: 'post',
+//     data:params
+//   })
+// }
+export const getSystemSettingsSave = params => { return axios.post(`${base}rest/tsConfig/saveConfig`,params).then(res => res.data); };
 
 
 
@@ -228,20 +228,20 @@ export function getSystemSettingsSave(params) {
 // ------数据报表------
 
 // ---列表获取
-export function getDataReportList(params) {
-  return request({
-    url: '/table/list',
-    method: 'get',
-    params
-  })
-}
+// export function getDataReportList(params) {
+//   return request({
+//     url: '/table/list',
+//     method: 'get',
+//     params
+//   })
+// }
 
 // ---导出
-export function getExportRemove(params) {
-  return request({
-    url: '/table/list',
-    method: 'get',
-    params
-  })
-}
+// export function getExportRemove(params) {
+//   return request({
+//     url: '/table/list',
+//     method: 'get',
+//     params
+//   })
+// }
 
