@@ -31,7 +31,7 @@
       </div>
     </el-row>
     <el-row style="margin-bottom:15px;" class="el-row-wrap">
-      <el-table :data="tableData" style="width: 100%">
+      <el-table :data="tableData" style="width: 100%" class="data-mining-table">
         <el-table-column label="任务名称" prop="name">
         </el-table-column>
         <el-table-column label="时间">
@@ -53,14 +53,24 @@
           </template>
         </el-table-column>
       </el-table>
+      <div class="block">
+        <!-- <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[100, 200, 300, 400]"
+          :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
+        </el-pagination> -->
+      </div>
     </el-row>
   </div>
 </template>
 <script>
+  // import {
+  //   getDataMiningInfo
+  // } from '@/api/ppc'
+  import * as api from '@/api/ppc';
   export default {
     data() {
       return {
         value6: '',
+        currentPage: "",
         options: [{
           value: '选项1',
           label: '黄金糕'
@@ -98,37 +108,51 @@
       }
     },
     methods: {
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+      },
+      getDataMiningInfo() {
+        api.getDataMiningInfo().then(res => {
+          console.log(JSON.parse(res))
+        })
+      },
       getMiningConditions(row) {
         this.$router.push({
           path: `/resource-allocation/get-mining-conditions/${row.date}`
         });
       },
-      getResults(row){
+      getResults(row) {
         this.$router.push({
           path: `/resource-allocation/get-results/${row.date}`
         });
       },
-      reMining(row){
+      reMining(row) {
         this.$router.push({
           path: `/resource-allocation/remining/${row.date}`
         });
       },
-      startMining(){
+      startMining() {
         this.$router.push({
           path: `/resource-allocation/startmining`
         });
       }
+    },
+    mounted() {
+      this.getDataMiningInfo()
     }
   }
 
 </script>
 <style rel="stylesheet/scss" lang="scss" scope>
-  // [class*=" el-icon-"],
-  // [class^=el-icon-] {
-  //   font-size: 25px;
-  //   line-height: 1.5;
-  //   cursor: pointer;
-  // }
+  .data-mining-table [class*=" el-icon-"],
+  [class^=el-icon-] {
+    font-size: 20px;
+    line-height: 1.6;
+    cursor: pointer;
+  }
 
   .date-picker-wrap .el-button:nth-of-type(1) {
     margin-left: 150px;
@@ -136,6 +160,11 @@
 
   .el-button+.el-button {
     margin-left: 20px
+  }
+
+  .block {
+    margin-top: 20px;
+    text-align: center;
   }
 
 </style>

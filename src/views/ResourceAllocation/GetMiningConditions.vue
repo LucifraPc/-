@@ -20,6 +20,4 @@
 
 </script>
 <style rel="stylesheet/scss" lang="scss" scope>
-
-
 </style>
