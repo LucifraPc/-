@@ -107,7 +107,8 @@
                   prop="serviceName"
                   label="客服专员"
                   column-key="serviceName"
-                  :filters="followResultUser">
+                  :filters="followResultUser"
+                  filter-placement="bottom-end">
                   <template slot-scope="scope">
                     <el-tag close-transition>{{scope.row.serviceName}}</el-tag>
                   </template>
@@ -117,7 +118,8 @@
                   label="拨打结果"
                   column-key="tag"
                   align="center"
-                  :filters="followResult">
+                  :filters="followResult"
+                  filter-placement="bottom-end">
                   <template slot-scope="scope">
                     <el-tag close-transition>{{callResult[scope.row.followupResult]}}</el-tag>
                   </template>
@@ -338,31 +340,32 @@ export default {
       this.getCommissionerList();
       // 初始化获取拨打结果筛选
       this.getCallList();
-      // this.changeArrKey()
   },
   watch: {
     // 检测路由切换页面
     $route() {
       // console.log(this.$route.name)
       // 路由切换 初始化数据
-      this.registrationTime='';
-      this.followUpTime='';
-      this.ClinchAdealTime='';
-      this.expireTime='';
-      this.searcKey='';
-      this.searchAll=false;
-      this.multipleSelection=[];
-      this.currentPage=1;
-      this.showDetialBox=false;
-      this.loading=true;
-      this.customerParam.page=1;
-      this.customerParam.size=10;
+      // this.registrationTime='';
+      // this.followUpTime='';
+      // this.ClinchAdealTime='';
+      // this.expireTime='';
+      // this.searcKey='';
+      // this.searchAll=false;
+      // this.multipleSelection=[];
+      // this.currentPage=1;
+      // this.showDetialBox=false;
+      // this.loading=true;
+      // this.customerParam.page=1;
+      // this.customerParam.size=10;
+      // this.followResultUser=[];
+      // this.followResult=[];
       // 初始化获取列表
-      this.getCustomerList();
+      // this.getCustomerList();
       // 初始化获取客户专员筛选
-      this.getCommissionerList();
+      // this.getCommissionerList();
       // 初始化获取拨打结果筛选
-      this.getCallList();
+      // this.getCallList();
     },
     // 检测搜索全部操作
     'searchAll'(){
@@ -371,30 +374,39 @@ export default {
     }
   },
   methods: {
-    changeArrKey(){
-      var b = {};
-      a.forEach(function (obj) {
-          var array = b[obj['key']] || [];
-          array.push(obj);
-          b[obj['key']] = array;
-      });
-      console.log(b.a.length);
-      console.log(b.b.length);
-    },
     // 初始化获取客户专员筛选
     getCommissionerList(){
-        let customerState = this.type[this.$route.name];
+        let vthis=this;
+        let customerState = vthis.type[vthis.$route.name];
         getCommissionerList(customerState).then((res)=>{
             if(res.msg=='success'){
-                this.followResultUser=res.data;
+                res.data.forEach(function (item,index) {
+                    let obj={
+                      text: '', value: ''
+                    }
+                    obj.text=item.followup;
+                    obj.value=item.followupId;
+                    vthis.followResultUser.push(obj)
+                })
+                // this.followResultUser=res.data;
             }
         })
     },
     // 初始化获取拨打结果筛选
     getCallList(){
+        let vthis=this;
         getCustomerFollowUpResult().then((res)=>{
             if(res.msg=='success'){
-                this.followResult=res.data;
+                res.data.forEach(function (item,index) {
+                    let obj={
+                      text: '', value: ''
+                    }
+                    obj.text=item.followup;
+                    obj.value=item.followupId;
+                    vthis.followResult.push(obj)
+                })
+                // console.log(vthis.followResult)
+                // this.followResult=res.data;
             }
         })
     },
