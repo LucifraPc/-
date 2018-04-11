@@ -115,7 +115,9 @@ export const getCustomerMining = (customerId) => { return axios.get(`${base}rest
 //     params
 //   })
 // }
-export const getCustomerFollowUpResult = () => { return axios.get(`${base}rest/customer/detail/queryFollowResult`).then(res => res.data); };
+export const getCustomerFollowUpResult = () => { return axios.post(`${base}rest/customer/queryFollowup`).then(res => res.data); };
+// export const getCustomerFollowUpResult = () => { return axios.get(`${base}rest/customer/detail/queryFollowResult`).then(res => res.data); };
+
 
 // ---客户删除,批量删除接口
 // export function deleteCustomer(params) {

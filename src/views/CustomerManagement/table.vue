@@ -338,6 +338,7 @@ export default {
       this.getCommissionerList();
       // 初始化获取拨打结果筛选
       this.getCallList();
+      // this.changeArrKey()
   },
   watch: {
     // 检测路由切换页面
@@ -370,6 +371,16 @@ export default {
     }
   },
   methods: {
+    changeArrKey(){
+      var b = {};
+      a.forEach(function (obj) {
+          var array = b[obj['key']] || [];
+          array.push(obj);
+          b[obj['key']] = array;
+      });
+      console.log(b.a.length);
+      console.log(b.b.length);
+    },
     // 初始化获取客户专员筛选
     getCommissionerList(){
         let customerState = this.type[this.$route.name];
@@ -438,6 +449,7 @@ export default {
                   type: 'success',
                   message: '转入成功!'
                 });
+                this.getCustomerList();
             }else{
                 this.$message({
                   type: 'errow',
@@ -465,7 +477,7 @@ export default {
       let id = this.multipleSelection.map(v => {return v.password}).join()
       console.log(id)
 
-      // delCustomerBtn(id);
+      this.delCustomerBtn(id);
      
     },
     // 批量指派操作
