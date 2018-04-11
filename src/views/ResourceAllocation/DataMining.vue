@@ -123,12 +123,12 @@
 
 </script>
 <style rel="stylesheet/scss" lang="scss" scope>
-  [class*=" el-icon-"],
-  [class^=el-icon-] {
-    font-size: 25px;
-    line-height: 1.5;
-    cursor: pointer;
-  }
+  // [class*=" el-icon-"],
+  // [class^=el-icon-] {
+  //   font-size: 25px;
+  //   line-height: 1.5;
+  //   cursor: pointer;
+  // }
 
   .date-picker-wrap .el-button:nth-of-type(1) {
     margin-left: 150px;
