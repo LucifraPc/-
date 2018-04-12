@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 var basePath = 'http://bm.lubansoft.com//'
+
 $(document).ready(function () {   
     $(".fdd").hide();
     var condition = { "product": "登录产品", "userRegisterTime": "用户注册时间", "useArea": "登录地区", "buyType": "个人套餐购买情况", "functionUseTimes": "功能使用情况", "loginCount": "账号登陆次数", "onlineTime": "账号在线时长" };
@@ -349,7 +350,7 @@ $(document).ready(function () {
                             url: url,
                             data: { condtitions: condtitions, miningId: mid },
                             success: function (result) {
-                                window.location.href = "essencesale/requestMiningTaskPage.htm";
+                                window.parent.location.href = "http://localhost:9528/#/resource-allocation/data-mining";
                             }
                         });
 

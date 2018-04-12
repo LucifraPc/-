@@ -3,27 +3,28 @@
     <el-row style="margin-bottom:15px;" class="el-row-wrap">
       <div class="date-picker-wrap">
         <span>时间：</span>
-        <el-date-picker v-model="value6" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+        <el-date-picker v-model="startDateAndEndDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
+          value-format='yyyy-MM-dd'>
         </el-date-picker>
-        <el-button>全部</el-button>
-        <el-button>今天</el-button>
-        <el-button>昨天</el-button>
-        <el-button>本周</el-button>
-        <el-button>上月</el-button>
-        <el-button>本月</el-button>
+        <el-button @click="selectDate('all')">全部</el-button>
+        <el-button @click="selectDate('today')">今天</el-button>
+        <el-button @click="selectDate('yesterday')">昨天</el-button>
+        <el-button @click="selectDate('thisWeek')">本周</el-button>
+        <el-button @click="selectDate('lastMonth')">上月</el-button>
+        <el-button @click="selectDate('thisMonth')">本月</el-button>
       </div>
       <div style="margin-top:20px">
         <div>
           <span>任务名称：</span>
-          <el-input placeholder="请输入名称" style="width:180px;margin-right:35px">
+          <el-input placeholder="请输入名称" style="width:180px;margin-right:35px" v-model="taskName">
           </el-input>
           <span>发起人：</span>
-          <el-input placeholder="请输入发起人" style="width:180px">
+          <el-input placeholder="请输入发起人" style="width:180px" v-model="addUser">
           </el-input>
-          <el-button style="margin-right:45px">搜索</el-button>
+          <el-button style="margin-right:45px" @click="getDataMiningInfo">搜索</el-button>
           <span>任务状态：</span>
-          <el-select v-model="value" placeholder="请选择" style="margin-right:44px">
-            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+          <el-select v-model="status" placeholder="请选择" style="margin-right:44px">
+            <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
             </el-option>
           </el-select>
           <el-button @click="startMining">发起挖掘</el-button>
@@ -31,19 +32,25 @@
       </div>
     </el-row>
     <el-row style="margin-bottom:15px;" class="el-row-wrap">
-      <el-table :data="tableData" style="width: 100%" class="data-mining-table">
-        <el-table-column label="任务名称" prop="name">
+      <el-table :data="tableData" style="width: 100%" class="data-mining-table" height='645'>
+        <el-table-column label="任务名称" prop="name" show-overflow-tooltip>
         </el-table-column>
         <el-table-column label="时间">
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.date }}</span>
+            <span>{{ scope.row.startTime }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="发起人" prop="name">
+        <el-table-column label="发起人" prop="addUser">
         </el-table-column>
-        <el-table-column label="状态" prop="name">
+        <el-table-column label="状态" prop="status">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status==1">挖掘中</span>
+            <span v-if="scope.row.status==2" style="color:#33A333">已完成</span>
+            <span v-if="scope.row.status==3">已取消</span>
+            <span v-if="scope.row.status==4" style="color:red">挖掘异常</span>
+          </template>
         </el-table-column>
-        <el-table-column label="结果" prop="name">
+        <el-table-column label="结果" prop="result">
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
@@ -54,84 +61,160 @@
         </el-table-column>
       </el-table>
       <div class="block">
-        <!-- <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[100, 200, 300, 400]"
-          :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
-        </el-pagination> -->
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 25, 50]"
+          :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="400">
+        </el-pagination>
       </div>
     </el-row>
   </div>
 </template>
 <script>
-  // import {
-  //   getDataMiningInfo
-  // } from '@/api/ppc'
-  import * as api from '@/api/ppc';
+  import * as api from "@/api/ppc";
+  import {
+    getWeekStartDate,
+    getLastWeekStartDate,
+    getMonthStartDate,
+    getLastMonthStartDate,
+    formatDate
+  } from "@/utils/index";
   export default {
     data() {
       return {
-        value6: '',
-        currentPage: "",
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value: '',
+        addUser: "",
+        startDateAndEndDate: "",
+        taskName: "",
+        status: "0",
+        currentPage: 1,
+        pageSize: 25,
+        statusOptions: [{
+            value: "0",
+            label: "全部"
+          },
+          {
+            value: "1",
+            label: "挖掘中"
+          },
+          {
+            value: "2",
+            label: "已完成"
+          },
+          {
+            value: "3",
+            label: "已取消"
+          },
+          {
+            value: "4",
+            label: "挖掘异常"
+          }
+        ],
+        value: "",
         tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
+          date: "2016-05-02",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄"
         }]
+      };
+    },
+    watch: {
+      startDateAndEndDate(newValue, oldValue) {
+        this.getDataMiningInfo();
+      },
+      status(newValue, oldValue) {
+        this.getDataMiningInfo();
       }
     },
     methods: {
       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
+        this.pageSize = val;
+        this.getDataMiningInfo();
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+        this.currentPage = val;
+        this.getDataMiningInfo();
+      },
+      formatDate(date) {
+        if (Object.prototype.toString.call(date) == "[object Date]") {
+          var year = date.getFullYear();
+          var month = date.getMonth() + 1;
+          var weekday = date.getDate();
+          if (month < 10) {
+            month = "0" + month;
+          }
+          if (weekday < 10) {
+            weekday = "0" + weekday;
+          }
+          return year + "-" + month + "-" + weekday;
+        }
+        return date;
+      },
+      selectDate(val) {
+        const end = new Date(),
+              start = new Date();
+        switch (val) {
+          case "all":
+            this.startDateAndEndDate = [];
+            break;
+          case "today":
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 0);
+            this.startDateAndEndDate = [start, end];
+            break;
+          case "yesterday":
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 1);
+            this.startDateAndEndDate = [start, end];
+            break;
+          case "thisWeek":
+            this.startDateAndEndDate = [getWeekStartDate(), end];
+            break;
+          case "lastMonth":
+            this.startDateAndEndDate = [getLastMonthStartDate(), end];
+            break;
+          case "thisMonth":
+            this.startDateAndEndDate = [getMonthStartDate(), end];
+            break;
+
+          default:
+            break;
+        }
+
+        this.$emit("pick", new Date());
       },
       getDataMiningInfo() {
-        api.getDataMiningInfo().then(res => {
-          console.log(JSON.parse(res))
-        })
+        let startDateAndEndDate_ = this.startDateAndEndDate.slice();
+        let startDate = this.formatDate(startDateAndEndDate_[0]) ?
+          this.formatDate(startDateAndEndDate_[0]) :
+          "";
+        let endDate = this.formatDate(startDateAndEndDate_[1]) ?
+          this.formatDate(startDateAndEndDate_[1]) :
+          "";
+        let taskParam = {
+          addUser: this.addUser,
+          currentPage: this.currentPage,
+          endDate: endDate,
+          name: "",
+          pageSize: this.pageSize,
+          sortFiled: null,
+          sortType: null,
+          startDate: startDate,
+          status: this.status
+        };
+        api.getDataMiningInfo(taskParam).then(res => {
+          this.tableData = JSON.parse(res)[0].result.data;
+          console.log(this.tableData);
+        });
       },
       getMiningConditions(row) {
         this.$router.push({
-          path: `/resource-allocation/get-mining-conditions/${row.date}`
+          path: `/resource-allocation/get-mining-conditions/${row.id}`
         });
       },
       getResults(row) {
         this.$router.push({
-          path: `/resource-allocation/get-results/${row.date}`
+          path: `/resource-allocation/get-results/${row.id}`
         });
       },
       reMining(row) {
         this.$router.push({
-          path: `/resource-allocation/remining/${row.date}`
+          path: `/resource-allocation/remining/${row.id}`
         });
       },
       startMining() {
@@ -141,14 +224,20 @@
       }
     },
     mounted() {
-      this.getDataMiningInfo()
+      this.getDataMiningInfo();
+      console.log(
+        getWeekStartDate(),
+        getLastWeekStartDate(),
+        getMonthStartDate(),
+        getLastMonthStartDate()
+      );
     }
-  }
+  };
 
 </script>
 <style rel="stylesheet/scss" lang="scss" scope>
   .data-mining-table [class*=" el-icon-"],
-  [class^=el-icon-] {
+  [class^="el-icon-"] {
     font-size: 20px;
     line-height: 1.6;
     cursor: pointer;
@@ -159,7 +248,7 @@
   }
 
   .el-button+.el-button {
-    margin-left: 20px
+    margin-left: 1%;
   }
 
   .block {

@@ -7,10 +7,10 @@
 var LBSMSSendInnerTestAccountMgt = {};
 LBSMSSendInnerTestAccountMgt.pagebar = new Array();
 var basePath = 'http://bm.lubansoft.com//'
+// console.log(window.parent.miningId)
 $(document).ready(function () {
-
   // var mid = $("#mid").val();
-  var mid='900'
+  var mid = window.parent.miningId
   //挖掘条件列表
   var showCondition = function () {
 
