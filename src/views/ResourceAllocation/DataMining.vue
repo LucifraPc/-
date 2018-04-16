@@ -44,7 +44,7 @@
         </el-table-column>
         <el-table-column label="状态" prop="status">
           <template slot-scope="scope">
-            <span v-if="scope.row.status==1">挖掘中</span>
+            <span v-if="scope.row.status==1" style="color:blue">挖掘中</span>
             <span v-if="scope.row.status==2" style="color:#33A333">已完成</span>
             <span v-if="scope.row.status==3">已取消</span>
             <span v-if="scope.row.status==4" style="color:red">挖掘异常</span>
@@ -55,7 +55,8 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <span class="el-icon-info " title="查看挖掘条件" @click="getMiningConditions(scope.row)"></span>
-            <span class="el-icon-tickets " title="查看挖掘结果" @click="getResults(scope.row)"></span>
+            <span class="el-icon-delete " title="取消挖掘"  @click="cancleMining(scope.row)" v-if='scope.row.status==1'></span>
+            <span class="el-icon-tickets " title="查看挖掘结果" @click="getResults(scope.row)" v-if="scope.row.status==2"></span>
             <span class="el-icon-refresh " title="重新挖掘" @click="reMining(scope.row)"></span>
           </template>
         </el-table-column>
@@ -149,7 +150,7 @@
       },
       selectDate(val) {
         const end = new Date(),
-              start = new Date();
+          start = new Date();
         switch (val) {
           case "all":
             this.startDateAndEndDate = [];
