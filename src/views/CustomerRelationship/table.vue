@@ -77,6 +77,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import slideView from '../../components/slideView/slideView'
 
 
@@ -151,13 +152,19 @@ export default {
     },
     // 单个认领操作
     claimCustomerBtn(id){
-      console.log(id)
-      getCustomerClaim(id).then((res)=>{
+      let idArr=new Array();
+      if(!Array.isArray(id)){
+        idArr.push(id);
+      }else{
+        idArr=id;
+      }
+      getCustomerClaim(idArr).then((res)=>{
           if(res.msg=='success'){
               this.$message({
                 type: 'success',
                 message: '认领成功!'
               });
+              this.getCustomerList();
           }else{
               this.$message({
                 type: 'errow',
@@ -179,7 +186,7 @@ export default {
     },
     // 批量认领操作
     claimAllCustomerBtn(){
-      let id = this.multipleSelection.map(v => {return v.passport}).join();
+      let id = this.multipleSelection.map(v => {return v.passport});
       this.claimCustomerBtn(id);
     },
     // 搜索

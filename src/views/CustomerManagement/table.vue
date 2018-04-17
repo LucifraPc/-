@@ -457,13 +457,19 @@ export default {
     // 单个删除操作
     delCustomerBtn(id){
       // console.log(id)
+      let idArr=new Array();
+      if(!Array.isArray(id)){
+        idArr.push(id);
+      }else{
+        idArr=id;
+      }
       this.$confirm('确定将客户转入公海?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
         center: true
       }).then(() => {
-        deleteCustomer(id).then((res)=>{
+        deleteCustomer(idArr).then((res)=>{
             if(res.msg=='success'){
                 this.$message({
                   type: 'success',
@@ -495,8 +501,8 @@ export default {
     // 批量删除操作
     delAllCustomerBtn(){
       // deleteCustomer
-      let id = this.multipleSelection.map(v => {return v.password}).join()
-      console.log(id)
+      let id = this.multipleSelection.map(v => {return v.password})
+      // console.log(id)
 
       this.delCustomerBtn(id);
      

@@ -114,10 +114,11 @@ export function getCustomerFollowUpResult() {
 
 
 // ---客户删除,批量删除接口
-export function deleteCustomer(customerId) {
+export function deleteCustomer(params) {
   return request({
-    url: `rest/customer/deleteCustomer/${customerId}`,
-    method: 'get',
+    url: `/rest/highseas/list`,
+    method: 'put',
+    data:params
   })
 }
 // export const deleteCustomer = customerId => { return axios.get(`${base}rest/customer/deleteCustomer/${customerId}`).then(res => res.data); };
