@@ -48,7 +48,7 @@
 					<hr style="height:1px;border:none;border-top:1px dashed #ccc;" />
 					<div class="historyBox">
 						<p>历史跟进记录</p>
-						<div  v-if="followupLog.length>0">
+						<div  v-if="followupLog.length>0" style="max-height: 300px;overflow-y: auto">
 							<div  v-for="item in followupLog">
 								<p><span>{{item.followupTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span><span>{{item.classId}}</span><span>{{callResult[item.followupId]}}</span></p>
 								<p>{{item.followupExplain}}</p>
@@ -116,31 +116,34 @@
 					</div>
 			    	<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 			    		<el-form-item label="订单编号：" prop="name">
-						    <el-input placeholder="请输入内容" v-model="searchNum" class="input-with-select" style="width:390px;">
+						    <el-input placeholder="请输入内容" v-model="searchNum" class="input-with-select select-clear" style="width:390px;">
+						    	<i slot="append" class="el-icon-circle-close" v-show="searchNum.length>0" @click="searchNum='';searchNumBtn()"></i>
 							    <el-button slot="append" icon="el-icon-search" @click="searchNumBtn"></el-button>
 							</el-input>
 							<el-button type="primary">绑定订单</el-button>
 						</el-form-item>
-						<el-form-item label="下单时间：" prop="name">
-						    <span v-model="ruleForm.name"></span>
-						</el-form-item>
-						<el-form-item label="订单金额：" prop="name">
-						    <span v-model="ruleForm.name"></span>
-						</el-form-item>
-						<el-form-item label="支付方式：" prop="name">
-						    <span v-model="ruleForm.name"></span>
-						</el-form-item>
-						<el-form-item label="支付状态：" prop="name">
-						    <span v-model="ruleForm.name"></span>
-						</el-form-item>
-						<el-form-item label="发票类型：" prop="name">
-						    <span v-model="ruleForm.name"></span>
-						</el-form-item>
-						<el-form-item label="购买内容：" prop="name">
-						    <span v-model="ruleForm.name"></span>
-						</el-form-item>
+						<div v-show="showDetialOrder">
+							<el-form-item label="下单时间：" prop="name">
+						    	<span v-model="ruleForm.name"></span>
+							</el-form-item>
+							<el-form-item label="订单金额：" prop="name">
+							    <span v-model="ruleForm.name"></span>
+							</el-form-item>
+							<el-form-item label="支付方式：" prop="name">
+							    <span v-model="ruleForm.name"></span>
+							</el-form-item>
+							<el-form-item label="支付状态：" prop="name">
+							    <span v-model="ruleForm.name"></span>
+							</el-form-item>
+							<el-form-item label="发票类型：" prop="name">
+							    <span v-model="ruleForm.name"></span>
+							</el-form-item>
+							<el-form-item label="购买内容：" prop="name">
+							    <span v-model="ruleForm.name"></span>
+							</el-form-item>
+						</div>
 					</el-form>
-					<div v-if="$route.name=='新客户' || $route.name=='高意向' || $route.name=='可跟进'|| $route.name=='无法接通'|| $route.name=='无效线索' " >
+					<div v-if="$route.name=='新客户' || $route.name=='高意向' || $route.name=='可跟进'|| $route.name=='无法接通'|| $route.name=='无效线索' || $route.name=='客户公海' " >
 						<hr style="height:1px;border:none;border-top:1px dashed #ccc;margin:30px 0px" />
 						<div class="mealAllowancebox">
 							<p>已绑定订单：</p>
@@ -243,7 +246,8 @@
 	            {   required: true,message: '请选择跟进结果', trigger: 'change' }
 	          ]
 	        },
-	        tableData: []
+	        tableData: [],
+	        showDetialOrder:false,//订单详情
 	      }
 	    },
 	    watch: {
@@ -321,11 +325,11 @@
 		            	let submitCustomerDetailParam={
 						  "customerName": this.customerDetail.customerName,
 						  "customerType": this.customerDetail.classId,
-						  "followupExplan": this.customerDetail.followupExplan,
+						  "followupExplan": this.customerDetail.followupExplan?this.customerDetail.followupExplan:'',
 						  "followupId": this.customerDetail.followupId,
 						  "mobile": this.customerDetail.mobile,
 						  "qq": this.customerDetail.qq,
-						  "userName": this.customerDetail.userName
+						  "userName": this.passwordId
 						}
 						getCustomerDetailSubmint(submitCustomerDetailParam).then((res)=>{
 				            if(res.msg=='success'){
@@ -334,6 +338,11 @@
 					                message: '修改成功!'
 				                });
 				                this.getCustomerDetailFun();
+				            }else{
+				            	this.$message({
+					                type: 'error',
+					                message: '修改失败!'
+				                });
 				            }
 				        })
 		          } else {
@@ -347,7 +356,7 @@
 		    },
 		    // 根据编号搜索订单
 		    searchNumBtn(){
-
+		    	this.showDetialOrder=true;
 		    }
 	    }
 	}
@@ -363,4 +372,16 @@
 	.floatRight span{
 		margin:0px!important;
 	}
+	.select-clear .el-input-group__append{
+		position:relative;
+	}
+	.select-clear .el-input-group__append .el-icon-circle-close{
+		display: inline-block;
+		font-size:16px;
+		left:-22px;
+		top:11px;
+		color: #a5a5a5;
+		position: absolute;
+	}
+
 </style>

@@ -8,7 +8,7 @@ import request from '@/utils/request'
 // ---客户列表
 export function getCustomerManagementList(params) {
   return request({
-    url: 'rest/customer/queryCustomer',
+    url: 'rest/customer/list',
     method: 'post',
     data: params
   })
@@ -18,7 +18,7 @@ export function getCustomerManagementList(params) {
 // ---获取客户分类
 export function getCustomerClassification(params) {
   return request({
-    url: 'rest/customer/queryCustomerClass',
+    url: 'rest/customer/classes',
     method: 'get',
     params
   })
@@ -28,7 +28,7 @@ export function getCustomerClassification(params) {
 
 export function getCustomerDetail(passwordId) {
   return request({
-    url: `rest/customer/detail/queryCustomerDetail/${passwordId}`,
+    url: `rest/customer/detail/followup/${passwordId}`,
     method: 'get',
   })
 }
@@ -37,7 +37,7 @@ export function getCustomerDetail(passwordId) {
 // ---获取客户详情--基本情况--提交客户跟进详情
 export function getCustomerDetailSubmint(params) {
   return request({
-    url: `rest/customer/detail/submitFollowInfo`,
+    url: `rest/customer/detail/followup`,
     method: 'post',
     data:params
   })
@@ -105,7 +105,7 @@ export function getCustomerMining(customerId) {
 // ---查询跟进结果集 / 拨打
 export function getCustomerFollowUpResult() {
   return request({
-    url: `rest/customer/queryFollowup`,
+    url: `rest/customer/followup`,
     method: 'get',
   })
 }
@@ -127,7 +127,7 @@ export function deleteCustomer(params) {
 // ---客户指派  获取销售人员查询下拉列表  客户专员
 export function getCommissionerList(customerState) {
   return request({
-    url: `rest/customer/querySales/${customerState}`,
+    url: `rest/customer/sales/list/${customerState}`,
     method: 'get'
   })
 }
@@ -249,7 +249,7 @@ export function getSystemSettingsSave(params) {
 // ---列表获取
 export function getDataReportList(params) {
   return request({
-    url: `rest/customer/queryCustomer`,
+    url: `rest/customer/list`,
     method: 'post',
     data:params
   })
