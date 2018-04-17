@@ -125,7 +125,7 @@
                   </template>
               </el-table-column>
               <el-table-column label="最新跟进时间" align="center" show-overflow-tooltip>
-                <template slot-scope="scope">{{ scope.row.lastFollowupDate/1000 |moment("YYYY-MM-DD HH:mm:ss")  }}</template>
+                <template slot-scope="scope">{{ scope.row.lastFollowupDate/1000 | moment("YYYY-MM-DD HH:mm:ss")  }}</template>
               </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
@@ -157,7 +157,7 @@
           </div>
       </el-row>
       <!-- 跟进详情弹窗 -->
-      <slide-view :showDetialBox="showDetialBox" v-on:showDetialBoxConfalse="showDetialBoxConfalse"></slide-view>
+      <slide-view :showDetialBox="showDetialBox" :passwordId="passwordId" v-on:showDetialBoxConfalse="showDetialBoxConfalse"></slide-view>
       <!-- 批量指派弹窗 -->
       <el-dialog
           title="客户指派"
@@ -166,16 +166,16 @@
           <div>
               <h4 style="margin:0px;">部分指派：</h4>
               <p style="padding-left:40px;margin:10px 0px;">
-                  已选择 {{multipleSelection.length}} 个客户，所属 {{assignedCount.length}} 个成员 <span style="color:#1890FF" v-for="item in assignedCount">{{item}} </span>
+                  已选择 {{multipleSelection.length}} 个客户，所属 {{assignedCount.length}} 个成员 <span class="assignedCountBox" :title="assignedCount"><span style="color:#1890FF" v-for="item in assignedCount">{{item}} </span></span>
                   <el-select v-model="assignedOptionsValue" placeholder="请选择指派给谁">
                       <el-option
                         v-for="item in assignedOptions"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
+                        :key="item.username"
+                        :label="item.username"
+                        :value="item.username">
                       </el-option>
                   </el-select>
-                  <el-button type="primary" style="float:right;" @click="dialogVisible = false">提 交</el-button>
+                  <el-button type="primary" style="float:right;" @click="submitAssignment">提 交</el-button>
               </p>
               
           </div>
@@ -183,23 +183,23 @@
               <h4 style="margin:0px;">全部指派：</h4>
               <p style="padding-left:40px;margin:10px 0px;">
                   指派
-                  <el-select v-model="fromOptionsValue" placeholder="请选择转走谁的">
+                  <el-select v-model="fromOptionsValue" @change="getOptionsCount" placeholder="请选择转走谁的">
                     <el-option
                       v-for="item in fromOptions"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
+                      :key="item.username"
+                      :label="item.username"
+                      :value="item.username">
                     </el-option>
                   </el-select> 的全部 {{fromOptionsCount}} 个客户
                   <el-select v-model="gotoOptionsValue" placeholder="请选择给谁">
                     <el-option
                       v-for="item in gotoOptions"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
+                      :key="item.username"
+                      :label="item.username"
+                      :value="item.username">
                     </el-option>
                   </el-select> 
-                  <el-button type="primary" style="float:right;" @click="dialogVisible = false">提 交</el-button>
+                  <el-button type="primary" style="float:right;" @click="submitAssignmentAll">提 交</el-button>
               </p>
           </div>
           <span slot="footer" class="dialog-footer">
@@ -215,7 +215,7 @@
 import slideView from '../../components/slideView/slideView'
 
 
-import {getCustomerManagementList,getCustomerFollowUpResult,getCommissionerList,deleteCustomer} from '@/api/table.js'
+import {getCustomerManagementList,getCustomerFollowUpResult,getCommissionerList,deleteCustomer,getCommissionerCustomerList,getCommissionerCustomerCount,getSubmitAssignment,getSubmitAssignmentAll} from '@/api/table.js'
 
 
 export default {
@@ -233,7 +233,9 @@ export default {
       ClinchAdealTime:'',//成交时间
       expireTime:'',//到期时间
 
+      // 弹窗绑定值
       showDetialBox:false,
+      passwordId:null,
 
       // 列表数据
       customerData: [],
@@ -267,6 +269,7 @@ export default {
 
       dialogVisible:false,//指派弹窗控制器
       assignedCount:[],//所属几个成员
+      assignedCountList:[],//所属几个成员List
       assignedOptions:[],//部分指派给谁
       fromOptions:[],//全部转走谁的
       gotoOptions:[],//全部转给谁
@@ -380,14 +383,17 @@ export default {
         let customerState = vthis.type[vthis.$route.name];
         getCommissionerList(customerState).then((res)=>{
             if(res.msg=='success'){
-                res.data.forEach(function (item,index) {
+              if(res.data){
+                  res.data.forEach(function (item,index) {
                     let obj={
                       text: '', value: ''
                     }
-                    obj.text=item.followup;
-                    obj.value=item.followupId;
+                    obj.text=item.serviceName;
+                    obj.value=item.serviceName;
                     vthis.followResultUser.push(obj)
                 })
+              }
+                
                 // this.followResultUser=res.data;
             }
         })
@@ -397,6 +403,7 @@ export default {
         let vthis=this;
         getCustomerFollowUpResult().then((res)=>{
             if(res.msg=='success'){
+              if(res.data){
                 res.data.forEach(function (item,index) {
                     let obj={
                       text: '', value: ''
@@ -405,6 +412,7 @@ export default {
                     obj.value=item.followupId;
                     vthis.followResult.push(obj)
                 })
+              }
                 // console.log(vthis.followResult)
                 // this.followResult=res.data;
             }
@@ -449,7 +457,7 @@ export default {
     // 单个删除操作
     delCustomerBtn(id){
       // console.log(id)
-      this.$confirm('是否将客户转入公海?', '提示', {
+      this.$confirm('确定将客户转入公海?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
@@ -477,6 +485,7 @@ export default {
     followCustomerBtn(id){
       // console.log(id);
       this.showDetialBox=!this.showDetialBox;
+      this.passwordId=id;
     },
     // 单个跟进组件传值
     showDetialBoxConfalse(value){
@@ -492,14 +501,86 @@ export default {
       this.delCustomerBtn(id);
      
     },
+    // 获取转走人员的客户数
+    getOptionsCount(){
+        let stuff=this.fromOptionsValue;
+        getCommissionerCustomerCount(stuff).then((res)=>{
+            if(res.msg=='success'){
+                if(res.data){
+                    this.fromOptionsCount=res.data;
+                }
+            }
+        })
+    },
+    // 获取全部人员
+    qeryStaffList(){
+        let roles=[65,66];
+        getCommissionerCustomerList(roles).then((res)=>{
+            if(res.msg=='success'){
+                if(res.data){
+                    this.assignedOptions=res.data;
+                    this.fromOptions=res.data;
+                    this.gotoOptions=res.data;
+                }
+            }
+        })
+    },
     // 批量指派操作
     assignedAllCustomerBtn(){
+      this.assignedCount=[];
+      this.assignedCountList=[];
       // console.log(this.multipleSelection)
+      this.qeryStaffList();
       let vm = this ;
       vm.multipleSelection.forEach((item,index,arr) => {
+          let obj={};
+          obj.currentStaff=item.serviceName
+          obj.customerPassport=item.password
           vm.assignedCount.push(item.serviceName)
+          vm.assignedCountList.push(obj)
       })
+
       vm.assignedCount=Array.from(new Set(vm.assignedCount));
+    },
+    // 提交部分指派
+    submitAssignment(){
+        let forceAllocParam = this.assignedCountList;
+        let toStuff = this.assignedOptionsValue;
+        getSubmitAssignment(toStuff,forceAllocParam).then((res)=>{
+            if(res.msg=='success'){
+                this.$message({
+                  type: 'success',
+                  message: '指派成功!'
+                });
+                this.dialogVisible=false;
+                this.getCustomerList();
+            }else{
+                this.$message({
+                  type: 'error',
+                  message: res.msg
+                });
+            }
+        })
+    },
+    // 提交全部指派
+    submitAssignmentAll(){
+        let fromStuff = this.fromOptionsValue;
+        let toStuff = this.gotoOptionsValue;
+        getSubmitAssignmentAll(fromStuff,toStuff).then((res)=>{
+            if(res.msg=='success'){
+                this.$message({
+                  type: 'success',
+                  message: '指派成功!'
+                });
+                this.dialogVisible=false;
+                this.getCustomerList();
+            }else{
+                this.$message({
+                  type: 'error',
+                  message: res.msg
+                });
+            }
+        })
     },
     // 表头筛选  专员   拨打
     filterChange(filters){
@@ -544,7 +625,7 @@ export default {
     },
     // 搜索
     searchBtn(){
-      this.customerParam.searchCondition=this.searchAll;
+      this.customerParam.searchCondition=this.searcKey;
       this.customerParam.page=1;
       this.getCustomerList();
     }
@@ -557,5 +638,16 @@ export default {
   }
   .cursorter-table.el-table thead>tr>th{
     border-bottom: 1px solid #ebeef5;
+  }
+  .assignedCountBox{
+    width:180px;
+    display:inline-block;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+  .assignedCountBox span{
+      margin-right:5px;
   }
 </style>

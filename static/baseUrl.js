@@ -1,1 +1,1 @@
-global.baseHost = 'http://172.16.21.142:8080/LubanTeleSales/';
+global.baseHost = 'http://192.168.3.121:8084/crm/';

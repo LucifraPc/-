@@ -1,13 +1,10 @@
 import request from '@/utils/request'
 
-export function login(username, password) {
+export function login(loginForm) {
   return request({
-    url: '/user/login',
+    url: 'rest/login/',
     method: 'post',
-    data: {
-      username,
-      password
-    }
+    data: loginForm
   })
 }
 
@@ -21,7 +18,7 @@ export function getInfo(token) {
 
 export function logout() {
   return request({
-    url: '/user/logout',
-    method: 'post'
+    url: 'rest/login/loginout',
+    method: 'get'
   })
 }

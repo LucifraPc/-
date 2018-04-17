@@ -4,17 +4,18 @@
     <!-- <breadcrumb></breadcrumb> -->
     <el-dropdown class="avatar-container">
       <div class="avatar-wrapper">
-        <img class="user-avatar" :src="avatar+'?imageView2/1/w/80/h/80'">
-        <!-- <i class="el-icon-caret-bottom"></i> -->
+        <!-- <img class="user-avatar" :src="avatar+'?imageView2/1/w/80/h/80'"> -->
+        <span>{{userName}}</span>
+        <i class="el-icon-caret-bottom"></i>
       </div>
       <el-dropdown-menu class="user-dropdown" slot="dropdown">
-        <router-link class="inlineBlock" to="/">
-          <el-dropdown-item>
-            首页
+        <router-link class="inlineBlock" to="/" style="text-align:center;">
+          <el-dropdown-item >
+            <span style="width:80px;">首 页</span>
           </el-dropdown-item>
         </router-link>
         <el-dropdown-item divided>
-          <span @click="logout" style="display:block;">退出</span>
+          <span @click="logout" style="display:block;width:80px;text-align:center;">退 出</span>
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -23,6 +24,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import {logout} from '@/api/login.js'
 // import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 
@@ -37,13 +39,20 @@ export default {
       'avatar'
     ])
   },
+  created() {
+        this.userName=this.$cookies.get("usernameCrm");
+    },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('ToggleSideBar')
     },
     logout() {
-      this.$store.dispatch('LogOut').then(() => {
-        location.reload() // 为了重新实例化vue-router对象 避免bug
+      logout().then((res)=>{
+          this.$cookies.set("formwhere", "formLoginOut");
+          this.$router.push({
+              path: '/login'
+          })
+          // location.reload();
       })
     }
   }
@@ -74,7 +83,7 @@ export default {
     right: 55px;
     .avatar-wrapper {
       cursor: pointer;
-      margin-top: 13px;
+      /*margin-top: 13px;*/
       position: relative;
       .user-avatar {
         width: 40px;
@@ -82,10 +91,11 @@ export default {
         border-radius: 50%;
       }
       .el-icon-caret-bottom {
-        position: absolute;
-        right: -20px;
-        top: 25px;
+       /* position: absolute;
+        right:00px;
+        top: 25px;*/
         font-size: 12px;
+        margin-left:5px;
       }
     }
   }

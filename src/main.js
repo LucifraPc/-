@@ -14,7 +14,8 @@ import '@/permission' // permission control
 Vue.use(ElementUI)
 Vue.use(require('vue-moment'));
 Vue.component('bread-crumb',BreadCrumb);
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+Vue.use(require('vue-cookies'));
 
 new Vue({
   el: '#app',
