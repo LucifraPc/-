@@ -7,65 +7,57 @@
 	    	</div>
 
 	        <el-tabs v-model="activeName" @tab-click="handleClick">
-			    <el-tab-pane label="基本情况" name="first">
-			    	<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-			    		<el-form-item label="通行证：" prop="name">
-						    <span v-model="ruleForm.name"></span>
+			    <el-tab-pane label="基本情况" name="基本情况">
+			    	<el-form :model="customerDetail" :rules="rules" ref="customerDetail" label-width="100px" class="demo-ruleForm">
+			    		<el-form-item label="通行证：" prop="username">
+						    <span>{{customerDetail.username}}</span>
 						</el-form-item>
-						<el-form-item label="姓名：" prop="name">
-						    <el-input v-model="ruleForm.name"></el-input>
+						<el-form-item label="姓名：" prop="customerName">
+						    <el-input v-model="customerDetail.customerName"></el-input>
 						</el-form-item>
-						<el-form-item label="手机号码：" prop="name">
-						    <el-input v-model="ruleForm.name"></el-input>
+						<el-form-item label="手机号码：" prop="mobile">
+						    <el-input v-model="customerDetail.mobile"></el-input>
 						</el-form-item>
-						<el-form-item label="QQ号：" prop="name">
-						    <el-input v-model="ruleForm.name"></el-input>
+						<el-form-item label="QQ号：" prop="qq">
+						    <el-input v-model="customerDetail.qq"></el-input>
 						</el-form-item>
-						<el-form-item label="注册时间：" prop="name">
-						    <span v-model="ruleForm.name"></span>
+						<el-form-item label="注册时间：" prop="registedTime">
+						    <span>{{customerDetail.registedTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span>
 						</el-form-item>
-						<el-form-item label="挖掘时间：" prop="name">
-						    <span v-model="ruleForm.name"></span>
+						<el-form-item label="挖掘时间：" prop="registedTime">
+						    <span>{{customerDetail.registedTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span>
 						</el-form-item>
-						<el-form-item label="跟进结果：" prop="region">
-						    <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
-						      	<el-option label="区域一" value="shanghai"></el-option>
-						      	<el-option label="区域二" value="beijing"></el-option>
+						<el-form-item label="跟进结果：" prop="classId">
+						    <el-select v-model="customerDetail.classId" placeholder="请选择跟进结果">
+						      	<el-option v-for="item in getCustomerClass" v-if="item.classId<90" :label="item.className" :value="item.classId" ></el-option>
 						    </el-select>
 						</el-form-item>
-						<el-form-item label="拨打结果：" prop="resource">
-						    <el-radio-group v-model="ruleForm.resource">
-						      	<el-radio label="接通"></el-radio>
-						      	<el-radio label="未接"></el-radio>
-						      	<el-radio label="关机"></el-radio>
-						      	<el-radio label="无人接通"></el-radio>
-						      	<el-radio label="停机"></el-radio>
-						      	<el-radio label="空错号"></el-radio>
-						     	<el-radio label="使用其他软件"></el-radio>
+						<el-form-item label="拨打结果：" prop="followupId">
+						    <el-radio-group v-model="customerDetail.followupId">
+						      	<el-radio v-for="item in followupList" :label="item.followupId">{{item.followup}}</el-radio>
 						    </el-radio-group>
 						</el-form-item>
-						<el-form-item label="跟进说明：" prop="desc">
-						    <el-input type="textarea" v-model="ruleForm.desc"  :rows="4"></el-input>
+						<el-form-item label="跟进说明：" prop="followupExplan">
+						    <el-input type="textarea" v-model="customerDetail.followupExplan"  :rows="4"></el-input>
 						</el-form-item>
 						<el-form-item>
-						    <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-						    <el-button @click="resetForm('ruleForm')">取消</el-button>
+						    <el-button type="primary" @click="submitcustomerDetail('customerDetail')">提交</el-button>
+						    <el-button @click="resetcustomerDetail('customerDetail')">取消</el-button>
 						</el-form-item>
 					</el-form>
 					<hr style="height:1px;border:none;border-top:1px dashed #ccc;" />
 					<div class="historyBox">
 						<p>历史跟进记录</p>
-						<div>
-							<p><span>2018.3.1 15:10:03</span><span>高意向</span><span>接通</span></p>
-							<p>这是一条跟进说明，长度很长很长。这是一条跟进说明，长度很长很长。这是一条跟进说明，长度很长很长。这是一条跟进说明，长度很长很长。这是一条跟进说明，长度很长很长</p>
+						<div  v-if="followupLog.length>0">
+							<div  v-for="item in followupLog">
+								<p><span>{{item.followupTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span><span>{{item.classId}}</span><span>{{callResult[item.followupId]}}</span></p>
+								<p>{{item.followupExplain}}</p>
+							</div>
 						</div>
-						<div>
-							<p><span>2018.3.1 15:10:03</span><span>高意向</span><span>接通</span></p>
-							<p>这是一条跟进说明，长度很长很长。这是一条跟进说明，长度很长很长。这是一条跟进说明，长度很长很长。这是一条跟进说明，长度很长很长。这是一条跟进说明，长度很长很长</p>
-						</div>
+						<div v-else style="text-align:center;">无跟进记录</div>
 					</div>
 			    </el-tab-pane>
-			    <el-tab-pane label="套餐余量" name="second">
+			    <el-tab-pane label="套餐余量" name="套餐余量">
 			    	<div class="mealAllowancebox">
 						<p>有效云套餐  (个人/企业)  ：(/)</p>
 						<div>
@@ -84,7 +76,7 @@
 						</div>
 					</div>
 			    </el-tab-pane>
-			    <el-tab-pane label="功能使用" name="third">
+			    <el-tab-pane label="功能使用" name="功能使用">
 			    	<div class="mealAllowancebox">
 						<p>使用云功能次数  ：5次</p>
 						<div>
@@ -105,11 +97,27 @@
 						</div>
 					</div>
 			    </el-tab-pane>
-			    <el-tab-pane label="订单记录" name="fourth">
+			    <el-tab-pane label="订单记录" name="订单记录">
+			    	<div v-if="$route.name=='成交客户' || $route.name=='即将到期客户' || $route.name=='到期未续费' ">
+						<div class="mealAllowancebox">
+							<p>已绑定订单：</p>
+							<div >
+								<p class="floatRightBox">订单编号：2017101607024915
+									<el-button type="primary floatRight">解除绑定</el-button></p>
+								<p class="floatRightBox">订单编号：2017101607024915
+									<el-button type="primary floatRight">解除绑定</el-button></p>
+								<p class="floatRightBox">订单编号：2017101607024915
+									<el-button type="primary floatRight">解除绑定</el-button></p>
+								<p class="floatRightBox">订单编号：2017101607024915
+									<el-button type="primary floatRight">解除绑定</el-button></p>
+							</div>
+						</div>
+						<hr style="height:1px;border:none;border-top:1px dashed #ccc;margin:30px 0px" />
+					</div>
 			    	<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 			    		<el-form-item label="订单编号：" prop="name">
-						    <el-input placeholder="请输入内容" v-model="input5" class="input-with-select" style="width:390px;">
-							    <el-button slot="append" icon="el-icon-search"></el-button>
+						    <el-input placeholder="请输入内容" v-model="searchNum" class="input-with-select" style="width:390px;">
+							    <el-button slot="append" icon="el-icon-search" @click="searchNumBtn"></el-button>
 							</el-input>
 							<el-button type="primary">绑定订单</el-button>
 						</el-form-item>
@@ -132,35 +140,39 @@
 						    <span v-model="ruleForm.name"></span>
 						</el-form-item>
 					</el-form>
-					<hr style="height:1px;border:none;border-top:1px dashed #ccc;margin:30px 0px" />
-					<div class="mealAllowancebox">
-						<p>已绑定订单：</p>
-						<div>
-							<p>订单编号：2017101607024915</p>
-							<p>订单编号：2017101607024915</p>
-							<p>订单编号：2017101607024915</p>
-							<p>订单编号：2017101607024915</p>
+					<div v-if="$route.name=='新客户' || $route.name=='高意向' || $route.name=='可跟进'|| $route.name=='无法接通'|| $route.name=='无效线索' " >
+						<hr style="height:1px;border:none;border-top:1px dashed #ccc;margin:30px 0px" />
+						<div class="mealAllowancebox">
+							<p>已绑定订单：</p>
+							<div>
+								<p>订单编号：2017101607024915</p>
+								<p>订单编号：2017101607024915</p>
+								<p>订单编号：2017101607024915</p>
+								<p>订单编号：2017101607024915</p>
+							</div>
 						</div>
 					</div>
+					
 			    </el-tab-pane>
-			    <el-tab-pane label="挖掘记录" name="five">
+			    <el-tab-pane label="挖掘记录" name="挖掘记录">
 			    	<el-table
 					    :data="tableData"
 					    border
 					    style="width: 100%">
 					    <el-table-column
 					      prop="date"
-					      label="日期"
+					      label="挖掘时间"
 					      width="180">
 					    </el-table-column>
 					    <el-table-column
 					      prop="name"
-					      label="姓名"
-					      width="180">
+					      label="挖掘任务名称"
+					      >
 					    </el-table-column>
 					    <el-table-column
 					      prop="address"
-					      label="地址">
+					      label="操作人"
+					      width="180">
 					    </el-table-column>
 					</el-table>
 			    </el-tab-pane>
@@ -169,15 +181,52 @@
   	</transition>
 </template>
 <script>
+	import {getCustomerDetail,getCustomerClassification,getCustomerFollowUpResult,getCustomerDetailSubmint} from '@/api/table.js'
 	export default {
-		props:["showDetialBox"],
+		props:["showDetialBox","passwordId"],
 	    created(){
+	    	this.getCustomerClassList();
+	    	this.getCallList();
 	    },
 	    data() {
 	      return {
-	      	input5:'',
+	      	type:{// 客户分类结果集
+		        "新客户": 0,
+		        "高意向": 1,
+		        "可跟进": 2,
+		        "成交客户": 3,
+		        "即将到期客户": -1,
+		        "到期未续费": -2,
+		        "无法接通": 4,
+		        "无效线索": 5
+		    },
+		    callResult:{// 客户分类结果集
+		        "null": "无",
+		        "1": "接通",
+		        "2": "未接",
+		        "3": "关机",
+		        "4": "无人接听",
+		        "5": "停机",
+		        "6": "空号",
+		        "7": "使用其他软件",
+		      },
+
+
+	      	searchNum:'',
 	        showDetialBoxCon:false,
-	        activeName: 'first',
+	        activeName: '基本情况',
+
+	        
+	        getCustomerClass:[],// 客户分类跟进结果
+	        followResult:[],//拨打类型
+
+
+	        // 基本情况
+	        customerDetail:{},
+	        
+			// 历史跟进记录
+			followupLog: [],
+			followupList:[],
 
 	        ruleForm: {
 	          name: '',
@@ -190,56 +239,128 @@
 	          desc: ''
 	        },
 	        rules: {
-	          region: [
-	            {   required: true,message: '请选择活动区域', trigger: 'change' }
+	          classId: [
+	            {   required: true,message: '请选择跟进结果', trigger: 'change' }
 	          ]
 	        },
-	        tableData: [{
-	          date: '2016-05-02',
-	          name: '王小虎',
-	          address: '上海市普陀区金沙江路 1518 弄'
-	        }, {
-	          date: '2016-05-04',
-	          name: '王小虎',
-	          address: '上海市普陀区金沙江路 1517 弄'
-	        }, {
-	          date: '2016-05-01',
-	          name: '王小虎',
-	          address: '上海市普陀区金沙江路 1519 弄'
-	        }, {
-	          date: '2016-05-03',
-	          name: '王小虎',
-	          address: '上海市普陀区金沙江路 1516 弄'
-	        }]
+	        tableData: []
 	      }
 	    },
 	    watch: {
+	    	// 监测弹窗key
 	      	'showDetialBox':{
 		      	handler(curVal){
 		      		this.showDetialBoxCon=this.showDetialBox;
 		      	}
+	      	},
+	      	// 监测切换客户key
+	      	'passwordId':{
+	      		handler(curVal){
+		      		this.getCustomerDetailFun();
+		      	}
 	      	}
 	    },
 	    methods: {
-	      	showDetialBoxConfalse(){
+	    	// 获取跟进结果
+	    	getCustomerClassList(){
+	    		getCustomerClassification().then((res)=>{
+		    		if(res.msg=='success'){
+		    			if(res.data){
+		    				this.getCustomerClass=res.data;
+		    			}
+		    		}	
+		    	})
+	    	},
+	    	// 初始化获取拨打结果筛选
+		    getCallList(){
+		        let vthis=this;
+		        getCustomerFollowUpResult().then((res)=>{
+		            if(res.msg=='success'){
+		              if(res.data){
+		                this.followupList=res.data;
+		              }
+		            }
+		        })
+		    },
+	    	// 关闭弹窗传值给父组件
+	    	showDetialBoxConfalse(){
 	      		this.$emit('showDetialBoxConfalse',false);
 	      	},
+	    	// 获取基本情况
+	    	getCustomerDetailFun(){
+	    		getCustomerDetail(this.passwordId).then((res)=>{
+		            if(res.msg=='success'){
+		            	if(res.data.customerDetail){
+		            		this.customerDetail=res.data.customerDetail;
+		            	}
+		            	if(this.followupLog){
+		            		this.followupLog=res.data.followupLog;
+		            	}
+		                
+		            }
+		        })
+	    	},
+	      	// 切换页签  获取数据
 	      	handleClick(tab, event) {
-		        console.log(tab, event);
+		        if(this.activeName=='基本情况'){
+		        	this.getCustomerDetailFun();
+		        }else if(this.activeName=='套餐余量'){
+
+		        }else if(this.activeName=='功能使用'){
+		        	
+		        }else if(this.activeName=='订单记录'){
+		        	
+		        }else if(this.activeName=='挖掘记录'){
+		        	
+		        }
 		    },
-		    submitForm(formName) {
+		    // 提交客户详情
+		    submitcustomerDetail(formName) {
 		        this.$refs[formName].validate((valid) => {
 		          if (valid) {
-		            alert('submit!');
+		            	let submitCustomerDetailParam={
+						  "customerName": this.customerDetail.customerName,
+						  "customerType": this.customerDetail.classId,
+						  "followupExplan": this.customerDetail.followupExplan,
+						  "followupId": this.customerDetail.followupId,
+						  "mobile": this.customerDetail.mobile,
+						  "qq": this.customerDetail.qq,
+						  "userName": this.customerDetail.userName
+						}
+						getCustomerDetailSubmint(submitCustomerDetailParam).then((res)=>{
+				            if(res.msg=='success'){
+				            	this.$message({
+					                type: 'success',
+					                message: '修改成功!'
+				                });
+				                this.getCustomerDetailFun();
+				            }
+				        })
 		          } else {
 		            console.log('error submit!!');
 		            return false;
 		          }
 		        });
 		    },
-		    resetForm(formName) {
-		        this.$refs[formName].resetFields();
+		    resetcustomerDetail(formName) {
+		        // this.$refs[formName].resetFields();
+		    },
+		    // 根据编号搜索订单
+		    searchNumBtn(){
+
 		    }
 	    }
 	}
 </script>
+<style>
+	.floatRightBox{
+		height:40px;
+		line-height:40px;
+	}
+	.floatRight{
+		float:right;
+	}
+	.floatRight span{
+		margin:0px!important;
+	}
+</style>

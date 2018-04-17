@@ -8,7 +8,8 @@
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
         </span>
-        <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" placeholder="username" />
+        <el-input name="username" type="text" v-model="loginForm.username" autofocus="autofocus"  autoComplete="on" placeholder="username" />
+        <!-- <i class="el-icon-circle-close icon-size" v-show="loginForm.username.length>0" @click="loginForm.username=''"></i> -->
       </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
@@ -20,6 +21,8 @@
           <svg-icon icon-class="eye" />
         </span>
       </el-form-item>
+      <el-checkbox class="automaticLogin" v-model="automaticLogin">自动登录</el-checkbox>
+     
       <el-form-item>
         <el-button type="primary" style=" 
        background-image: -moz-linear-gradient(top, #6eb6de, #4a77d4); 
@@ -36,10 +39,10 @@
           登录
         </el-button>
       </el-form-item>
-      <div class="tips">
+      <!-- <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
         <span> password: admin</span>
-      </div>
+      </div> -->
     </el-form>
   </div>
 </template>
@@ -48,13 +51,16 @@
   import {
     isvalidUsername
   } from '@/utils/validate'
+  import {login} from '@/api/login.js'
+
+  import md5 from 'js-md5';
 
   export default {
     name: 'login',
     data() {
       const validateUsername = (rule, value, callback) => {
-        if (!isvalidUsername(value)) {
-          callback(new Error('请输入正确的用户名'))
+        if (value=='' || value.trim()=='') {
+          callback(new Error('请输入用户名'))
         } else {
           callback()
         }
@@ -67,9 +73,10 @@
         }
       }
       return {
+        automaticLogin:false,
         loginForm: {
-          username: 'admin',
-          password: 'admin'
+          username: '',
+          password: ''
         },
         loginRules: {
           username: [{
@@ -87,7 +94,46 @@
         pwdType: 'password'
       }
     },
+    created() {
+        this.$cookies.get("automaticLogin")?this.automaticLogin=true:this.automaticLogin=false;
+        if(this.$cookies.get("formwhere") && this.$cookies.get("automaticLogin")){
+            if(this.$cookies.get("formwhere")=='formLogin'){
+                this.$router.push({
+                    path: '/'
+                })
+            }
+        }else{
+            this.$cookies.set("passwordCrm",'');
+        }
+        this.$cookies.get("usernameCrm")?this.loginForm.username=this.$cookies.get("usernameCrm"):this.loginForm.username='';
+        this.$cookies.get("passwordCrm")?this.loginForm.password=this.$cookies.get("passwordCrm"):this.loginForm.password='';
+
+        //阻止用户频繁点击登录
+          this.handleLogin = this.debounce(this.handleLogin, 500)
+          document.onkeydown = (event) => {
+              if (event.keyCode == 13) {
+                  this.handleLogin()
+              }
+          }
+    },
+    watch: {
+    // 检测搜索全部操作
+      // 'loginForm.username'(){
+      //   this.loginForm.password="";
+      // }
+    },
     methods: {
+      //阻止用户频繁按登录
+      debounce(fn, time) {
+          let startTime = 0;
+          return function (...args) {
+              let curTime = new Date();
+              if (curTime - startTime >= time) {
+                  fn.apply(this, args);
+                  startTime = curTime;
+              }
+          }
+      },
       showPwd() {
         if (this.pwdType === 'password') {
           this.pwdType = ''
@@ -99,11 +145,34 @@
         this.$refs.loginForm.validate(valid => {
           if (valid) {
             this.loading = true
-            this.$store.dispatch('Login', this.loginForm).then(() => {
-              this.loading = false
-              this.$router.push({
-                path: '/'
-              })
+            let loginForm = {};
+            loginForm.username = this.loginForm.username;
+            loginForm.password = md5(this.loginForm.password);
+            login(loginForm).then((res)=>{
+
+              this.loading = false;
+              if(res.msg=='success'){
+                  if(this.automaticLogin){
+                      this.$cookies.set("usernameCrm", loginForm.username);
+                      this.$cookies.set("passwordCrm", this.loginForm.password);
+                      this.$cookies.set("automaticLogin", this.automaticLogin);
+                      this.$cookies.set("formwhere", "formLogin");
+                  }else{
+                      this.$cookies.set("automaticLogin","");
+                  }
+                  this.$message({
+                    message:'登录成功',
+                    type: 'success'
+                  })
+                  this.$router.push({
+                      path: '/'
+                  })
+              }else{
+                  this.$message({
+                      message: res.msg,
+                      type: 'error'
+                  })
+              }
             }).catch(() => {
               this.loading = false
             })
@@ -202,6 +271,23 @@
       position: absolute;
       right: 35px;
       bottom: 28px;
+    }
+    .icon-size{
+      font-size:16px;
+      color: #889AA4;
+      cursor:pointer;
+      position: relative;
+      right:5px;
+      top:2px;
+    }
+    .automaticLogin{
+        margin:0px 0px 20px 2px;
+        .el-checkbox__label{
+          color:#fff;
+        }
+        .el-checkbox__input.is-checked+.el-checkbox__label{
+          color:#409EFF;
+        }
     }
   }
 

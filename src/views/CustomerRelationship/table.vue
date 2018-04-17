@@ -7,41 +7,44 @@
               <el-input class="search-input-box"
                 placeholder="请输入通行证/姓名/手机号/QQ号搜索"
                 v-model="searcKey">
-                <i slot="prefix" class="el-input__icon el-icon-circle-close" v-show="searcKey" @click="searcKey=''"></i>
-                <i slot="prefix" class="el-input__icon el-icon-search"></i>
+                <i slot="prefix" class="el-input__icon el-icon-circle-close" v-show="searcKey" @click="searcKey='';searchBtn()"></i>
+                <i slot="prefix" class="el-input__icon el-icon-search" @click="searchBtn"></i>
               </el-input>
           </el-col>
       </el-row>
       <el-row class="background-FFF height-100 padding-20 margin-top-15">
           <!-- 表格数据 -->
           <el-table
+              v-loading="loading"
+              element-loading-text="拼命加载中..."
               ref="multipleTable"
-              :data="tableData3"
+              :data="customerData"
               tooltip-effect="dark"
               style="width: 100%"
-
               @selection-change="handleSelectionChange">
               <el-table-column type="selection" width="55" align="center"></el-table-column>
-              <el-table-column label="通行证账号"  show-overflow-tooltip align="center">
-                <template slot-scope="scope">{{ scope.row.passpost }}</template>
+              <el-table-column label="通行证账号" align="center" show-overflow-tooltip>
+                <template slot-scope="scope">{{ scope.row.passport}}</template>
               </el-table-column>
-              <el-table-column prop="name" label="客户姓名" show-overflow-tooltip align="center"></el-table-column>
-              <el-table-column label="注册时间"  show-overflow-tooltip align="center">
-                <template slot-scope="scope">{{ scope.row.registrationTime }}</template>
+              <el-table-column prop="name" label="客户姓名" align="center" show-overflow-tooltip></el-table-column>
+              <el-table-column label="注册时间" align="center" show-overflow-tooltip>
+                <template slot-scope="scope">{{ scope.row.regDate/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
-              <el-table-column label="入海时间"  show-overflow-tooltip align="center">
-                <template slot-scope="scope">{{ scope.row.registrationTime }}</template>
+              <el-table-column label="入海时间" align="center" show-overflow-tooltip>
+                <template slot-scope="scope">{{ scope.row.enterHighSeasDate/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
-              <el-table-column prop="userSerive" label="使用云功能次数" align="center" show-overflow-tooltip></el-table-column>
-              <el-table-column prop="status" label="使用BIM应用次数" align="center" show-overflow-tooltip></el-table-column>
-              <el-table-column prop="userSerive" label="有效云套餐(个人/企业)" width="200" align="center"  show-overflow-tooltip></el-table-column>
-              <el-table-column prop="status" label="有效BIM套餐(个人/企业)" width="200" align="center" show-overflow-tooltip></el-table-column>
-              <el-table-column label="最新跟进时间"  show-overflow-tooltip align="center">
-                <template slot-scope="scope">{{ scope.row.followUpTime }}</template>
+
+              <el-table-column prop="useCloudFunctionTimes" label="使用云功能次数" align="center" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="useBimFunctionTimes" label="使用BIM应用次数" align="center" show-overflow-tooltip></el-table-column>
+              <el-table-column label="有效云套餐(个人/企业)" width="100" align="center"  show-overflow-tooltip>
+                  <template slot-scope="scope">{{scope.row.personalCloudPkgNum}} / {{scope.row.entCloudPkgNum}}</template>
+              </el-table-column>
+              <el-table-column label="有效BIM套餐(个人/企业)" width="120" align="center" show-overflow-tooltip>
+                  <template slot-scope="scope">{{scope.row.personalBimPkgNum}} / {{scope.row.entBimPkgNum}}</template>
               </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
-                  <span class="operationBtn" @click="claimCustomerBtn(scope.row.id)">认领</span><span class="operationBtn" @click="viewCustomerBtn(scope.row.id)">查看</span>
+                  <span class="operationBtn" @click="claimCustomerBtn(scope.row.passport)">认领</span><span class="operationBtn" @click="viewCustomerBtn(scope.row.passport)">查看</span>
                 </template>
               </el-table-column>
           </el-table>
@@ -54,123 +57,120 @@
           </div>
 
           <!-- 分页 -->
-          <div class="block" style="text-align: center;margin-top:20px">
+          <div class="block" v-show="customerData.length>0" style="text-align: center;margin-top:20px">
               <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentPage"
+                :current-page="customerParam.page"
                 :page-sizes="[10, 20, 50, 100]"
-                :page-size="100"
+                :page-size="customerParam.size"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="totalElements">
               </el-pagination>
           </div>
       </el-row>
 
       <!-- 查看详情弹窗 -->
-      <slide-view :showDetialBox="showDetialBox" v-on:showDetialBoxConfalse="showDetialBoxConfalse"></slide-view>
+      <slide-view :showDetialBox="showDetialBox" :passwordId="passwordId" v-on:showDetialBoxConfalse="showDetialBoxConfalse"></slide-view>
       
     </div>
 </template>
 
 <script>
 import slideView from '../../components/slideView/slideView'
+
+
+import {getCustomerPublicList,getCustomerFollowUpResult,getCustomerClaim} from '@/api/table.js'
+
+
 export default {
   components: {
     slideView
   },
   data() {
     return {
+      loading:true,
+
       searcKey:'',//搜索值
 
+      // 弹窗控制值
       showDetialBox:false,
+      passwordId:null,
 
       // 列表数据
-      tableData3: [{
-          id:11,
-          name: '胡彦斌',
-          passpost: 'Hulk111',
-          phone: '15721143333',
-          QQ: '12345698745',
-          registrationTime: '2017-10-01 12：00',
-          userSerive: '辛元忠',
-          status: '无人接听',
-          followUpTime: '2017-10-01 12：00',
-        },{
-          id:22,
-          name: '胡彦斌',
-          passpost: 'Hulk111',
-          phone: '15721143333',
-          QQ: '12345698745',
-          registrationTime: '2017-10-01 12：00',
-          userSerive: '辛元忠',
-          status: '无人接听',
-          followUpTime: '2017-10-01 12：00',
-        }],
+      customerData: [],
 
       multipleSelection: [], //选中数据
 
-      currentPage:1,
+
+      customerParam:{
+        "orders": [],
+        "page": 0,
+        "size": 0,
+        "query": "",
+      },
+
+      totalElements:0,
     }
   },
   created() {
+     this.getCustomerList();
   },
   watch: {
     // 检测路由切换页面
     $route() {
-      console.log(this.$route.name)
-      this.registrationTime='';
-      this.followUpTime='';
-      this.ClinchAdealTime='';
-      this.expireTime='';
-      this.searcKey='';
-      this.searchAll=false;
-      this.multipleSelection=[];
-      this.currentPage=1;
-      this.showDetialBox=false;
-    },
-    // 检测搜索全部操作
-    'searchAll'(){
-       console.log(this.searchAll)
+
     }
   },
   methods: {
-
+     // 初始化获取列表
+    getCustomerList(){
+        // console.log(this.customerParam)
+        getCustomerPublicList(this.customerParam).then((res)=>{
+            if(res.msg=='success'){
+                this.loading=false;
+                this.customerData=res.data.content;
+                this.totalElements=res.data.totalElements;
+            }
+        })
+    },
     // 列表选择操作
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
     // 分页操作
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
+      this.customerParam.size=val;
+      this.getCustomerList();
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
+      this.customerParam.page=val;
+      this.getCustomerList();
     },
     // 单个认领操作
     claimCustomerBtn(id){
       console.log(id)
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-        center: true
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });
-      });
+      getCustomerClaim(id).then((res)=>{
+          if(res.msg=='success'){
+              this.$message({
+                type: 'success',
+                message: '认领成功!'
+              });
+          }else{
+              this.$message({
+                type: 'errow',
+                message: '认领失败!'
+              });
+          }
+      })
     },
     // 单个查看操作
     viewCustomerBtn(id){
       // console.log(id);
       this.showDetialBox=!this.showDetialBox;
+      this.passwordId=id;
     },
     // 单个查看组件传值
     showDetialBoxConfalse(value){
@@ -179,8 +179,15 @@ export default {
     },
     // 批量认领操作
     claimAllCustomerBtn(){
-      console.log(this.multipleSelection)
+      let id = this.multipleSelection.map(v => {return v.passport}).join();
+      this.claimCustomerBtn(id);
     },
+    // 搜索
+    searchBtn(){
+      this.customerParam.page=1;
+      this.customerParam.query=this.searcKey,
+      this.getCustomerList();
+    }
   }
 }
 </script>
