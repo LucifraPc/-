@@ -59,20 +59,24 @@
 			    </el-tab-pane>
 			    <el-tab-pane label="套餐余量" name="套餐余量">
 			    	<div class="mealAllowancebox">
-						<p>有效云套餐  (个人/企业)  ：(/)</p>
+						<p>有效云套餐  (个人)  ：({{allowanceCloud.length}})</p>
 						<div>
-							<p><span>套餐：鲁班钢筋云功能套餐</span><span>状态：有效</span><span>服务时间：2017-02-07~2018-02-06(剩余16天)</span></p>
-							<p><span>套餐：鲁班钢筋云功能套餐</span><span>状态：有效</span><span>服务时间：2017-02-07~2018-02-06(剩余16天)</span></p>
-							<p><span>套餐：鲁班钢筋云功能套餐</span><span>状态：有效</span><span>服务时间：2017-02-07~2018-02-06(剩余16天)</span></p>
+							<p v-for="item in allowanceCloud">
+								<span>套餐：{{item.packageServiceName}}</span>
+								<span>状态：{{allowanceStatus[item.status]}}</span>
+								<span>服务时间：{{item.startTime}}~{{item.endTime}}(剩余{{changeTimeDifference(item.startTime,item.endTime)}}天)</span>
+							</p>
 						</div>
 					</div>
 					<hr style="height:1px;border:none;border-top:1px dashed #ccc;margin:30px 0px" />
 					<div class="mealAllowancebox">
-						<p>有效BIM套餐  (个人/企业)  ：(/)</p>
+						<p>有效BIM套餐  (个人)  ：({{allowanceBim.length}})</p>
 						<div>
-							<p><span>套餐：鲁班钢筋云功能套餐</span><span>状态：有效</span><span>服务时间：2017-02-07~2018-02-06(剩余16天)</span></p>
-							<p><span>套餐：鲁班钢筋云功能套餐</span><span>状态：有效</span><span>服务时间：2017-02-07~2018-02-06(剩余16天)</span></p>
-							<p><span>套餐：鲁班钢筋云功能套餐</span><span>状态：有效</span><span>服务时间：2017-02-07~2018-02-06(剩余16天)</span></p>
+							<p v-for="item in allowanceBim">
+								<span>套餐：{{item.packageServiceName}}</span>
+								<span>状态：{{allowanceStatus[item.status]}}</span>
+								<span>服务时间：{{item.startTime}}~{{item.endTime}}(剩余{{changeTimeDifference(item.startTime,item.endTime)}}天)</span>
+							</p>
 						</div>
 					</div>
 			    </el-tab-pane>
@@ -181,6 +185,8 @@
 </template>
 <script>
 	import {getCustomerDetail,getCustomerClassification,getCustomerFollowUpResult,getCustomerDetailSubmint,getCustomerOrder,getCustomerFunCount,getCustomerPackage,getCustomerMining,getCustomerOrderSearchNumber,bindingOrdersFun,delbindingOrdersFun} from '@/api/table.js'
+
+	import moment from 'moment'
 	export default {
 		props:["showDetialBox","passwordId"],
 	    created(){
@@ -260,7 +266,15 @@
 
 
 	        userCloudTimes:0,
-	        useBimTimes:0
+	        useBimTimes:0,
+
+	        // 套餐余量
+	        allowanceCloud:[],
+	        allowanceBim:[],
+	        allowanceStatus:{//套餐状态 0:无效 1:有效
+		        "0":"无效",
+		        "1":"有效" 
+		    },
 	      }
 	    },
 	    watch: {
@@ -487,11 +501,22 @@
 		    },
 		    // 套餐余量
 		    getCustomerPackageList(){
+		    	// 套餐类型：1 绑定锁套餐  2 vip套餐  5 普通套餐  6 正版套餐  7 线上套餐 8 线下套餐 9绑定锁绑定电脑并存的套餐（新11g） 11 鲁班库套餐 12 BIM应用套餐  13 材价 14 钢筋图集套餐 15 PDS云存储套餐 16个人pds应用套餐（暂时用2特殊处理）
 		    	let username = this.passwordId;
+		    	this.allowanceBim=new Array();
+		    	this.allowanceCloud=new Array();
 		    	getCustomerPackage(username).then((res)=>{
 		            if(res.msg=='success'){
 		            	if(res.data){
-		            		
+		            		res.data.forEach(function (item) {
+		            			console.log(item.packageType)
+								if(item.packageType==12){
+									this.allowanceBim.push(item)
+								}
+								if(item.packageType==16){
+									this.allowanceCloud.push(item)
+								}
+							});
 		            	}
 		            }else{
 		            	this.$message({
@@ -500,6 +525,10 @@
 		                });
 		            }
 		        })
+		    },
+		    // 时间差
+		    changeTimeDifference(time1,time2){
+		    	return moment(time1).diff(time2, 'days');
 		    }
 	    }
 	}

@@ -45,9 +45,9 @@ export function getCustomerDetailSubmint(params) {
 // export const getCustomerDetailSubmint = params => { return axios.post(`${base}rest/customer/detail/submitFollowInfo`,params).then(res => res.data); };
 
 // ---获取客户详情--查询套餐余量
-export function getCustomerPackage(customerId) {
+export function getCustomerPackage(username) {
   return request({
-    url:`rest/customer/detail/comboMargin/${customerId}`,
+    url:`rest/customer/detail/comboMargin/${username}`,
     method: 'get',
   })
 }
