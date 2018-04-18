@@ -101,7 +101,8 @@
 			    	<div v-if="$route.name=='成交客户' || $route.name=='即将到期客户' || $route.name=='到期未续费' ">
 						<div class="mealAllowancebox">
 							<p>已绑定订单：</p>
-							<div >
+							<div >  
+							 <!-- topOrderList -->
 								<p class="floatRightBox">订单编号：2017101607024915
 									<el-button type="primary floatRight">解除绑定</el-button></p>
 								<p class="floatRightBox">订单编号：2017101607024915
@@ -148,6 +149,7 @@
 						<div class="mealAllowancebox">
 							<p>已绑定订单：</p>
 							<div>
+								<!--bottomOrderList -->
 								<p>订单编号：2017101607024915</p>
 								<p>订单编号：2017101607024915</p>
 								<p>订单编号：2017101607024915</p>
@@ -184,7 +186,7 @@
   	</transition>
 </template>
 <script>
-	import {getCustomerDetail,getCustomerClassification,getCustomerFollowUpResult,getCustomerDetailSubmint} from '@/api/table.js'
+	import {getCustomerDetail,getCustomerClassification,getCustomerFollowUpResult,getCustomerDetailSubmint,getCustomerOrder,getCustomerFunCount} from '@/api/table.js'
 	export default {
 		props:["showDetialBox","passwordId"],
 	    created(){
@@ -248,6 +250,8 @@
 	        },
 	        tableData: [],
 	        showDetialOrder:false,//订单详情
+	        topOrderList:[],//上可点击订单
+	        bottomOrderList:[],//下不可点击订单
 	      }
 	    },
 	    watch: {
@@ -255,12 +259,17 @@
 	      	'showDetialBox':{
 		      	handler(curVal){
 		      		this.showDetialBoxCon=this.showDetialBox;
+		      		this.activeName='基本情况';
+		      		if(this.showDetialBox){
+		      			this.getCustomerDetailFun();
+		      		}
 		      	}
 	      	},
 	      	// 监测切换客户key
 	      	'passwordId':{
 	      		handler(curVal){
-		      		this.getCustomerDetailFun();
+	      			this.activeName='基本情况';
+		      		// this.getCustomerDetailFun();
 		      	}
 	      	}
 	    },
@@ -311,8 +320,9 @@
 		        }else if(this.activeName=='套餐余量'){
 
 		        }else if(this.activeName=='功能使用'){
-		        	
+		        	this.getCustomerFunCountList();
 		        }else if(this.activeName=='订单记录'){
+		        	this.getCustomerOrderList();
 		        	
 		        }else if(this.activeName=='挖掘记录'){
 		        	
@@ -357,6 +367,38 @@
 		    // 根据编号搜索订单
 		    searchNumBtn(){
 		    	this.showDetialOrder=true;
+		    	let orderMsg=this.searchNum;
+		    },
+		    getCustomerOrderList(){
+		    	let username = this.passwordId;
+		    	getCustomerOrder(username).then((res)=>{
+		            if(res.msg=='success'){
+		            	if(res.data){
+		            		this.topOrderList=res.data;//上可点击订单
+	        				this.bottomOrderList=res.data;//下不可点击订单
+		            	}
+		            }else{
+		            	this.$message({
+			                type: 'error',
+			                message: '查询失败!'
+		                });
+		            }
+		        })
+		    },
+		    getCustomerFunCountList(){
+		    	let username = this.passwordId;
+		    	getCustomerFunCount(username).then((res)=>{
+		            if(res.msg=='success'){
+		            	if(res.data){
+		            		
+		            	}
+		            }else{
+		            	this.$message({
+			                type: 'error',
+			                message: '查询失败!'
+		                });
+		            }
+		        })
 		    }
 	    }
 	}

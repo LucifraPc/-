@@ -79,6 +79,7 @@
               element-loading-text="拼命加载中..."
               ref="multipleTable"
               :data="customerData"
+              @sort-change="changeSort"
               tooltip-effect="dark"
               @filter-change="filterChange"
               style="width: 100%;padding-top:10px"
@@ -92,13 +93,13 @@
               <el-table-column v-if="$route.name=='新客户' || $route.name=='高意向' || $route.name=='可跟进'|| $route.name=='无法接通'|| $route.name=='无效线索' " label="QQ号" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">{{ scope.row.qq}}</template>
               </el-table-column>
-              <el-table-column label="注册时间" align="center" show-overflow-tooltip>
+              <el-table-column label="注册时间" prop="registerDate" sortable="custom" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">{{ scope.row.registerDate/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
-              <el-table-column label="成交时间" v-if="$route.name=='成交客户' || $route.name=='即将到期客户' || $route.name=='到期未续费' " align="center" show-overflow-tooltip>
+              <el-table-column label="成交时间"  prop="registerDate" sortable="custom" v-if="$route.name=='成交客户' || $route.name=='即将到期客户' || $route.name=='到期未续费' " align="center" show-overflow-tooltip>
                 <template slot-scope="scope">{{ scope.row.registerDate/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
-              <el-table-column label="到期时间" v-if="$route.name=='成交客户' || $route.name=='即将到期客户' || $route.name=='到期未续费' " align="center" show-overflow-tooltip>
+              <el-table-column label="到期时间"  prop="registerDate" sortable="custom" v-if="$route.name=='成交客户' || $route.name=='即将到期客户' || $route.name=='到期未续费' " align="center" show-overflow-tooltip>
                 <template slot-scope="scope">{{ scope.row.registerDate/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
               <el-table-column
@@ -124,7 +125,7 @@
                     <el-tag close-transition>{{callResult[scope.row.followupResult]}}</el-tag>
                   </template>
               </el-table-column>
-              <el-table-column label="最新跟进时间" align="center" show-overflow-tooltip>
+              <el-table-column label="最新跟进时间"  prop="lastFollowupDate" sortable="custom" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">{{ scope.row.lastFollowupDate/1000 | moment("YYYY-MM-DD HH:mm:ss")  }}</template>
               </el-table-column>
               <el-table-column label="操作" align="center">
@@ -294,13 +295,7 @@ export default {
         "followupResult": [],//拨打结果条件
         "isAll": "2",//是否搜全部:1部分范围搜索/2全部范围搜索
         "orders": [//排序条件,为null或长度为0表示不用排序 
-          {
-            "direction": 0,//排序方式 0 ASC 1 DESC
-            "ignoreCase": false,//
-            "order": {},
-            "property": "string"//要排序的字段名
-          }
-        ],
+         ],
         "page": 1,// 请求的页码，从1开始
         "pageRequest": {},
         "registerDateSort": 0,//
@@ -634,7 +629,24 @@ export default {
       this.customerParam.searchCondition=this.searcKey;
       this.customerParam.page=1;
       this.getCustomerList();
-    }
+    },
+    // 排序
+    changeSort(column){
+      // 排序方式 0 ASC 1 DESC 
+      if(column.prop){
+          this.customerParam.orders[0]={};
+          if(column.order=="ascending"){
+              this.customerParam.orders[0].direction=0;
+          }else{
+              this.customerParam.orders[0].direction=1;
+          }
+          this.customerParam.orders[0].ignoreCase=false;
+          this.customerParam.orders[0].property=column.prop;
+      }else{
+          this.customerParam.orders=new Array();
+      }
+      this.getCustomerList();
+    },
   }
 }
 </script>

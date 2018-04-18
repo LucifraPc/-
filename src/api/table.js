@@ -47,7 +47,7 @@ export function getCustomerDetailSubmint(params) {
 // ---获取客户详情--查询套餐余量
 export function getCustomerPackage(customerId) {
   return request({
-    url:`rest/customer/detail/queryComboMargin/${customerId}`,
+    url:`rest/customer/detail/comboMargin/${customerId}`,
     method: 'get',
   })
 }
@@ -63,9 +63,9 @@ export function getCustomerPackage(customerId) {
 // }
 
 // ---获取客户详情--查询功能使用次数
-export function getCustomerFunCount(customerId) {
+export function getCustomerFunCount(username) {
   return request({
-    url: `rest/customer/detail/queryUseTime/${customerId}`,
+    url: `rest/customer/detail/useTime/${username}`,
     method: 'get',
   })
 }
@@ -73,9 +73,9 @@ export function getCustomerFunCount(customerId) {
 
 
 // ---获取客户详情--客户详情订单记录
-export function getCustomerOrder(customerId) {
+export function getCustomerOrder(username) {
   return request({
-    url: `rest/customer/detail/queryOrderRecord/${customerId}`,
+    url: `rest/customer/detail/orderRecord/${username}`,
     method: 'get'
   })
 }
@@ -94,7 +94,7 @@ export function getCustomerOrder(customerId) {
 // ---获取客户详情--客户详情挖掘记录
 export function getCustomerMining(customerId) {
   return request({
-    url: `rest/customer/detail/queryMiningRecords/${customerId}`,
+    url: `rest/customer/detail/miningRecords/${customerId}`,
     method: 'get'
   })
 }
@@ -246,21 +246,20 @@ export function getSystemSettingsSave(params) {
 
 // ------数据报表------
 
-// ---列表获取
+// ---列表获取  查询数据报表列表
 export function getDataReportList(params) {
   return request({
-    url: `rest/customer/list`,
+    url: `rest/datareport/list`,
     method: 'post',
     data:params
   })
 }
 
-// ---导出
-export function getExportRemove(params) {
+// ---导出 导出数据报表
+export function getExportRemove(startTime,endTime) {
   return request({
-    url: '/table/list',
-    method: 'get',
-    params
+    url: `rest/datareport/list/export/${startTime}/${endTime}`,
+    method: 'get'
   })
 }
 
