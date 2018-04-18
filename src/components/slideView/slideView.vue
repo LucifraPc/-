@@ -505,16 +505,20 @@
 		    	let username = this.passwordId;
 		    	this.allowanceBim=new Array();
 		    	this.allowanceCloud=new Array();
+		    	let vm=this;
 		    	getCustomerPackage(username).then((res)=>{
 		            if(res.msg=='success'){
 		            	if(res.data){
 		            		res.data.forEach(function (item) {
-		            			console.log(item.packageType)
+		            			item.startTime = item.startTime.replace('年', '-').replace('月', '-').replace('日', '')
+								item.endTime = item.endTime.replace('年', '-').replace('月', '-').replace('日', '')
+		            			// console.log(item.packageType)
 								if(item.packageType==12){
-									this.allowanceBim.push(item)
+									
+									vm.allowanceBim.push(item)
 								}
 								if(item.packageType==16){
-									this.allowanceCloud.push(item)
+									vm.allowanceCloud.push(item)
 								}
 							});
 		            	}
@@ -528,6 +532,7 @@
 		    },
 		    // 时间差
 		    changeTimeDifference(time1,time2){
+		    	console.log(time1,time2)
 		    	return moment(time1).diff(time2, 'days');
 		    }
 	    }
