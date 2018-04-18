@@ -111,7 +111,7 @@ export default {
           }
 
           this.downUrl = process.env.BASE_API +'rest/datareport/list/export/'+startDate+'/'+endDate;
-          console.log(this.downUrl)
+          // console.log(this.downUrl)
           // document.getElementById("downBtn").setAttribute("download", "download");
           setTimeout(() => {
             document.getElementById("downBtn").click();

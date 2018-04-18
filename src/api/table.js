@@ -82,14 +82,31 @@ export function getCustomerOrder(username) {
 // export const getCustomerOrder = (customerId) => { return axios.get(`${base}rest/customer/detail/queryOrderRecord/${customerId}`).then(res => res.data); };
 
 
-// ---获取客户详情--订单记录--编号搜索
-// export function getCustomerOrderSearchNumber(params) {
-//   return request({
-//     url: '/table/list',
-//     method: 'get',
-//     params
-//   })
-// }
+// ---获取客户详情--订单记录--编号搜索查询订单详细信息
+export function getCustomerOrderSearchNumber(oid) {
+  return request({
+    url: `rest/customer/detail/order/${oid}`,
+    method: 'get'
+  })
+}
+
+// ---获取客户详情--订单记录---绑定订单到客户
+export function bindingOrdersFun(username,oid) {
+  return request({
+    url: `rest/customer/detail/orderRecord/${username}/${oid}`,
+    method: 'post'
+  })
+}
+// ---获取客户详情--订单记录---解除绑定订单到客户
+export function delbindingOrdersFun(username,oid) {
+  return request({
+    url: `rest/customer/detail/orderRecord/${username}/${oid}`,
+    method: 'delete'
+  })
+}
+
+
+
 
 // ---获取客户详情--客户详情挖掘记录
 export function getCustomerMining(customerId) {
@@ -98,6 +115,9 @@ export function getCustomerMining(customerId) {
     method: 'get'
   })
 }
+
+
+
 // export const getCustomerMining = (customerId) => { return axios.get(`${base}rest/customer/detail/queryMiningRecords/${customerId}`).then(res => res.data); };
 
 
