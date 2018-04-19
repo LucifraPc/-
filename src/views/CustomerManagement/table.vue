@@ -106,7 +106,7 @@
                   show-overflow-tooltip
                   align="center"
                   prop="serviceName"
-                  label="客服专员"
+                  label="销售人员"
                   column-key="serviceName"
                   :filters="followResultUser"
                   filter-placement="bottom-end">

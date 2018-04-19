@@ -92,6 +92,18 @@
 								<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
 								<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
 							</div>
+							<!-- 分页 -->
+				          	<div class="block" v-show="customerFunctionLog1.length>0" style="text-align: center;margin-top:20px">
+					            <el-pagination
+					                @size-change="handleSizeChange1"
+					                @current-change="handleCurrentChange1"
+					                :current-page="customerFunctionLog1.page"
+					                :page-sizes="[10, 20, 50, 100]"
+					                :page-size="customerFunctionLog1.size"
+					                layout="total, sizes, prev, pager, next, jumper"
+					                :total="totalElements1">
+					            </el-pagination>
+				          	</div>
 						</div>
 						<hr style="height:1px;border:none;border-top:1px dashed #ccc;margin:30px 0px" />
 						<div class="mealAllowancebox">
@@ -102,6 +114,18 @@
 								<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
 								<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
 							</div>
+							<!-- 分页 -->
+				          	<div class="block" v-show="customerFunctionLog2.length>0" style="text-align: center;margin-top:20px">
+					            <el-pagination
+					                @size-change="handleSizeChange2"
+					                @current-change="handleCurrentChange2"
+					                :current-page="customerFunctionLog2.page"
+					                :page-sizes="[10, 20, 50, 100]"
+					                :page-size="customerFunctionLog2.size"
+					                layout="total, sizes, prev, pager, next, jumper"
+					                :total="totalElements2">
+					            </el-pagination>
+				          	</div>
 						</div>
 					</div>
 			    </el-tab-pane>
@@ -189,7 +213,7 @@
   	</transition>
 </template>
 <script>
-	import {getCustomerDetail,getCustomerClassification,getCustomerFollowUpResult,getCustomerDetailSubmint,getCustomerOrder,getCustomerFunCount,getCustomerPackage,getCustomerMining,getCustomerOrderSearchNumber,bindingOrdersFun,delbindingOrdersFun} from '@/api/table.js'
+	import {getCustomerDetail,getCustomerClassification,getCustomerFollowUpResult,getCustomerDetailSubmint,getCustomerOrder,getCustomerFun,getCustomerFunCount,getCustomerPackage,getCustomerMining,getCustomerOrderSearchNumber,bindingOrdersFun,delbindingOrdersFun} from '@/api/table.js'
 
 	import moment from 'moment'
 	export default {
@@ -270,9 +294,14 @@
 		        "-3":"已退款" 
 		    },
 
-
+		    // 功能使用
 	        userCloudTimes:0,
 	        useBimTimes:0,
+	        customerFunctionLog1:[],
+	        customerFunctionLog2:[],
+	        totalElements1:0,
+	        totalElements2:0,
+
 
 	        // 套餐余量
 	        allowanceCloud:[],
@@ -281,6 +310,18 @@
 		        "0":"无效",
 		        "1":"有效" 
 		    },
+		    cstomerFunctionLogParam1:{
+			  "customerName": "",//客户通行证名
+			  "functionType": 0,//功能类型 2云功能 12 bim应用 ,
+			  "page": 1,
+			  "size": 10,
+			},
+			cstomerFunctionLogParam2:{
+			  "customerName": "",//客户通行证名
+			  "functionType": 12,//功能类型 2云功能 12 bim应用 ,
+			  "page": 1,
+			  "size": 10,
+			}
 	      }
 	    },
 	    watch: {
@@ -303,6 +344,27 @@
 	      	}
 	    },
 	    methods: {
+	    	// 分页操作功能使用
+		    handleSizeChange1(val) {
+		      // console.log(`每页 ${val} 条`);
+		      this.customerFunctionLog1.size=val;
+		      this.getCustomerFunList(this.customerFunctionLog1);
+		    },
+		    handleCurrentChange1(val) {
+		      // console.log(`当前页: ${val}`);
+		      this.customerFunctionLog1.page=val;
+		      this.getCustomerFunList(this.customerFunctionLog1);
+		    },
+		    handleSizeChange2(val) {
+		      // console.log(`每页 ${val} 条`);
+		      this.customerFunctionLog2.size=val;
+		      this.getCustomerFunList(this.customerFunctionLog2);
+		    },
+		    handleCurrentChange2(val) {
+		      // console.log(`当前页: ${val}`);
+		      this.customerFunctionLog2.page=val;
+		      this.getCustomerFunList(this.customerFunctionLog2);
+		    },
 	    	// 获取跟进结果
 	    	getCustomerClassList(){
 	    		getCustomerClassification().then((res)=>{
@@ -337,6 +399,8 @@
 		        	this.getCustomerPackageList();
 		        }else if(this.activeName=='功能使用'){
 		        	this.getCustomerFunCountList();
+		        	this.getCustomerFunList(this.cstomerFunctionLogParam1);
+		        	this.getCustomerFunList(this.cstomerFunctionLogParam2);
 		        }else if(this.activeName=='订单记录'){
 		        	this.getCustomerOrderList();
 		        }else if(this.activeName=='挖掘记录'){
@@ -484,6 +548,30 @@
 		            	if(res.data){
 		            		this.userCloudTimes=res.data.userCloudTimes;
 		            		this.useBimTimes=res.data.useBimTimes;
+		            	}
+		            }else{
+		            	this.$message({
+			                type: 'error',
+			                message: '查询失败!'
+		                });
+		            }
+		        })
+
+		    },
+		    // 分页查询功能日志
+		    getCustomerFunList(cstomerFunctionLogParam){
+		    	cstomerFunctionLogParam.customerName = this.passwordId;
+		    	getCustomerFun(cstomerFunctionLogParam).then((res)=>{
+		    		// alert(cstomerFunctionLogParam.functionType)
+		            if(res.msg=='success'){
+		            	this.loading=false;
+		            	if(status==2){
+		            		this.totalElements1=res.data.totalElements;
+		            		this.customerFunctionLog1=res.data.content;
+		            	}
+		            	if(status==12){
+		            		this.totalElements2=res.data.totalElements;
+		            		this.customerFunctionLog2=res.data.content;
 		            	}
 		            }else{
 		            	this.$message({

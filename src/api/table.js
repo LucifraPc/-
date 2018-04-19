@@ -53,14 +53,14 @@ export function getCustomerPackage(username) {
 }
 // export const getCustomerPackage = customerId => { return axios.get(`${base}rest/customer/detail/queryComboMargin/${customerId}`).then(res => res.data); };
 
-// ---获取客户详情--功能使用
-// export function getCustomerFun(params) {
-//   return request({
-//     url: '/table/list',
-//     method: 'get',
-//     params
-//   })
-// }
+// ---获取客户详情--分页查询指定客户的功能使用日志
+export function getCustomerFun(params) {
+  return request({
+    url: 'rest/customer/function',
+    method: 'post',
+    data:params
+  })
+}
 
 // ---获取客户详情--查询功能使用次数
 export function getCustomerFunCount(username) {
