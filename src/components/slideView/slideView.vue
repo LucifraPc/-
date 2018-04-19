@@ -8,7 +8,7 @@
 
 	        <el-tabs v-model="activeName" @tab-click="handleClick">
 			    <el-tab-pane label="基本情况" name="基本情况">
-			    	<el-form :model="customerDetail" :rules="rules" ref="customerDetail" label-width="100px" class="demo-ruleForm">
+			    	<el-form v-loading="loading" element-loading-text="拼命加载中..." :model="customerDetail" :rules="rules" ref="customerDetail" label-width="100px" class="demo-ruleForm">
 			    		<el-form-item label="通行证：" prop="username">
 						    <span>{{customerDetail.username}}</span>
 						</el-form-item>
@@ -58,106 +58,111 @@
 					</div>
 			    </el-tab-pane>
 			    <el-tab-pane label="套餐余量" name="套餐余量">
-			    	<div class="mealAllowancebox">
-						<p>有效云套餐  (个人)  ：({{allowanceCloud.length}})</p>
-						<div>
-							<p v-for="item in allowanceCloud">
-								<span>套餐：{{item.packageServiceName}}</span>
-								<span>状态：{{allowanceStatus[item.status]}}</span>
-								<span>服务时间：{{item.startTime}}~{{item.endTime}}(剩余{{changeTimeDifference(item.startTime,item.endTime)}}天)</span>
-							</p>
+			    	<div v-loading="loading" element-loading-text="拼命加载中...">
+				    	<div class="mealAllowancebox">
+							<p>有效云套餐  (个人)  ：({{allowanceCloud.length}})</p>
+							<div>
+								<p v-for="item in allowanceCloud">
+									<span>套餐：{{item.packageServiceName}}</span>
+									<span>状态：{{allowanceStatus[item.status]}}</span>
+									<span>服务时间：{{item.startTime}}~{{item.endTime}}(剩余{{changeTimeDifference(item.startTime,item.endTime)}}天)</span>
+								</p>
+							</div>
 						</div>
-					</div>
-					<hr style="height:1px;border:none;border-top:1px dashed #ccc;margin:30px 0px" />
-					<div class="mealAllowancebox">
-						<p>有效BIM套餐  (个人)  ：({{allowanceBim.length}})</p>
-						<div>
-							<p v-for="item in allowanceBim">
-								<span>套餐：{{item.packageServiceName}}</span>
-								<span>状态：{{allowanceStatus[item.status]}}</span>
-								<span>服务时间：{{item.startTime}}~{{item.endTime}}(剩余{{changeTimeDifference(item.startTime,item.endTime)}}天)</span>
-							</p>
+						<hr style="height:1px;border:none;border-top:1px dashed #ccc;margin:30px 0px" />
+						<div class="mealAllowancebox">
+							<p>有效BIM套餐  (个人)  ：({{allowanceBim.length}})</p>
+							<div>
+								<p v-for="item in allowanceBim">
+									<span>套餐：{{item.packageServiceName}}</span>
+									<span>状态：{{allowanceStatus[item.status]}}</span>
+									<span>服务时间：{{item.startTime}}~{{item.endTime}}(剩余{{changeTimeDifference(item.startTime,item.endTime)}}天)</span>
+								</p>
+							</div>
 						</div>
 					</div>
 			    </el-tab-pane>
 			    <el-tab-pane label="功能使用" name="功能使用">
-			    	<div class="mealAllowancebox">
-						<p>使用云功能次数  ：{{userCloudTimes}} 次</p>
-						<div>
-							<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
-							<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
-							<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
-							<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
+			    	<div v-loading="loading" element-loading-text="拼命加载中...">
+				    	<div class="mealAllowancebox">
+							<p>使用云功能次数  ：{{userCloudTimes}} 次</p>
+							<div>
+								<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
+								<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
+								<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
+								<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
+							</div>
 						</div>
-					</div>
-					<hr style="height:1px;border:none;border-top:1px dashed #ccc;margin:30px 0px" />
-					<div class="mealAllowancebox">
-						<p>使用BIM应用次数  ：{{useBimTimes}} 次</p>
-						<div>
-							<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
-							<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
-							<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
-							<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
+						<hr style="height:1px;border:none;border-top:1px dashed #ccc;margin:30px 0px" />
+						<div class="mealAllowancebox">
+							<p>使用BIM应用次数  ：{{useBimTimes}} 次</p>
+							<div>
+								<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
+								<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
+								<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
+								<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
+							</div>
 						</div>
 					</div>
 			    </el-tab-pane>
 			    <el-tab-pane label="订单记录" name="订单记录">
-			    	<div v-show="topOrderList.length>0" v-if="$route.name=='成交客户' || $route.name=='即将到期客户' || $route.name=='到期未续费' ">
-						<div class="mealAllowancebox">
-							<p>已绑定订单：</p>
-							<div >  
-							 <!-- topOrderList -->
-							 	<p class="floatRightBox" v-for="item in topOrderList">
-							 		订单编号：<span style="cursor: pointer;color:#409EFF" @click="searchNumBtn(item.outTradeOrderId)">{{item.outTradeOrderId}}</span>	 	
-							 		<el-button type="primary floatRight" @click="delBindOrder(item.outTradeOrderId)">解除绑定</el-button></p>
-							 	</p>
+			    	<div v-loading="loading" element-loading-text="拼命加载中...">
+				    	<div v-show="topOrderList.length>0" v-if="$route.name=='成交客户' || $route.name=='即将到期客户' || $route.name=='到期未续费' ">
+							<div class="mealAllowancebox">
+								<p>已绑定订单：</p>
+								<div >  
+								 <!-- topOrderList -->
+								 	<p class="floatRightBox" v-for="item in topOrderList">
+								 		订单编号：<span style="cursor: pointer;color:#409EFF" @click="searchNumBtn(item.outTradeOrderId)">{{item.outTradeOrderId}}</span>	 	
+								 		<el-button type="primary floatRight" @click="delBindOrder(item.outTradeOrderId)">解除绑定</el-button></p>
+								 	</p>
+								</div>
+							</div>
+							<hr style="height:1px;border:none;border-top:1px dashed #ccc;margin:30px 0px" />
+						</div>
+				    	<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+				    		<el-form-item label="订单编号：" prop="name">
+							    <el-input placeholder="请输入内容" v-model="searchNum" class="input-with-select select-clear" style="width:390px;">
+							    	<i slot="append" class="el-icon-circle-close" v-show="searchNum.length>0" @click="searchNum='';"></i>
+								    <el-button slot="append" icon="el-icon-search" @click="searchNumBtn(searchNum)"></el-button>
+								</el-input>
+								<el-button type="primary" :disabled="!showDetialOrder" @click="bindingOrders">绑定订单</el-button>
+							</el-form-item>
+							<div v-show="showDetialOrder">
+								<el-form-item label="下单时间：" prop="postTime">
+							    	<span>{{ruleForm.postTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span>
+								</el-form-item>
+								<el-form-item label="订单金额：" prop="orderPrice">
+								    <span>￥{{ruleForm.orderPrice}}</span>
+								</el-form-item>
+								<el-form-item label="支付方式：" prop="paymentMethod">
+								    <span>{{paytype[ruleForm.paymentMethod]}}</span>
+								</el-form-item>
+								<el-form-item label="支付状态：" prop="paymentStatus">
+								    <span>{{paystatus[ruleForm.paymentStatus]}}</span>
+								</el-form-item>
+								<el-form-item label="发票类型：" prop="invoiceType">
+								    <span>{{invoicetype[ruleForm.invoiceType]}}</span>
+								</el-form-item>
+								<el-form-item label="购买内容：" prop="content">
+								    <div style="margin-bottom:10px" v-for="item in ruleForm.content">{{item}}</div>
+								</el-form-item>
+							</div>
+						</el-form>
+						<div v-show="bottomOrderList.length>0" v-if="$route.name=='新客户' || $route.name=='高意向' || $route.name=='可跟进'|| $route.name=='无法接通'|| $route.name=='无效线索' || $route.name=='客户公海' " >
+							<hr style="height:1px;border:none;border-top:1px dashed #ccc;margin:30px 0px" />
+							<div class="mealAllowancebox" >
+								<p>已绑定订单：</p>
+								<div>
+									<!--bottomOrderList -->
+									<p v-for="item in bottomOrderList">订单编号：{{item.outTradeOrderId}}</p>
+								</div>
 							</div>
 						</div>
-						<hr style="height:1px;border:none;border-top:1px dashed #ccc;margin:30px 0px" />
 					</div>
-			    	<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-			    		<el-form-item label="订单编号：" prop="name">
-						    <el-input placeholder="请输入内容" v-model="searchNum" class="input-with-select select-clear" style="width:390px;">
-						    	<i slot="append" class="el-icon-circle-close" v-show="searchNum.length>0" @click="searchNum='';"></i>
-							    <el-button slot="append" icon="el-icon-search" @click="searchNumBtn(searchNum)"></el-button>
-							</el-input>
-							<el-button type="primary" :disabled="!showDetialOrder" @click="bindingOrders">绑定订单</el-button>
-						</el-form-item>
-						<div v-show="showDetialOrder">
-							<el-form-item label="下单时间：" prop="postTime">
-						    	<span>{{ruleForm.postTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span>
-							</el-form-item>
-							<el-form-item label="订单金额：" prop="orderPrice">
-							    <span>￥{{ruleForm.orderPrice}}</span>
-							</el-form-item>
-							<el-form-item label="支付方式：" prop="paymentMethod">
-							    <span>{{paytype[ruleForm.paymentMethod]}}</span>
-							</el-form-item>
-							<el-form-item label="支付状态：" prop="paymentStatus">
-							    <span>{{paystatus[ruleForm.paymentStatus]}}</span>
-							</el-form-item>
-							<el-form-item label="发票类型：" prop="invoiceType">
-							    <span>{{invoicetype[ruleForm.invoiceType]}}</span>
-							</el-form-item>
-							<el-form-item label="购买内容：" prop="content">
-							    <div style="margin-bottom:10px" v-for="item in ruleForm.content">{{item}}</div>
-							</el-form-item>
-						</div>
-					</el-form>
-					<div v-show="bottomOrderList.length>0" v-if="$route.name=='新客户' || $route.name=='高意向' || $route.name=='可跟进'|| $route.name=='无法接通'|| $route.name=='无效线索' || $route.name=='客户公海' " >
-						<hr style="height:1px;border:none;border-top:1px dashed #ccc;margin:30px 0px" />
-						<div class="mealAllowancebox" >
-							<p>已绑定订单：</p>
-							<div>
-								<!--bottomOrderList -->
-								<p v-for="item in bottomOrderList">订单编号：{{item.outTradeOrderId}}</p>
-							</div>
-						</div>
-					</div>
-					
 			    </el-tab-pane>
 			    <el-tab-pane label="挖掘记录" name="挖掘记录">
-			    	<el-table
+			    	<el-table v-loading="loading" element-loading-text="拼命加载中..."
 					    :data="tableData"
 					    border
 					    style="width: 100%">
@@ -195,6 +200,7 @@
 	    },
 	    data() {
 	      return {
+	      	loading:true,
 	      	type:{// 客户分类结果集
 		        "新客户": 0,
 		        "高意向": 1,
@@ -324,6 +330,7 @@
 	      	},
 	      	// 切换页签  获取数据
 	      	handleClick(tab, event) {
+	      		this.loading=true;
 		        if(this.activeName=='基本情况'){
 		        	this.getCustomerDetailFun();
 		        }else if(this.activeName=='套餐余量'){
@@ -439,6 +446,7 @@
 	    	getCustomerDetailFun(){
 	    		getCustomerDetail(this.passwordId).then((res)=>{
 		            if(res.msg=='success'){
+		            	this.loading=false;
 		            	if(res.data.customerDetail){
 		            		this.customerDetail=res.data.customerDetail;
 		            	}
@@ -454,6 +462,7 @@
 		    	let username = this.passwordId;
 		    	getCustomerOrder(username).then((res)=>{
 		            if(res.msg=='success'){
+		            	this.loading=false;
 		            	if(res.data){
 		            		this.topOrderList=res.data;//上可点击订单
 	        				this.bottomOrderList=res.data;//下不可点击订单
@@ -471,6 +480,7 @@
 		    	let username = this.passwordId;
 		    	getCustomerFunCount(username).then((res)=>{
 		            if(res.msg=='success'){
+		            	this.loading=false;
 		            	if(res.data){
 		            		this.userCloudTimes=res.data.userCloudTimes;
 		            		this.useBimTimes=res.data.useBimTimes;
@@ -488,6 +498,7 @@
 		    	let username = this.passwordId;
 		    	getCustomerMining(username).then((res)=>{
 		            if(res.msg=='success'){
+		            	this.loading=false;
 		            	if(res.data){
 		            		this.tableData=res.data;
 		            	}
@@ -508,6 +519,7 @@
 		    	let vm=this;
 		    	getCustomerPackage(username).then((res)=>{
 		            if(res.msg=='success'){
+		            	this.loading=false;
 		            	if(res.data){
 		            		res.data.forEach(function (item) {
 		            			item.startTime = item.startTime.replace('年', '-').replace('月', '-').replace('日', '')

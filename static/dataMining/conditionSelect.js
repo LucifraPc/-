@@ -14,10 +14,9 @@ $(document).ready(function () {
         var k = $("#tr_count").val();
 
 
-        var newTr = "<tr><td colspan='3' style='height:10px;background: #EEEFF4'></td></tr>"
-            + "<tr style='line-height: 20px;padding:20px;' class='ctr' id='ctr" + k + "'>"
-            + "<td width='14%' style='background: white;border: 1px solid #C7C7C7;'>"
-            + "<select class='condition' id='condition_id" + k + "' onchange='cdnChange(this," + k + ")'>";
+        var newTr = "<tr style='line-height: 20px;padding:20px;' class='ctr' id='ctr" + k + "'>"
+            + "<td width='14%' style='background: white;'>"
+            + "<select class='condition  el-input__inner' id='condition_id" + k + "' onchange='cdnChange(this," + k + ")' style='margin:0px 10px;width:calc(100% - 20px);'> ";
 
 
         for (var cn in condition) {
@@ -25,9 +24,9 @@ $(document).ready(function () {
         }
         var prevSD = $("input[class='Wdate startDate']:last").val() ? $("input[class='Wdate startDate']:last").val() : "";
         var prevED = $("input[class='Wdate endDate']:last").val() ? $("input[class='Wdate endDate']:last").val() : "";
-        newTr += "</select>"
+        newTr += "</select><i class='el-icon-caret-bottom' style='position:absolute; top:25px;right:15px'></i>"
             + "</td>"
-            + "<td width='80%' style='background: white;border: 1px solid #C7C7C7;text-align: left;'>"
+            + "<td width='80%' style='background: white;padding-left:15px!important;text-align: left;'>"
             + "时间范围：<input class='Wdate startDate' value='" + prevSD + "' id='sd" + k + "' type='text' size='12' onClick=WdatePicker({errDealMode:1,readOnly:true,isShowClear:false,maxDate:'#F{$dp.$D(ed" + k + ")||\\'%y-%M-%d\\'}'})> ~ "
             + "<input   type='text' size='12' value='" + prevED + "' id='ed" + k + "' class='Wdate endDate' onClick=WdatePicker({isShowClear:false,readOnly:true,minDate:'#F{$dp.$D(sd" + k + ")}',maxDate:'%y-%M-%d'})> <br/>"
             + "<input type='checkbox' name='pdt_checkbox" + k + "' onclick='checkAll(this.name)' value=''>全部"
@@ -35,8 +34,8 @@ $(document).ready(function () {
             + "&nbsp;&nbsp;<input type='checkbox' name='pdt_checkbox" + k + "' value='2'>钢筋"
             + "&nbsp;&nbsp;<input type='checkbox' name='pdt_checkbox" + k + "' value='5'>安装"
             + "</td>"
-            + "<td width='6%'>"
-            + "<input type='button' onclick='cdndelete(this)' class='fdd' value='删除'/>"
+            + "<td width='6%'  style='padding-left:15px!important;'>"
+            + "<input type='button' onclick='cdndelete(this)' class='fdd el-button el-button--primary' value='删除'/>"
             + "</td> </tr>";
 
         //        $("#fd").html("<input type='button' onclick='cdndelete(0)'  value='删除'/>");

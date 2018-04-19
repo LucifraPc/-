@@ -86,7 +86,7 @@
               @selection-change="handleSelectionChange">
               <el-table-column type="selection" width="55" align="center"></el-table-column>
               <el-table-column label="通行证账号" align="center" show-overflow-tooltip>
-                <template slot-scope="scope">{{ scope.row.password}}</template>
+                <template slot-scope="scope">{{ scope.row.userName}}</template>
               </el-table-column>
               <el-table-column prop="userName" label="姓名" align="center" show-overflow-tooltip></el-table-column>
               <el-table-column prop="mobile" label="手机号码" align="center" show-overflow-tooltip></el-table-column>
@@ -96,11 +96,11 @@
               <el-table-column label="注册时间" prop="registerDate" sortable="custom" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">{{ scope.row.registerDate/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
-              <el-table-column label="成交时间"  prop="registerDate" sortable="custom" v-if="$route.name=='成交客户' || $route.name=='即将到期客户' || $route.name=='到期未续费' " align="center" show-overflow-tooltip>
-                <template slot-scope="scope">{{ scope.row.registerDate/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
+              <el-table-column label="成交时间"  prop="transactionTime" sortable="custom" v-if="$route.name=='成交客户' || $route.name=='即将到期客户' || $route.name=='到期未续费' " align="center" show-overflow-tooltip>
+                <template slot-scope="scope">{{ scope.row.transactionTime/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
-              <el-table-column label="到期时间"  prop="registerDate" sortable="custom" v-if="$route.name=='成交客户' || $route.name=='即将到期客户' || $route.name=='到期未续费' " align="center" show-overflow-tooltip>
-                <template slot-scope="scope">{{ scope.row.registerDate/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
+              <el-table-column label="到期时间"  prop="expiredTime" sortable="custom" v-if="$route.name=='成交客户' || $route.name=='即将到期客户' || $route.name=='到期未续费' " align="center" show-overflow-tooltip>
+                <template slot-scope="scope">{{ scope.row.expiredTime/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
               <el-table-column
                   show-overflow-tooltip
@@ -130,7 +130,7 @@
               </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
-                    <span class="operationBtn" @click="delCustomerBtn(scope.row.password)">删除</span><span class="operationBtn" @click="followCustomerBtn(scope.row.password)">跟进</span>
+                    <span class="operationBtn" @click="delCustomerBtn(scope.row.userName)">删除</span><span class="operationBtn" @click="followCustomerBtn(scope.row.userName)">跟进</span>
                 </template>
               </el-table-column>
           </el-table>
@@ -293,14 +293,14 @@ export default {
         "expireDateSort": 0,//到期时间排序
         "followupDateSort": 0,//按跟进时间排序 
         "followupResult": [],//拨打结果条件
-        "isAll": "2",//是否搜全部:1部分范围搜索/2全部范围搜索
+        "isAll": "1",//是否搜全部:1部分范围搜索/2全部范围搜索
         "orders": [//排序条件,为null或长度为0表示不用排序 
          ],
         "page": 1,// 请求的页码，从1开始
         "pageRequest": {},
         "registerDateSort": 0,//
         "searchCondition": "",//搜索值
-        "servceName": [],//客户专员,姓名 
+        "serviceName": [],//客户专员,姓名 
         "size": 10,//每页的记录数,不指定表示不分页 ,
         "startDealDate": "",//起始成交时间 
         "startExpireDate": "",//开始到期时间
@@ -496,7 +496,7 @@ export default {
     // 批量删除操作
     delAllCustomerBtn(){
       // deleteCustomer
-      let id = this.multipleSelection.map(v => {return v.password})
+      let id = this.multipleSelection.map(v => {return v.userName})
       // console.log(id)
 
       this.delCustomerBtn(id);
@@ -536,7 +536,7 @@ export default {
       vm.multipleSelection.forEach((item,index,arr) => {
           let obj={};
           obj.currentStaff=item.serviceName
-          obj.customerPassport=item.password
+          obj.customerPassport=item.userName
           vm.assignedCount.push(item.serviceName)
           vm.assignedCountList.push(obj)
       })
