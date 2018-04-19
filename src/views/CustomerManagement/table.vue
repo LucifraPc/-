@@ -394,7 +394,12 @@ export default {
     // 初始化获取客户专员筛选
     getCommissionerList(){
         let vthis=this;
-        let customerState = vthis.type[vthis.$route.name];
+        let customerState = 0;
+        if(vthis.$route.name=='即将到期客户' || vthis.$route.name=='到期未续费'){
+            customerState = 0;
+        }else{
+            customerState = vthis.type[vthis.$route.name]
+        }
         getCommissionerList(customerState).then((res)=>{
             if(res.msg=='success'){
               if(res.data){
