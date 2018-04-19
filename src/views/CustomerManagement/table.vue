@@ -334,6 +334,24 @@ export default {
     }
   },
   created() {
+      let vthis=this;
+        if(vthis.$route.name=='即将到期客户'){
+            vthis.searchAll=true;
+            vthis.customerParam.isAll="2";
+            vthis.customerParam.soontoexpire=1;
+            vthis.customerParam.customerClass=0;
+        }else if(vthis.$route.name=='到期未续费'){
+            vthis.searchAll=true;
+            vthis.customerParam.isAll="2";
+            vthis.customerParam.expired=1;
+            vthis.customerParam.customerClass=0;
+        }else{
+            // vthis.searchAll=false;
+            vthis.customerParam.isAll="1";
+            vthis.customerParam.soontoexpire=0;
+            vthis.customerParam.expired=0;
+            vthis.customerParam.customerClass=vthis.type[vthis.$route.name];
+        }
       // 初始化获取列表
       this.getCustomerList();
       // 初始化获取客户专员筛选
@@ -369,8 +387,7 @@ export default {
     },
     // 检测搜索全部操作
     'searchAll'(){
-       this.searchAll?this.customerParam.isAll="2":this.customerParam.isAll="1";
-       this.getCustomerList();
+        this.getCustomerList();
     }
   },
   methods: {
@@ -418,24 +435,6 @@ export default {
     // 初始化获取列表
     getCustomerList(){
         let vthis=this;
-        if(vthis.$route.name=='即将到期客户'){
-            vthis.searchAll=true;
-            vthis.customerParam.isAll="2";
-            vthis.customerParam.soontoexpire=1;
-            vthis.customerParam.customerClass=0;
-        }else if(vthis.$route.name=='到期未续费'){
-            vthis.searchAll=true;
-            vthis.customerParam.isAll="2";
-            vthis.customerParam.expired=1;
-            vthis.customerParam.customerClass=0;
-        }else{
-            vthis.searchAll=false;
-            vthis.customerParam.isAll="1";
-            vthis.customerParam.soontoexpire=0;
-            vthis.customerParam.expired=0;
-            vthis.customerParam.customerClass=vthis.type[vthis.$route.name];
-        }
-        
         getCustomerManagementList(vthis.customerParam).then((res)=>{
             if(res.msg=='success'){
                 vthis.loading=false;
