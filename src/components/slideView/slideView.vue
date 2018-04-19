@@ -63,9 +63,9 @@
 							<p>有效云套餐  (个人)  ：({{allowanceCloud.length}})</p>
 							<div>
 								<p v-for="item in allowanceCloud">
-									<span>套餐：{{item.packageServiceName}}</span>
-									<span>状态：{{allowanceStatus[item.status]}}</span>
-									<span>服务时间：{{item.startTime}}~{{item.endTime}}(剩余{{changeTimeDifference(item.startTime,item.endTime)}}天)</span>
+									<span class="width168 ellipsis" :title="item.packageServiceName">套餐：{{item.packageServiceName}}</span>
+									<span class="width70 ellipsis">状态：{{allowanceStatus[item.status]}}</span>
+									<span class="width290 ellipsis" :title="'剩余'+changeTimeDifference(item.startTime,item.endTime)+'天'">服务时间：{{item.startTime}}~{{item.endTime}}(剩余{{changeTimeDifference(item.startTime,item.endTime)}}天)</span>
 								</p>
 							</div>
 						</div>
@@ -74,9 +74,9 @@
 							<p>有效BIM套餐  (个人)  ：({{allowanceBim.length}})</p>
 							<div>
 								<p v-for="item in allowanceBim">
-									<span>套餐：{{item.packageServiceName}}</span>
-									<span>状态：{{allowanceStatus[item.status]}}</span>
-									<span>服务时间：{{item.startTime}}~{{item.endTime}}(剩余{{changeTimeDifference(item.startTime,item.endTime)}}天)</span>
+									<span class="width168 ellipsis" :title="item.packageServiceName">套餐：{{item.packageServiceName}}</span>
+									<span class="width70 ellipsis">状态：{{allowanceStatus[item.status]}}</span>
+									<span class="width290 ellipsis" :title="'剩余'+changeTimeDifference(item.startTime,item.endTime)+'天'">服务时间：{{item.startTime}}~{{item.endTime}}(剩余{{changeTimeDifference(item.startTime,item.endTime)}}天)</span>
 								</p>
 							</div>
 						</div>
@@ -526,7 +526,6 @@
 								item.endTime = item.endTime.replace('年', '-').replace('月', '-').replace('日', '')
 		            			// console.log(item.packageType)
 								if(item.packageType==12){
-									
 									vm.allowanceBim.push(item)
 								}
 								if(item.packageType==16){

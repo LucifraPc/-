@@ -6,11 +6,11 @@
           <el-card class="box-card margin-top-15">
               <div slot="header" class="clearfix">
                   <span>客户总数上限设置</span>
-                  <el-button style="float: right; padding: 3px 0" type="text"  @click="settingsSave(1)">保存</el-button>
+                  <el-button style="float: right; padding: 3px 0" type="text"  @click="settingsSave('res_alloc_count_max')">保存</el-button>
               </div>
               <el-form label-width="140px">
                 <el-form-item label="持有客户总量：" class="label-top">
-                    <p>每个电销坐席可持有的客户总量不得超过<el-input v-model="curtomerCount1" style="width:60px;margin:0px 10px;"></el-input>个客户，超过时，该坐席不可捞取客户，也不可接收新指派的客户保存后立即生效，超出数量限制的，将不可获得新客户</p>
+                    <p>每个电销坐席可持有的客户总量不得超过<el-input v-model="curtomerCount1" style="width:100px;margin:0px 10px;"></el-input>个客户，超过时，该坐席不可捞取客户，也不可接收新指派的客户保存后立即生效，超出数量限制的，将不可获得新客户</p>
                 </el-form-item>
                 <el-form-item label="参与计算的分类：">
                     <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
@@ -25,16 +25,14 @@
           <el-card class="box-card margin-top-15">
               <div slot="header" class="clearfix">
                   <span>到期时间设置</span>
-                  <el-button style="float: right; padding: 3px 0" type="text" @click="settingsSave(2)">保存</el-button>
+                  <el-button style="float: right; padding: 3px 0" type="text" @click="settingsSave('datamining_expireTime')">保存</el-button>
               </div>
               <el-form  label-width="140px">
                 <el-form-item label="持有客户总量：" class="label-top">
-                    <p>最近一个套餐到期时间与当前时间的差，小于<el-input v-model="curtomerCount2" style="width:60px;margin:0px 10px"></el-input>天时，算作到期客户以天为最小单位计算，每天凌晨2：00批处理，也保存后，第二天生效</p>
+                    <p>最近一个套餐到期时间与当前时间的差，小于<el-input v-model="curtomerCount2" style="width:100px;margin:0px 10px"></el-input>天时，算作到期客户以天为最小单位计算，每天凌晨2：00批处理，也保存后，第二天生效</p>
                 </el-form-item>
               </el-form>
           </el-card>
-          
-          
     </div>
 </template>
 
@@ -57,16 +55,30 @@ export default {
   },
   created() {
     this.getCustomerClassList();
-    this.getSettingsDetail();
+    this.getSettingsDetail('res_alloc_count_max');
+    this.getSettingsDetail('datamining_expireTime');
   },
   watch: {
   },
   methods: {
+      formatDuring(mss) {
+        var days = parseInt(mss / (1000 * 60 * 60 * 24));
+        return days ;
+      },
+
       //初始获取数据
-      getSettingsDetail(){
-          getSystemSettingsDetail().then((res)=>{
+      getSettingsDetail(key){
+          getSystemSettingsDetail(key).then((res)=>{
               if(res.msg=='success'){
-                  
+                // 客户总数上限设置
+                  if(key=='res_alloc_count_max'){
+                    this.curtomerCount1=res.data.maxCustomerCount;
+                    this.checkedItem=res.data.calcClasses;
+                  }
+                // 到期时间设置
+                  if(key=='datamining_expireTime'){
+                      this.curtomerCount2=this.formatDuring(res.data);
+                  } 
               }
           })
       },
@@ -88,15 +100,33 @@ export default {
 
       // 保存
       settingsSave(status){
-          let tsConfigSaveParam ={
-            "comboExpiredays": status==1?'': this.curtomerCount2 ,  //套餐到期天数 ,
-            "configType": status, //客户总数上限设置1,到期时间设置2 ,
-            "customerNumbers":  status==1?this.curtomerCount1:'', //持有客户总量 ,
-            "customerType": status==1?this.checkedItem:''//客户类型
+        alert(status)
+          if(status=='res_alloc_count_max'){
+              let saveParam ={
+                "maxCustomerCount": this.curtomerCount1 , 
+                "calcClasses": this.checkedItem
+              }
+              this.getSystemSettingsSaveFun(status,saveParam)
+          }else{
+              let saveParam ={
+                "data": parseInt(this.curtomerCount2 * 24 * 60 * 60 * 1000)
+              }
+              this.getSystemSettingsSaveFun(status,saveParam)
           }
-          getSystemSettingsSave(tsConfigSaveParam).then((res)=>{
+      },
+      // 设置保存接口
+      getSystemSettingsSaveFun(key,saveParam){
+          getSystemSettingsSave(key,saveParam).then((res)=>{
               if(res.msg=='success'){
-                  
+                  this.$message({
+                    type: 'success',
+                    message: '设置成功!'
+                  });
+              }else{
+                  this.$message({
+                    type: 'errow',
+                    message: '设置失败!'
+                  });
               }
           })
       },

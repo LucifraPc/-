@@ -277,6 +277,19 @@ a:hover {
     width:150px;
     margin:0px 10px;
   }
-
-  
+  .ellipsis{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    display:inline-block;
+  }
+  .width168{
+    width:168px;
+  }
+  .width70{
+    width:70px;
+  }
+  .width190{
+    width:190px;
+  }
   

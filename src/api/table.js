@@ -242,19 +242,18 @@ export function getCustomerClaim(customerPspts) {
 // ------系统设置------
 
 // ---详情获取
-export function getSystemSettingsDetail(params) {
+export function getSystemSettingsDetail(key) {
   return request({
-    url: `rest/tsConfig/querytsConfig`,
-    method: 'post',
-    data:params
+    url: `rest/config/${key}`,
+    method: 'get'
   })
 }
 // export const getSystemSettingsDetail = params => { return axios.post(`${base}rest/tsConfig/querytsConfig`,params).then(res => res.data); };
 
 // ---设置保存
-export function getSystemSettingsSave(params) {
+export function getSystemSettingsSave(key,params) {
   return request({
-    url: `rest/tsConfig/saveConfig`,
+    url: `rest/config/${key}`,
     method: 'post',
     data:params
   })
