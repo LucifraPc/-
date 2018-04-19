@@ -6,21 +6,19 @@
 //分页对象
 var LBSMSSendInnerTestAccountMgt = {};
 LBSMSSendInnerTestAccountMgt.pagebar = new Array();
-var basePath = 'http://bm.lubansoft.com//'
+var basePath = window.parent.basePath
 // console.log(window.parent.miningId)
 $(document).ready(function () {
   // var mid = $("#mid").val();
   var mid = window.parent.miningId
   //挖掘条件列表
   var showCondition = function () {
-
-    mycomm_queryJsonData({
-      url: basePath + "essencesale/queryConditionByminingId.htm",
-      data: {
-        "miningId": mid
-      },
-      success: function (result) {
-
+    $.ajax({
+      url: basePath + "rest/dataming/condition/" + mid,
+      datatype: 'json',
+      type: 'get',
+      success: function (res) {
+        var result = res.data
         var onlyRead = "onmousemove=this.setCapture(); onmouseout=this.releaseCapture(); onfocus=this.blur();";
 
         for (var i = 0; i < result.length; i++) {
@@ -81,7 +79,7 @@ $(document).ready(function () {
             var pid = result[i].dc3;
             var st = result[i].st;
             var et = result[i].et;
-            var url = basePath + "/commoninfo/JSON/queryAreaInfos.htm";
+            var url = basePath + "rest/common/area";
             areaList(url, pid, st, et);
 
           }
@@ -305,8 +303,6 @@ $(document).ready(function () {
         }
       }
     });
-
-
   }
 
   showCondition();
@@ -314,17 +310,16 @@ $(document).ready(function () {
 });
 
 var areaList = function areaList(url, pid, st, et) {
-
-  mycomm_queryJsonData({
-    url: url,
-    data: {},
-    async: false,
+  $.ajax({
+    url: basePath + 'rest/common/area',
+    datatype: 'json',
+    type: 'get',
     success: function (result) {
       var onlyRead = "onmousemove=this.setCapture(); onmouseout=this.releaseCapture(); onfocus=this.blur();";
       var useArea_cont = "";
       useArea_cont += "<div style='float:left'><input class='Wdate startDate' value='" + st + "'  " + onlyRead + "  type='text' size='12'>" +
         " ~ <input type='text' value='" + et + "' " + onlyRead + " size='12' class='Wdate endDate'>&nbsp;</div><br/><br/>";
-      proInfo = result.dataArea;
+      proInfo = result.data;
       for (var j = 0; j < pid.length; j++) {
         useArea_cont += "<div style='float:left;width:60px;'><input type='checkbox' disabled='disabled'  checked='checked' />";
         for (var k = 0; k < proInfo.length; k++) {
@@ -347,6 +342,5 @@ var areaList = function areaList(url, pid, st, et) {
         "height": "10px"
       }).appendTo(tr);
     }
-
   });
 };

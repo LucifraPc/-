@@ -6,9 +6,10 @@
         <el-badge :value="CurToAllocateNum" class="el-row-wrap--badge">
           <bread-crumb style="float:left;line-height:40px"></bread-crumb>
         </el-badge>
-        <el-input class="search-input-box" placeholder="请输入通行证/姓名/手机号/QQ号搜索" v-model="searchValue">
-          <i slot="prefix" class="el-input__icon el-icon-circle-close" v-show="searchValue" @click="searchValue=''"></i>
-          <i slot="prefix" class="el-input__icon el-icon-search"></i>
+        <el-input class="search-input-box" placeholder="请输入通行证/姓名/手机号/QQ号搜索" @keyup.enter.native="isResourcesByPeople?getAllocatedByPeopleList():getAllocatedByResourceList()"
+          v-show='!isResourcesByPeople' v-model="searchValue">
+          <i slot="prefix" class="el-input__icon el-icon-circle-close" v-show="searchValue" @click="searchValue='';isResourcesByPeople?getAllocatedByPeopleList():getAllocatedByResourceList()"></i>
+          <i slot="prefix" class="el-input__icon el-icon-search" @click="isResourcesByPeople?getAllocatedByPeopleList():getAllocatedByResourceList()"></i>
         </el-input>
       </el-col>
     </el-row>
@@ -17,7 +18,7 @@
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="按人员分配" name="first">
             <div style="text-align:right">
-              <el-button type="text" @click="handleAllocateDate(1)">提交分配数据</el-button>
+              <el-button type="text" @click="handleAllocateData(1)">提交分配数据</el-button>
             </div>
             <el-table :data="allocationMemberData" style="width: 100%">
               <el-table-column prop="username" label="员工姓名">
@@ -42,11 +43,11 @@
           </el-tab-pane>
           <el-tab-pane label="按资源分配" name="second">
             <div style="text-align:right;padding:15px 0">
-              <el-select v-model="userId" placeholder="请选择" style="margin-right:68px">
+              <el-select v-model="userId" placeholder="请选择" style="margin-right:1%">
                 <el-option v-for="item in members" :key="item.userId" :label="item.username" :value="item.userId">
                 </el-option>
               </el-select>
-              <el-button type="text">提交分配数据</el-button>
+              <el-button type="text" @click="handleAllocateData(2)">提交分配数据</el-button>
             </div>
             <el-table :data="allocationResourceData" style="width: 100%">
               <el-table-column prop="passport" label="通行证账号">
@@ -59,15 +60,15 @@
               </el-table-column>
               <el-table-column prop="address" label="分配给">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.userId" placeholder="请选择">
-                    <el-option v-for="item in members" :key="item.userId" :label="item.username" :value="item.userId">
+                  <el-select v-model="scope.row.username" placeholder="请选择" :disabled="isUseAllocate">
+                    <el-option v-for="item in members_" :key="item.userId" :label="item.username" :value="item.username">
                     </el-option>
                   </el-select>
                 </template>
               </el-table-column>
             </el-table>
             <div class="block">
-              <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage_" :page-sizes="[10, 25, 50]"
+              <el-pagination @size-change="handleSizeChange_" @current-change="handleCurrentChange_" :current-page="currentPage_" :page-sizes="[10, 25, 50]"
                 :page-size="pageSize_" layout="total, sizes, prev, pager, next, jumper" :total="total_">
               </el-pagination>
             </div>
@@ -97,14 +98,19 @@
           desc: ''
         },
         activeName: 'first',
-        CurToAllocateNum:'',
+        CurToAllocateNum: '',
         currentPage: 1,
         currentPage_: 1,
         pageSize: 10,
         pageSize_: 10,
         total: 10,
         total_: 10,
-        members:[],
+        members: [
+
+        ],
+        members_: [
+
+        ],
         allocationMemberData: [],
         allocationResourceData: [],
         options: [{
@@ -123,13 +129,20 @@
           value: '选项5',
           label: '北京烤鸭'
         }],
-        userId: ''
-
+        userId: 0,
+        isResourcesByPeople: true
+      }
+    },
+    computed: {
+      //是否使用批量分配
+      isUseAllocate: function () {
+        return this.userId != 0
       }
     },
     methods: {
       handleClick(tab, event) {
-        console.log(tab, event);
+        this.searchValue = '';
+        this.isResourcesByPeople = tab.label == "按人员分配"
       },
       handleSizeChange(val) {
         this.pageSize = val
@@ -139,23 +152,37 @@
         this.currentPage = val
         this.getResourcesByPeopleList()
       },
+      handleSizeChange_(val) {
+        this.pageSize_ = val
+        this.getAllocatedByResourceList()
+      },
+      handleCurrentChange_(val) {
+        this.currentPage_ = val
+        this.getAllocatedByResourceList()
+      },
       handleBlur(event) {
         let reg = /^\+?[1-9]\d*$/
         if (!reg.test(event.target.value) && event.target.value) {
-          this.$message.error('请输入正确的数字！');          
+          this.$message.error('请输入正确的数字！');
         }
-        if(event.target.value>this.CurToAllocateNum){
-          this.$message.error(`当前时刻剩余待分配客户数为 ${this.CurToAllocateNum}，大于申请的数量，无法分配`); 
+        if (event.target.value > this.CurToAllocateNum) {
+          this.$message.error(`当前时刻剩余待分配客户数为 ${this.CurToAllocateNum}，大于申请的数量，无法分配`);
         }
       },
-      getMembers(){
-         api.getMembers().then(res=>{
-           this.members=res.data;
-         })
+      getMembers() {
+        api.getMembers().then(res => {
+          this.members = res.data;
+          this.members_ = this.members.slice(); //copy一份
+          this.members.unshift({
+            userId: 0,
+            username: '请选择全部分给谁'
+          })
+          console.log(this.members, 'members')
+        })
       },
-      getCurToAllocateNum(){
-        api.getCurToAllocateNum().then(res=>{
-          this.CurToAllocateNum=res.data
+      getCurToAllocateNum() {
+        api.getCurToAllocateNum().then(res => {
+          this.CurToAllocateNum = res.data
         })
       },
       getAllocatedByPeopleList() {
@@ -184,18 +211,21 @@
             "ignoreCase": false,
             "property": "miningDate"
           }],
+          "query": this.searchValue,
           "page": this.currentPage_,
           "size": this.pageSize_
         }
         api.getAllocatedByResourceList(param).then(res => {
           console.log(res, 'sssssssssssssssss')
           this.allocationResourceData = res.data.content;
-          this.allocationResourceData.forEach(item =>{
-            this.$set(item,'userId',null);
-          } )
+          this.allocationResourceData.forEach(item => {
+            this.$set(item, 'username', null);
+          })
+          this.total_ = res.data.totalElements
         })
       },
-      handleAllocateDate(type) {
+      handleAllocateData(type) {
+        //按人员分配
         if (type == 1) {
           let params = []
           this.allocationMemberData.forEach(item => {
@@ -215,6 +245,50 @@
               this.$message.error(res.msg)
             }
           })
+        } else {
+          //按资源分配
+          let params = []
+          if (this.isUseAllocate) {
+            let useAllocateName = ''
+            this.members.forEach(item => {
+              if (item.userId == this.userId) {
+                useAllocateName = item.username
+              }
+            })
+            this.allocationResourceData.forEach(item => {
+              params.push({
+                "customerPassport": item.passport,
+                "employeeUsername": useAllocateName
+              })
+            })
+          } else {
+            this.allocationResourceData.forEach(item => {
+              if (item.username) {
+                params.push({
+                  "customerPassport": item.passport,
+                  "employeeUsername": item.username
+                })
+              }
+
+            })
+          }
+          if (params.length == 0) {
+            return
+          }
+          console.log(params)
+
+
+          // api.handleAllocateDateByResource(params).then(res => {
+          //   if (res.code == '1') {
+          //     this.$message({
+          //       message: res.msg,
+          //       type: 'success'
+          //     });
+          //     this.getAllocatedByResourceList()
+          //   } else {
+          //     this.$message.error(res.msg)
+          //   }
+          // })
         }
       }
     },
@@ -233,4 +307,5 @@
     margin-top: 20px;
     text-align: center
   }
+
 </style>

@@ -1,13 +1,19 @@
 <template>
   <div class="app-container">
     <el-row class="el-row-wrap">
-      <el-button size="small" round @click="backToPrevious" style="float:right;margin-top:5px">返回</el-button>
+      <el-button size="small" round @click="backToPrevious" style="float:right;margin-top:5px" v-show="isShowBack">返回</el-button>
       <iframe id="mainFrame" name="mainFrame" scrolling="no" :src="src" frameborder="0" style="padding: 0px; width: 100%;"></iframe>
     </el-row>
   </div>
 </template>
 <script>
   export default {
+    props: {
+      isShowBack: {
+        type: Boolean,
+        default: true
+      },
+    },
     data() {
       return {
         miningId: '',
@@ -23,7 +29,8 @@
     },
     mounted() {
       window.mainFrame.miningId = this.$route.params.id;
-      window.miningId=this.$route.params.id
+      window.miningId = this.$route.params.id;
+      window.basePath =process.env.BASE_API
     }
   }
 

@@ -63,7 +63,7 @@
       </el-table>
       <div class="block">
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 25, 50]"
-          :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="400">
+          :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
       </div>
     </el-row>
@@ -87,6 +87,7 @@
         status: "0",
         currentPage: 1,
         pageSize: 25,
+        total:0,
         statusOptions: [{
             value: "0",
             label: "全部"
@@ -189,17 +190,17 @@
           "";
         let taskParam = {
           addUser: this.addUser,
-          currentPage: this.currentPage,
+          page: this.currentPage,
           endDate: endDate,
-          name: "",
-          pageSize: this.pageSize,
-          sortFiled: null,
-          sortType: null,
+          name: this.taskName,
+          size: this.pageSize,
           startDate: startDate,
           status: this.status
         };
         api.getDataMiningInfo(taskParam).then(res => {
-          this.tableData = JSON.parse(res)[0].result.data;
+          console.log(res)
+          this.tableData = res.data.content;
+          this.total=res.data.totalElements
           console.log(this.tableData);
         });
       },
@@ -226,12 +227,6 @@
     },
     mounted() {
       this.getDataMiningInfo();
-      console.log(
-        getWeekStartDate(),
-        getLastWeekStartDate(),
-        getMonthStartDate(),
-        getLastMonthStartDate()
-      );
     }
   };
 
