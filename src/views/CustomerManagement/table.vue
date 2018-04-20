@@ -284,13 +284,14 @@ export default {
       tag:[],//跟进结果筛选
 
       customerParam:{
-        "customerClass":0,
+        "customerClass":1,
         "dealDateSort": 0,//成交时间排序
         "endDealDate": "",//截止成交时间
         "endExpireDate": "",//结束到期时间 
         "endFollowupDate": "",//截止跟进时间 
         "endRegisterDate": "",//截止注册时间 
         "expireDateSort": 0,//到期时间排序
+        "expired": 0,//是否查询已经过期用户 1:是 ,
         "followupDateSort": 0,//按跟进时间排序 
         "followupResult": [],//拨打结果条件
         "isAll": "1",//是否搜全部:1部分范围搜索/2全部范围搜索
@@ -302,6 +303,7 @@ export default {
         "searchCondition": "",//搜索值
         "serviceName": [],//客户专员,姓名 
         "size": 10,//每页的记录数,不指定表示不分页 ,
+        "soontoexpire": 0,//查询即将到期用户 1:是 ,
         "startDealDate": "",//起始成交时间 
         "startExpireDate": "",//开始到期时间
         "startFollowupDate": "",//起始跟进时间 
@@ -309,14 +311,14 @@ export default {
       },
       
       type:{// 客户分类结果集
-        "新客户": 0,
-        "高意向": 1,
-        "可跟进": 2,
-        "成交客户": 3,
+        "新客户": 1,
+        "高意向": 2,
+        "可跟进": 3,
         "即将到期客户": -1,
         "到期未续费": -2,
-        "无法接通": 4,
-        "无效线索": 5
+        "成交客户": 4,
+        "无法接通": 5,
+        "无效线索": 6
       },
       callResult:{// 客户分类结果集
         "0": "无",
@@ -332,6 +334,24 @@ export default {
     }
   },
   created() {
+      let vthis=this;
+        if(vthis.$route.name=='即将到期客户'){
+            vthis.searchAll=true;
+            vthis.customerParam.isAll="2";
+            vthis.customerParam.soontoexpire=1;
+            vthis.customerParam.customerClass=0;
+        }else if(vthis.$route.name=='到期未续费'){
+            vthis.searchAll=true;
+            vthis.customerParam.isAll="2";
+            vthis.customerParam.expired=1;
+            vthis.customerParam.customerClass=0;
+        }else{
+            // vthis.searchAll=false;
+            vthis.customerParam.isAll="1";
+            vthis.customerParam.soontoexpire=0;
+            vthis.customerParam.expired=0;
+            vthis.customerParam.customerClass=vthis.type[vthis.$route.name];
+        }
       // 初始化获取列表
       this.getCustomerList();
       // 初始化获取客户专员筛选
@@ -367,15 +387,19 @@ export default {
     },
     // 检测搜索全部操作
     'searchAll'(){
-       this.searchAll?this.customerParam.isAll="2":this.customerParam.isAll="1";
-       this.getCustomerList();
+        this.getCustomerList();
     }
   },
   methods: {
     // 初始化获取客户专员筛选
     getCommissionerList(){
         let vthis=this;
-        let customerState = vthis.type[vthis.$route.name];
+        let customerState = 0;
+        if(vthis.$route.name=='即将到期客户' || vthis.$route.name=='到期未续费'){
+            customerState = 0;
+        }else{
+            customerState = vthis.type[vthis.$route.name]
+        }
         getCommissionerList(customerState).then((res)=>{
             if(res.msg=='success'){
               if(res.data){
@@ -416,8 +440,6 @@ export default {
     // 初始化获取列表
     getCustomerList(){
         let vthis=this;
-        // console.log(vthis.customerParam)
-        vthis.customerParam.customerClass=vthis.type[vthis.$route.name];
         getCustomerManagementList(vthis.customerParam).then((res)=>{
             if(res.msg=='success'){
                 vthis.loading=false;

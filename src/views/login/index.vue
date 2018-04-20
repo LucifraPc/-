@@ -152,8 +152,8 @@
 
               this.loading = false;
               if(res.msg=='success'){
+                  this.$cookies.set("usernameCrm", loginForm.username);
                   if(this.automaticLogin){
-                      this.$cookies.set("usernameCrm", loginForm.username);
                       this.$cookies.set("passwordCrm", this.loginForm.password);
                       this.$cookies.set("automaticLogin", this.automaticLogin);
                       this.$cookies.set("formwhere", "formLogin");
