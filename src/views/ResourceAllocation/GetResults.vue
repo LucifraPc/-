@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-row class="el-row-wrap">
-      <span style="display:inline-block;font-size: 18px;font-weight: bold;line-height: 38px;">任务名称：5555 时间：2018-04-09 14:34:26 发起人：吴凡</span>
+      <span style="display:inline-block;font-size: 18px;font-weight: bold;line-height: 38px;">任务名称：5555 时间：2018-04-09 14:34:26</span>
       <el-button size="small" round @click="backToPrevious" style="float:right;margin-top:5px">返回</el-button>
     </el-row>
     <el-row class="el-row-wrap">
@@ -266,22 +266,18 @@
       getDataMiningResult() {
         this.loading_miningResultData = true
         let taskResultParam = {
-          currentPage: this.currentPage,
+          page: this.currentPage,
           endDate: this.startDateAndEndDate[1],
           isFilterEnterpriseBimPackage: this.isFilterEnterpriseBimPackage ? 1 : 0,
           isFilterEnterpriseCloudPackage: this.isFilterEnterpriseCloudPackage ? 1 : 0,
-          isFollowUp: this.isFollowUp,
           miningID: this.miningID,
-          pageSize: this.pageSize,
-          sortFiled: null,
-          sortType: null,
+          size: this.pageSize,
           startDate: this.startDateAndEndDate[0],
           username: this.username,
         }
         api.getDataMiningResult(taskResultParam).then(res => {
-          this.miningResultData = JSON.parse(res)[0].result.data;
-          // console.log(this.miningResultData)
-          this.total = parseInt(JSON.parse(res)[0].result.pageInfo.totalNumber);
+          this.miningResultData = res.data.content;
+          this.total =res.data.totalElements;
           this.loading_miningResultData = false
         })
       },

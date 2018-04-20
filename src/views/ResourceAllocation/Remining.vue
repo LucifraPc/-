@@ -119,6 +119,10 @@
           path: `/resource-allocation/data-mining`
         });
       }
+    },
+    mounted() {
+      window.basePath = process.env.BASE_API
+      window.miningId = this.$route.params.id;
     }
   }
 

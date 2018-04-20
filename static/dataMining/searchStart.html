@@ -1,76 +1,85 @@
-
 <html>
-<head>
-    <link href="My97DatePicker/skin/WdatePicker.css" rel="stylesheet" type="text/css">
-    <!-- My97Date 时间控件 -->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 
-    <script language="javascript" type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
-    <script src="http://bm.lubansoft.com/common/js/jquery-1.4.2.min.js" ></script>
-    <script type="text/javascript" src="common.js"></script>
-    <script type="text/javascript" src="conditionSelect.js"></script>
-    
-    <title></title>
+<head>
+  <link href="My97DatePicker/skin/WdatePicker.css" rel="stylesheet" type="text/css">
+  <!-- My97Date 时间控件 -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
+  <script language="javascript" type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
+  <script src="jquery-1.4.2.min.js"></script>
+  <script src="jquery.cookie.js"></script>
+  <script type="text/javascript" src="common.js"></script>
+  <script type="text/javascript" src="conditionSelect.js"></script>
+  <title></title>
+  <style>
+    /* input[type="checkbox"] {
+      height: 16px;
+      width: 16px
+    } */
+  </style>
 </head>
 
-<body >
-    <div style="width:100%; margin-top: 0px; height: 90px;">
-        <div style="width:100%;margin:20px 0px 20px;">
-            <!-- <a href="essencesale/requestMiningTaskPage.htm" style="color: #06b;">&lt;&lt;返回</a>
+<body>
+  <div style="width:100%; margin-top: 0px; height: 90px;">
+    <div style="width:100%;margin:20px 0px 20px;">
+      <!-- <a href="essencesale/requestMiningTaskPage.htm" style="color: #06b;">&lt;&lt;返回</a>
             <br/> -->
-            <span style="font-size: 16px;font-weight: bold;line-height:40px;">发起挖掘</span>
-            <div class="demo-input-suffix" style="width:300px;float: right;">
-              时间范围限制:
-               <input type="text" style="width:100px" class="el-input__inner" id="timeLimit" maxlength='9' value="180" size="4" onkeyup="value=value.replace(/[^\d]/g,'')" onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"/> 天
-            </div>
-        </div>
-        <div>
-            <input type="hidden" value="1" id="tr_count" />
-            <div class="demo-input-suffix" >
-                任务名称：
-                        <input class="el-input__inner" type="text" style="width:calc(100% - 180px);margin-bottom:20px" maxlength="50" id="task_name" />
-            </div>
-            <table id="cenditionList" class="timeMenuAds el-table el-table--fit el-table--border el-table--scrollable-y el-table--enable-row-hover el-table--enable-row-transition" style="width: 100%;margin-top: 10px;border-collapse:collapse;">
-                <tr style="line-height: 20px;border-top:1px solid #ebeef5" id="ctr0" class='ctr'>
-                    <td width="14%" style="background: white;border-top:0px">
-                        <select class="condition el-input__inner" id="condition_id0" onchange="cdnChange(this,0)" style="margin:0px 10px;width:calc(100% - 20px);">
-                            <option value="product" selected="select">登录产品</option>
-                            <option value="userRegisterTime">用户注册时间</option>
-                            <option value="useArea">登录地区</option>
-                            <option value="buyType">个人套餐购买情况</option>
-                            <option value="functionUseTimes">功能使用情况</option>
-                            <option value="loginCount">账号登陆次数</option>
-                            <option value="onlineTime">账号在线时长</option>
-                        </select>
-                        <i class="el-icon-caret-bottom" style="position:absolute; top:25px;right:15px;"></i>
-                    </td>
-                    <td width="80%" style="background: white;text-align: left;padding-left:15px!important;">
-                        时间范围：
-                        <input class="Wdate startDate" type="text" size="12" id='sd0' onClick="WdatePicker({errDealMode:1,readOnly:true,isShowClear:false,maxDate:'#F{$dp.$D(\'ed0\')||\'%y-%M-%d\'}'})"> ~
-                        <input class="Wdate endDate" type="text" size="12" id='ed0' onClick="WdatePicker({isShowClear:false,readOnly:true,errDealMode:4,minDate:'#F{$dp.$D(\'sd0\')}',maxDate:'%y-%M-%d'})">
-                        <br/>
-                        <input type='checkbox' name='pdt_checkbox0' onclick='checkAll(this.name)' value=''>全部 &nbsp;&nbsp;
-                        <input type='checkbox' name='pdt_checkbox0' value='3'>土建 &nbsp;&nbsp;
-                        <input type='checkbox' name='pdt_checkbox0' value='2'>钢筋 &nbsp;&nbsp;
-                        <input type='checkbox' name='pdt_checkbox0' value='5'>安装
-                    </td>
-                    <td width="6%" style="padding-left:15px!important;">
-                        <input type='button' onclick='cdndelete(this)' class='fdd el-button el-button--primary' value='删除' />
-                    </td>
-                </tr>
-            </table>
-
-        </div>
-        <div style="margin-top: 20px;">
-            <input type="button" class="el-button el-button--primary" id="add" value="增加条件" />
-            <input type="button" class="el-button el-button--primary" id="start" value="开始挖掘" />
-            <input type="button" class="el-button el-button--primary" id="reset" value="重置条件" />
-        </div>
-        <div id="test">
-
-
-        </div>
+      <span style="font-size: 16px;font-weight: bold;line-height:40px;">发起挖掘</span>
+      <div class="demo-input-suffix" style="width:300px;float: right;">
+        时间范围限制:
+        <input type="text" style="width:100px" class="el-input__inner" id="timeLimit" maxlength='9' value="180" size="4" onkeyup="value=value.replace(/[^\d]/g,'')"
+          onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))" /> 天
+      </div>
     </div>
+    <div>
+      <input type="hidden" value="1" id="tr_count" />
+      <div class="demo-input-suffix">
+        任务名称：
+        <input class="el-input__inner" type="text" style="width:calc(100% - 180px);margin-bottom:20px" maxlength="50" id="task_name"
+        />
+      </div>
+      <table id="cenditionList" class="timeMenuAds el-table el-table--fit el-table--border el-table--scrollable-y el-table--enable-row-hover el-table--enable-row-transition"
+        style="width: 100%;margin-top: 10px;border-collapse:collapse;">
+        <tr style="line-height: 20px;border-top:1px solid #ebeef5" id="ctr0" class='ctr'>
+          <td width="14%" style="background: white;border-top:0px">
+            <select class="condition" id="condition_id0" onchange="cdnChange(this,0)" style="margin:0px 10px;width:calc(100% - 20px);height: 40px;border-radius:4px;">
+              <option value="product" selected="select">登录产品</option>
+              <option value="userRegisterTime">用户注册时间</option>
+              <option value="useArea">登录地区</option>
+              <option value="buyType">个人套餐购买情况</option>
+              <option value="functionUseTimes">功能使用情况</option>
+              <option value="loginCount">账号登陆次数</option>
+              <option value="onlineTime">账号在线时长</option>
+            </select>
+
+          </td>
+          <td width="80%" style="background: white;text-align: left;padding-left:15px!important;">
+            时间范围：
+            <input class="Wdate startDate" type="text" size="12" id='sd0' onClick="WdatePicker({errDealMode:1,readOnly:true,isShowClear:false,maxDate:'#F{$dp.$D(\'ed0\')||\'%y-%M-%d\'}'})"> ~
+            <input class="Wdate endDate" type="text" size="12" id='ed0' onClick="WdatePicker({isShowClear:false,readOnly:true,errDealMode:4,minDate:'#F{$dp.$D(\'sd0\')}',maxDate:'%y-%M-%d'})">
+            <br/>
+            <input type='checkbox' name='pdt_checkbox0' onclick='checkAll(this.name)' value=''>全部 &nbsp;&nbsp;
+            <input type='checkbox' name='pdt_checkbox0' value='3'>土建 &nbsp;&nbsp;
+            <input type='checkbox' name='pdt_checkbox0' value='2'>钢筋 &nbsp;&nbsp;
+            <input type='checkbox' name='pdt_checkbox0' value='5'>安装
+          </td>
+          <td width="6%" style="padding-left:15px!important;">
+            <input type='button' onclick='cdndelete(this)' class='fdd el-button el-button--primary' value='删除' />
+          </td>
+        </tr>
+      </table>
+
+    </div>
+    <div style="margin-top: 20px;">
+      <input type="button" class="el-button el-button--primary" id="add" value="增加条件" />
+      <input type="button" class="el-button el-button--primary" id="start" value="开始挖掘" />
+      <input type="button" class="el-button el-button--primary" id="reset" value="重置条件" />
+    </div>
+    <div id="test">
+
+
+    </div>
+  </div>
 
 
 </body>

@@ -19,7 +19,7 @@ $(document).ready(function () {
       type: 'get',
       success: function (res) {
         var result = res.data
-        var onlyRead = "onmousemove=this.setCapture(); onmouseout=this.releaseCapture(); onfocus=this.blur();";
+        var onlyRead = "readonly='readonly'";
 
         for (var i = 0; i < result.length; i++) {
 
@@ -33,7 +33,7 @@ $(document).ready(function () {
             useTime_cont += "<input class='Wdate startDate' value='" + result[i].dc1.st + "'  " + onlyRead + "  type='text' size='12'>" +
               " ~ <input type='text' value='" + result[i].dc1.et + "' " + onlyRead + " size='12' class='Wdate endDate'> ";
             $("<td>").attr({
-              "width": "86%",
+              "width": "80%",
               "align": "left"
             }).html(useTime_cont).appendTo(tr);
             var tr = $("<tr>").appendTo($("#cenditionList"));
@@ -184,7 +184,7 @@ $(document).ready(function () {
             $("<td>").attr("width", "14%").html("功能使用情况:").appendTo(tr);
             var functionUseTimes_cont = "";
             functionUseTimes_cont += "<div style='float:left'><select " + onlyRead + " > <option value='1'>" + result[i].dc6.ft + "</option> </select></div>";
-            functionUseTimes_cont += "<div style='width:680px;float:right'>";
+            functionUseTimes_cont += "<div style='width:680px;margin-left:115px'>";
             functionUseTimes_cont += "<div style='float:left;width:670px;'><input class='Wdate startDate' value='" + result[i].dc6.st + "'  " + onlyRead + "  type='text' size='12'>" +
               " ~ <input type='text' value='" + result[i].dc6.et + "' " + onlyRead + " size='12' class='Wdate endDate'></div> ";
             var ftInfo = result[i].dc6.param;
@@ -321,7 +321,7 @@ var areaList = function areaList(url, pid, st, et) {
         " ~ <input type='text' value='" + et + "' " + onlyRead + " size='12' class='Wdate endDate'>&nbsp;</div><br/><br/>";
       proInfo = result.data;
       for (var j = 0; j < pid.length; j++) {
-        useArea_cont += "<div style='float:left;width:60px;'><input type='checkbox' disabled='disabled'  checked='checked' />";
+        useArea_cont += "<div style='float:left;width:70px;'><input type='checkbox' disabled='disabled'  checked='checked' />";
         for (var k = 0; k < proInfo.length; k++) {
           if (proInfo[k].provinceId == pid[j]) {
 

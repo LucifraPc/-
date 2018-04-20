@@ -3,7 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-var basePath = 'http://bm.lubansoft.com//'
+var basePath = window.parent.basePath
+var mid = window.parent.miningId
 $(document).ready(function () {
   var condition = {
     "product": "登录产品",
@@ -18,16 +19,13 @@ $(document).ready(function () {
 
   var showCondition = function () {
     var k = $("#tr_count").val();
-    // var mid = $("#mid").val();
-    var mid = '904';
-    mycomm_queryJsonData({
-      url: basePath + "essencesale/queryConditionByminingId.htm",
-      data: {
-        "miningId": mid
-      },
-      success: function (result) {
+    $.ajax({
+      url: basePath + "rest/dataming/condition/" + mid,
+      datatype: 'json',
+      type: 'get',
+      success: function (res) {
+        var result = res.data
         for (var i = 0; i < result.length; i++) {
-
           //功能使用日期
           if (result[i].ct == 1) {
 
@@ -77,7 +75,7 @@ $(document).ready(function () {
             var pid = result[i].dc3;
             var st = result[i].st;
             var et = result[i].et;
-            var url = basePath + "/commoninfo/JSON/queryAreaInfos.htm";
+            var url = basePath + "rest/common/area";
             areaLists(url, pid, k, condition, st, et);
             k++;
 
@@ -250,7 +248,7 @@ $(document).ready(function () {
           if (result[i].ct == 6) {
 
             var funUse = result[i].dc6;
-            var url = basePath + "/essencesale/queryFunctionUseCondition.htm";
+            var url = basePath + "rest/dataming/functionType";
             funList(url, funUse, k, condition);
             k++;
 
@@ -322,8 +320,6 @@ $(document).ready(function () {
         }
       }
     });
-
-
   }
 
   showCondition();
@@ -368,13 +364,12 @@ var in_array = function in_array(search, array) {
 };
 
 var areaLists = function areaLists(url, pid, k, condition, st, et) {
-
-  mycomm_queryJsonData({
-    url: basePath + "/commoninfo/JSON/queryAreaInfos.htm",
-    data: {},
+  $.ajax({
+    url: url,
+    datatype: 'json',
+    type: 'get',
     success: function (result) {
-
-      proInfo = result.dataArea;
+      proInfo = result.data;
       var addcont = "";
       var addcont = "时间范围：<input  value='" + st + "' id='sd" + k + "' class='Wdate startDate'  type='text' size='12' onClick=WdatePicker({errDealMode:1,readOnly:true,isShowClear:false,maxDate:'#F{$dp.$D(ed" + k + ")||\\'%y-%M-%d\\'}'})> ~ " +
         "<input   type='text' size='12' value='" + et + "' id='ed" + k + "' class='Wdate endDate' onClick=WdatePicker({isShowClear:false,readOnly:true,minDate:'#F{$dp.$D(sd" + k + ")}',maxDate:'%y-%M-%d'})> <br/>";
@@ -405,12 +400,12 @@ var areaLists = function areaLists(url, pid, k, condition, st, et) {
 }
 
 var funList = function funList(url, funUse, k, condition) {
-
-  mycomm_queryJsonData({
+  $.ajax({
     url: url,
-    data: {},
-    success: function (result) {
-
+    datatype: 'json',
+    type: 'get',
+    success: function (res) {
+      var result = res.data
       var functionTypes = new Array();
       for (var j = 0; j < result.length; j++) {
         functionTypes[j] = result[j].functionType;
@@ -534,8 +529,7 @@ var funList = function funList(url, funUse, k, condition) {
 
       }
     }
-  });
-
+  })
 };
 
 var acList = function acList(url, ac, k, condition) {

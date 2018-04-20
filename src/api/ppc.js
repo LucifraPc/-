@@ -3,8 +3,6 @@ import request from '@/utils/request'
 /* 数据挖掘  查询当前登录的用户的挖掘任务结果 */
 export function getDataMiningInfo(taskParam) {
   return request({
-    // http://bm.lubansoft.com/essencesale/queryMiningTaskByPage.htm
-    // baseURL: 'http://bm.lubansoft.com/essencesale/queryMiningTaskByPage.htm',
     url: 'rest/dataming/task/list',
     method: 'post',
     data: taskParam
@@ -13,12 +11,16 @@ export function getDataMiningInfo(taskParam) {
 /* 查看数据挖掘结果 */
 export function getDataMiningResult(taskResultParam) {
   return request({
-    baseURL: 'http://bm.lubansoft.com/essencesale/queryMiningResultByPage.htm',
-    // url: '/user/login',
+    url: 'rest/dataming/result/list',
     method: 'post',
-    data: {
-      taskResultParam
-    }
+    data:taskResultParam    
+  })
+}
+/* 取消挖掘 */
+export function cancleMining(miningId) {
+  return request({
+    url: 'rest/dataming/condition/' + miningId,
+    method: 'delete',
   })
 }
 /* 查看数据挖掘结果用户信息 */

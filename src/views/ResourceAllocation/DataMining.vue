@@ -16,17 +16,17 @@
       <div style="margin-top:20px">
         <div>
           <span>任务名称：</span>
-          <el-input placeholder="请输入名称" style="width:180px;margin-right:35px" v-model="taskName">
+          <el-input placeholder="请输入名称" style="width:180px;" v-model="taskName">
           </el-input>
-          <span>发起人：</span>
-          <el-input placeholder="请输入发起人" style="width:180px" v-model="addUser">
-          </el-input>
-          <el-button style="margin-right:45px" @click="getDataMiningInfo">搜索</el-button>
+          <!-- <span>发起人：</span>
+          <el-input placeholder="请输入发起人" style="width:180px" v-model="addUser"> -->
+          <!-- </el-input> -->
           <span>任务状态：</span>
           <el-select v-model="status" placeholder="请选择" style="margin-right:44px">
             <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
             </el-option>
           </el-select>
+          <el-button style="margin-right:45px" @click="getDataMiningInfo">搜索</el-button>
           <el-button @click="startMining">发起挖掘</el-button>
         </div>
       </div>
@@ -40,8 +40,8 @@
             <span>{{ scope.row.startTime }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="发起人" prop="addUser">
-        </el-table-column>
+        <!-- <el-table-column label="发起人" prop="addUser">
+        </el-table-column> -->
         <el-table-column label="状态" prop="status">
           <template slot-scope="scope">
             <span v-if="scope.row.status==1" style="color:blue">挖掘中</span>
@@ -55,7 +55,7 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <span class="el-icon-info " title="查看挖掘条件" @click="getMiningConditions(scope.row)"></span>
-            <span class="el-icon-delete " title="取消挖掘"  @click="cancleMining(scope.row)" v-if='scope.row.status==1'></span>
+            <span class="el-icon-delete " title="取消挖掘"  @click="cancleMining(scope.row.id)" v-if='scope.row.status==1'></span>
             <span class="el-icon-tickets " title="查看挖掘结果" @click="getResults(scope.row)" v-if="scope.row.status==2"></span>
             <span class="el-icon-refresh " title="重新挖掘" @click="reMining(scope.row)"></span>
           </template>
@@ -189,7 +189,7 @@
           this.formatDate(startDateAndEndDate_[1]) :
           "";
         let taskParam = {
-          addUser: this.addUser,
+          // addUser: this.addUser,
           page: this.currentPage,
           endDate: endDate,
           name: this.taskName,
@@ -223,6 +223,17 @@
         this.$router.push({
           path: `/resource-allocation/startmining`
         });
+      },
+      cancleMining(miningId){
+        api.cancleMining(miningId).then(res=>{
+          if(res.code==1){
+            this.$message({
+                message: res.msg,
+                type: 'success'
+              });
+            this.getDataMiningInfo()
+          }
+        })
       }
     },
     mounted() {
