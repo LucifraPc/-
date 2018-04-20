@@ -117,7 +117,16 @@ export default {
           getDataReportList(this.customerParam).then((res)=>{
               if(res.msg=='success'){
                   this.loading=false;
-                  let serviceContent = res.data.content.replace(/<br\/>/g, "");
+                  res.data.content.forEach(function (item,i) {
+                      item.contentInner='';
+                      item.content.forEach(function (iitem,j) {
+                          iitem=(iitem+'  ')
+                          item.contentInner += iitem;
+                          // item.contentInner=item.contentInner.replace(/<br\/>/g, "&#10;")
+                      })
+                  })
+                  // console.log(res.data.content)
+                  // let serviceContent = res.data.content.replace(/<br\/>/g, "&#13;&#10;");
                   this.customerData=res.data.content;
                   this.customerData.pop()
               }
