@@ -36,8 +36,26 @@
               <el-table-column label="下单时间"  show-overflow-tooltip>
                 <template slot-scope="scope">{{ scope.row.enterTime/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
-              <el-table-column prop="totalPrice" label="订单金额"  show-overflow-tooltip></el-table-column>
-              <el-table-column prop="content" label="购买内容"  show-overflow-tooltip></el-table-column>
+              <el-table-column prop="totalPrice" label="订单金额" width="150" show-overflow-tooltip></el-table-column>
+              <el-table-column label="购买内容" >
+                <template slot-scope="scope">
+                  <el-popover
+                      ref="popover1"
+                      placement="right"
+                      title="购买内容"
+                      width="220"
+                      trigger="hover">
+                      <div style="max-height:300px;overflow-y:auto">
+                          <div v-for="item in scope.row.content">{{item}}</div>
+                      </div>
+                  </el-popover>
+                  <span class="ellipsis">
+                    <span v-popover:popover1>
+                        <span v-for="item in scope.row.content">{{item}}</span>
+                    </span>
+                  </span>
+                </template>
+              </el-table-column>
               <el-table-column label="支付方式" show-overflow-tooltip>
                 <template slot-scope="scope">{{paymentWay[scope.row.paymentWay]}}</template>
               </el-table-column>

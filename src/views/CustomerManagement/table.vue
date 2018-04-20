@@ -158,7 +158,7 @@
           </div>
       </el-row>
       <!-- 跟进详情弹窗 -->
-      <slide-view :showDetialBox="showDetialBox" :passwordId="passwordId" v-on:showDetialBoxConfalse="showDetialBoxConfalse"></slide-view>
+      <slide-view :showDetialBox="showDetialBox" :passwordId="passwordId" v-on:changeListView="changeListView" v-on:showDetialBoxConfalse="showDetialBoxConfalse"></slide-view>
       <!-- 批量指派弹窗 -->
       <el-dialog
           title="客户指派"
@@ -514,6 +514,9 @@ export default {
     showDetialBoxConfalse(value){
       console.log(value)
       this.showDetialBox=value;
+    },
+    changeListView(value){
+        this.getCustomerList();
     },
     // 批量删除操作
     delAllCustomerBtn(){
