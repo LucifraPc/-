@@ -390,6 +390,9 @@
 	    	showDetialBoxConfalse(){
 	      		this.$emit('showDetialBoxConfalse',false);
 	      	},
+	      	changeListView(){
+	      		this.$emit('changeListView',true);
+	      	},
 	      	// 切换页签  获取数据
 	      	handleClick(tab, event) {
 	      		this.loading=true;
@@ -427,6 +430,7 @@
 					                message: '修改成功!'
 				                });
 				                this.getCustomerDetailFun();
+				                this.changeListView();
 				            }else{
 				            	this.$message({
 					                type: 'error',
