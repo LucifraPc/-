@@ -87,46 +87,40 @@
 				    	<div class="mealAllowancebox">
 							<p>使用云功能次数  ：{{userCloudTimes}} 次</p>
 							<div>
-								<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
-								<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
-								<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
-								<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
+								<p v-for="(item,i) in customerFunctionLog1"><span>{{item.usingTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span><span>{{item.city}}({{item.ip}})</span><span>{{item.functionType}}</span><span>{{item.functionName}}</span></p>
 							</div>
-							<!-- 分页 -->
-				          	<div class="block" v-show="customerFunctionLog1.length>0" style="text-align: center;margin-top:20px">
-					            <el-pagination
-					                @size-change="handleSizeChange1"
-					                @current-change="handleCurrentChange1"
-					                :current-page="customerFunctionLog1.page"
-					                :page-sizes="[10, 20, 50, 100]"
-					                :page-size="customerFunctionLog1.size"
-					                layout="total, sizes, prev, pager, next, jumper"
-					                :total="totalElements1">
-					            </el-pagination>
-				          	</div>
 						</div>
+						<!-- 分页 -->
+			          	<div class="block" v-show="customerFunctionLog1.length>0" style="text-align: center;margin-top:20px;text-align:left;">
+				            <el-pagination
+				                @size-change="handleSizeChange1"
+				                @current-change="handleCurrentChange1"
+				                :current-page="cstomerFunctionLogParam1.page"
+				                :page-sizes="[10, 20, 50, 100]"
+				                :page-size="cstomerFunctionLogParam1.size"
+				                layout="total, sizes, prev, pager, next, jumper"
+				                :total="totalElements1">
+				            </el-pagination>
+			          	</div>
 						<hr style="height:1px;border:none;border-top:1px dashed #ccc;margin:30px 0px" />
 						<div class="mealAllowancebox">
 							<p>使用BIM应用次数  ：{{useBimTimes}} 次</p>
 							<div>
-								<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
-								<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
-								<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
-								<p><span>2018-01-17 13:48:30</span><span>重庆市(113.251.19.68)</span><span>生成平面图</span></p>
+								<p v-for="(item,i) in customerFunctionLog2"><span>{{item.usingTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span><span>{{item.city}}({{item.ip}})</span><span>{{item.functionType}}</span><span>{{item.functionName}}</span></p>
 							</div>
-							<!-- 分页 -->
-				          	<div class="block" v-show="customerFunctionLog2.length>0" style="text-align: center;margin-top:20px">
-					            <el-pagination
-					                @size-change="handleSizeChange2"
-					                @current-change="handleCurrentChange2"
-					                :current-page="customerFunctionLog2.page"
-					                :page-sizes="[10, 20, 50, 100]"
-					                :page-size="customerFunctionLog2.size"
-					                layout="total, sizes, prev, pager, next, jumper"
-					                :total="totalElements2">
-					            </el-pagination>
-				          	</div>
 						</div>
+						<!-- 分页 -->
+			          	<div class="block" v-show="customerFunctionLog2.length>0" style="text-align: center;margin-top:20px;text-align:left;">
+				            <el-pagination
+				                @size-change="handleSizeChange2"
+				                @current-change="handleCurrentChange2"
+				                :current-page="cstomerFunctionLogParam2.page"
+				                :page-sizes="[10, 20, 50, 100]"
+				                :page-size="cstomerFunctionLogParam2.size"
+				                layout="total, sizes, prev, pager, next, jumper"
+				                :total="totalElements2">
+				            </el-pagination>
+			          	</div>
 					</div>
 			    </el-tab-pane>
 			    <el-tab-pane label="订单记录" name="订单记录">
@@ -323,7 +317,7 @@
 			    },
 			    cstomerFunctionLogParam1:{
 				  "customerName": "",//客户通行证名
-				  "functionType": 0,//功能类型 2云功能 12 bim应用 ,
+				  "functionType": 2,//功能类型 2云功能 12 bim应用 ,
 				  "page": 1,
 				  "size": 10,
 				},
@@ -358,23 +352,23 @@
 	    	// 分页操作功能使用
 		    handleSizeChange1(val) {
 		      // console.log(`每页 ${val} 条`);
-		      this.customerFunctionLog1.size=val;
-		      this.getCustomerFunList(this.customerFunctionLog1);
+		      this.cstomerFunctionLogParam1.size=val;
+		      this.getCustomerFunList(this.cstomerFunctionLogParam1);
 		    },
 		    handleCurrentChange1(val) {
 		      // console.log(`当前页: ${val}`);
-		      this.customerFunctionLog1.page=val;
-		      this.getCustomerFunList(this.customerFunctionLog1);
+		      this.cstomerFunctionLogParam1.page=val;
+		      this.getCustomerFunList(this.cstomerFunctionLogParam1);
 		    },
 		    handleSizeChange2(val) {
 		      // console.log(`每页 ${val} 条`);
-		      this.customerFunctionLog2.size=val;
-		      this.getCustomerFunList(this.customerFunctionLog2);
+		      this.cstomerFunctionLogParam2.size=val;
+		      this.getCustomerFunList(this.cstomerFunctionLogParam2);
 		    },
 		    handleCurrentChange2(val) {
 		      // console.log(`当前页: ${val}`);
-		      this.customerFunctionLog2.page=val;
-		      this.getCustomerFunList(this.customerFunctionLog2);
+		      this.cstomerFunctionLogParam2.page=val;
+		      this.getCustomerFunList(this.cstomerFunctionLogParam2);
 		    },
 	    	// 获取跟进结果
 	    	getCustomerClassList(){
@@ -580,13 +574,15 @@
 		    		// alert(cstomerFunctionLogParam.functionType)
 		            if(res.msg=='success'){
 		            	this.loading=false;
-		            	if(status==2){
+		            	if(cstomerFunctionLogParam.functionType==2){
 		            		this.totalElements1=res.data.totalElements;
 		            		this.customerFunctionLog1=res.data.content;
+		            		// console.log(this.customerFunctionLog1)
 		            	}
-		            	if(status==12){
+		            	if(cstomerFunctionLogParam.functionType==12){
 		            		this.totalElements2=res.data.totalElements;
 		            		this.customerFunctionLog2=res.data.content;
+		            		// console.log(this.customerFunctionLog2)
 		            	}
 		            }else{
 		            	this.$message({

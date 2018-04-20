@@ -314,8 +314,8 @@ export default {
         "新客户": 1,
         "高意向": 2,
         "可跟进": 3,
-        "即将到期客户": -1,
-        "到期未续费": -2,
+        "即将到期客户": 97,
+        "到期未续费": 98,
         "成交客户": 4,
         "无法接通": 5,
         "无效线索": 6
@@ -335,23 +335,23 @@ export default {
   },
   created() {
       let vthis=this;
-        if(vthis.$route.name=='即将到期客户'){
-            vthis.searchAll=true;
-            vthis.customerParam.isAll="2";
-            vthis.customerParam.soontoexpire=1;
-            vthis.customerParam.customerClass=0;
-        }else if(vthis.$route.name=='到期未续费'){
-            vthis.searchAll=true;
-            vthis.customerParam.isAll="2";
-            vthis.customerParam.expired=1;
-            vthis.customerParam.customerClass=0;
-        }else{
-            // vthis.searchAll=false;
-            vthis.customerParam.isAll="1";
-            vthis.customerParam.soontoexpire=0;
-            vthis.customerParam.expired=0;
-            vthis.customerParam.customerClass=vthis.type[vthis.$route.name];
-        }
+        // if(vthis.$route.name=='即将到期客户'){
+        //     vthis.searchAll=true;
+        //     vthis.customerParam.isAll="2";
+        //     vthis.customerParam.soontoexpire=1;
+        //     vthis.customerParam.customerClass=0;
+        // }else if(vthis.$route.name=='到期未续费'){
+        //     vthis.searchAll=true;
+        //     vthis.customerParam.isAll="2";
+        //     vthis.customerParam.expired=1;
+        //     vthis.customerParam.customerClass=0;
+        // }else{
+        //     // vthis.searchAll=false;
+        //     vthis.customerParam.isAll="1";
+        //     vthis.customerParam.soontoexpire=0;
+        //     vthis.customerParam.expired=0;
+        //     vthis.customerParam.customerClass=vthis.type[vthis.$route.name];
+        // }
       // 初始化获取列表
       this.getCustomerList();
       // 初始化获取客户专员筛选
@@ -394,12 +394,13 @@ export default {
     // 初始化获取客户专员筛选
     getCommissionerList(){
         let vthis=this;
-        let customerState = 0;
-        if(vthis.$route.name=='即将到期客户' || vthis.$route.name=='到期未续费'){
-            customerState = 0;
-        }else{
-            customerState = vthis.type[vthis.$route.name]
-        }
+        // let customerState = 0;
+        // if(vthis.$route.name=='即将到期客户' || vthis.$route.name=='到期未续费'){
+        //     customerState = 0;
+        // }else{
+        //     customerState = vthis.type[vthis.$route.name]
+        // }
+        let customerState = vthis.type[vthis.$route.name]
         getCommissionerList(customerState).then((res)=>{
             if(res.msg=='success'){
               if(res.data){
@@ -440,6 +441,7 @@ export default {
     // 初始化获取列表
     getCustomerList(){
         let vthis=this;
+        vthis.customerParam.customerClass=vthis.type[vthis.$route.name];
         getCustomerManagementList(vthis.customerParam).then((res)=>{
             if(res.msg=='success'){
                 vthis.loading=false;

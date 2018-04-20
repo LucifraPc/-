@@ -3,42 +3,89 @@
 
         <head>
             <link href="My97DatePicker/skin/WdatePicker.css" rel="stylesheet" type="text/css">
+
+            <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
             <script language="javascript" type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
             <script src="jquery-1.4.2.min.js"></script>
             <script src="jquery.cookie.js"></script>
             <script type="text/javascript" src="common.js"></script>
             <script type="text/javascript" src="searchAgain.js"></script>
             <script type="text/javascript" src="conditionSelect.js"></script>
+            <style>
+                select{
+                    height:40px;
+                    line-height:40px;
+                    border: 1px solid #dcdfe6;
+                    min-width:70px;
+                    margin-right:5px;
+                    border-radius:4px;
+                 }
+                 .funTimes.el-input__inner{
+                    padding:0px!important;
+                 }
+                 .Wdate{
+                    width:130px;
+                    padding:0px 5px;
+                    border: 1px solid #dcdfe6;
+                    height:32px;
+                    line-height:32px;
+                    border-radius:4px;
+                    margin-bottom: 5px;
+                 }
+                 input[type=text]{
+                    -webkit-appearance: none;
+                    background-color: #fff;
+                    background-image: none;
+                    border-radius: 4px;
+                    border: 1px solid #dcdfe6;
+                    -webkit-box-sizing: border-box;
+                    box-sizing: border-box;
+                    color: #606266;
+                    display: inline-block;
+                    font-size: inherit;
+                    height: 40px;
+                    line-height: 40px;
+                    outline: 0;
+                    padding: 0 15px;
+                    -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+                    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+                 }
+                 #cenditionList tbody{
+                    border-top:1px solid #ebeef5
+                 }
+            </style>
         </head>
 
         <body>
             <div style=" margin-top: 0px; height: 90px;">
-                <div style="width:100%;border-bottom: 1px solid">
+
+                <div style="width:100%;margin:20px 0px 20px;">
                     <!-- <a href="essencesale/requestMiningTaskPage.htm" style="color: #06b;">&lt;&lt;返回</a>
                     <br/> -->
-                    <span style="font-size: 16px;font-weight: bold;line-height: 30px;">以相同条件发起新挖掘</span>
+                    <span style="font-size: 16px;font-weight: bold;line-height:40px;">以相同条件发起新挖掘</span>
                     <input type="hidden" id="mid" value="${miningtaskInfo.id}" />
-                    <div style="float:right;margin-right:6%;">时间范围限制:
+                    <div class="demo-input-suffix" style="width:300px;float: right;">
+                         时间范围限制:
                         <input type="text" id="timeLimit" value="180" maxlength='9' size="4" onkeyup="value=value.replace(/[^\d]/g,'')"
                             onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"
-                        />天</div>
+                        /> 天</div>
                 </div>
                 <div>
+                    <div class="demo-input-suffix">
+                        任务名称：
+                        <input class="el-input__inner" type="text" style="width:calc(100% - 180px);margin-bottom:20px" maxlength="50" id="task_name"
+                        />
+                    </div>
                     <input type="hidden" value="1" id="tr_count" />
-                    <table id="cenditionList" class="timeMenuAds" style="width: 100%;margin-top: 10px;border-collapse:collapse">
-                        <tr>
-                            <td colspan="3" style="text-align: left;">任务名称：
-                                <input type="text" style="width:875px;" maxlength="50" id="task_name" />
-                            </td>
-                        </tr>
-
+                    <table id="cenditionList" class="timeMenuAds el-table el-table--fit el-table--border el-table--scrollable-y el-table--enable-row-hover el-table--enable-row-transition" style="width: 100%;border-top: none;margin-top: 10px;border-collapse:collapse">
                     </table>
 
                 </div>
                 <div style="margin-top: 20px;">
-                    <input type="button" id="add" value="增加条件" />
-                    <input type="button" id="start" value="开始挖掘" />
-                    <input type="button" id="reset" value="重置条件" />
+                    <input type="button" class="el-button el-button--primary" id="add" value="增加条件" />
+                    <input type="button" class="el-button el-button--primary" id="start" value="开始挖掘" />
+                    <input type="button" class="el-button el-button--primary" id="reset" value="重置条件" />
                 </div>
                 <div id="test">
 
