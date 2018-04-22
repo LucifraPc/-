@@ -278,17 +278,17 @@
           console.log(params)
 
 
-          // api.handleAllocateDateByResource(params).then(res => {
-          //   if (res.code == '1') {
-          //     this.$message({
-          //       message: res.msg,
-          //       type: 'success'
-          //     });
-          //     this.getAllocatedByResourceList()
-          //   } else {
-          //     this.$message.error(res.msg)
-          //   }
-          // })
+          api.handleAllocateDateByResource(params).then(res => {
+            if (res.code == '1') {
+              this.$message({
+                message: res.msg,
+                type: 'success'
+              });
+              this.getAllocatedByResourceList()
+            } else {
+              this.$message.error(res.msg)
+            }
+          })
         }
       }
     },

@@ -3,8 +3,10 @@
     <el-row style="margin-bottom:15px;" class="el-row-wrap">
       <div class="date-picker-wrap">
         <span>时间：</span>
-        <el-date-picker v-model="startDateAndEndDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
-          value-format='yyyy-MM-dd'>
+        <el-date-picker v-model="startDateAndEndDate" type="daterange" 
+         style="width:40%"
+        range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
+        value-format='yyyy-MM-dd'>
         </el-date-picker>
         <el-button @click="selectDate('all')">全部</el-button>
         <el-button @click="selectDate('today')">今天</el-button>
@@ -16,18 +18,18 @@
       <div style="margin-top:20px">
         <div>
           <span>任务名称：</span>
-          <el-input placeholder="请输入名称" style="width:180px;" v-model="taskName">
+          <el-input placeholder="请输入名称" style="width:280px;" v-model="taskName">
           </el-input>
           <!-- <span>发起人：</span>
           <el-input placeholder="请输入发起人" style="width:180px" v-model="addUser"> -->
           <!-- </el-input> -->
           <span>任务状态：</span>
-          <el-select v-model="status" placeholder="请选择" style="margin-right:44px">
+          <el-select v-model="status" placeholder="请选择" style="width:240px;margin-right:17px">
             <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
             </el-option>
           </el-select>
-          <el-button style="margin-right:45px" @click="getDataMiningInfo">搜索</el-button>
-          <el-button @click="startMining">发起挖掘</el-button>
+          <el-button @click="getDataMiningInfo">搜索</el-button>
+          <el-button type="primary"            @click="startMining">发起挖掘</el-button>
         </div>
       </div>
     </el-row>
@@ -210,6 +212,7 @@
         });
       },
       getResults(row) {
+        sessionStorage.setItem('curUserInfo',JSON.stringify(row))
         this.$router.push({
           path: `/resource-allocation/get-results/${row.id}`
         });
@@ -251,7 +254,7 @@
   }
 
   .date-picker-wrap .el-button:nth-of-type(1) {
-    margin-left: 150px;
+    margin-left: 1%;
   }
 
   .el-button+.el-button {
