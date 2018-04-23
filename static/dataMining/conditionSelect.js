@@ -24,7 +24,7 @@ $(document).ready(function () {
 
     var newTr = "<tr style='line-height: 20px;padding:20px;' class='ctr' id='ctr" + k + "'>" +
       "<td width='14%' style='background: white;'>" +
-      "<select class='condition  el-input__inner' id='condition_id" + k + "' onchange='cdnChange(this," + k + ")' style='margin:0px 10px;width:calc(100% - 20px);'> ";
+      "<select class='condition' id='condition_id" + k + "' onchange='cdnChange(this," + k + ")' style='margin:0px 10px;width:calc(100% - 20px);height: 40px;border-radius:4px;'";
 
 
     for (var cn in condition) {
@@ -32,7 +32,7 @@ $(document).ready(function () {
     }
     var prevSD = $("input[class='Wdate startDate']:last").val() ? $("input[class='Wdate startDate']:last").val() : "";
     var prevED = $("input[class='Wdate endDate']:last").val() ? $("input[class='Wdate endDate']:last").val() : "";
-    newTr += "</select><i class='el-icon-caret-bottom' style='position:absolute; top:25px;right:15px'></i>" +
+    newTr += "</select>" +
       "</td>" +
       "<td width='80%' style='background: white;padding-left:15px!important;text-align: left;'>" +
       "时间范围：<input class='Wdate startDate' value='" + prevSD + "' id='sd" + k + "' type='text' size='12' onClick=WdatePicker({errDealMode:1,readOnly:true,isShowClear:false,maxDate:'#F{$dp.$D(ed" + k + ")||\\'%y-%M-%d\\'}'})> ~ " +
@@ -465,13 +465,13 @@ var cdnChange = function cdnChange(selthis, k) {
   }
   //选择用户注册时间
   if (sc == "userRegisterTime") {
-    var addcont = "&nbsp;&nbsp;<select class='userRegister' onchange='usrChange(this," + k + ")'>" +
+    var addcont = "&nbsp;&nbsp;<select class='userRegister' style='height:40px;line-height40px;border-radius:4px' onchange='usrChange(this," + k + ")'>" +
       "<option value='2' selected='select'>等于</option>" +
       "<option value='1'>小于</option>" +
       "<option value='3'>大于</option>" +
       "<option value='4'>范围</option>" +
       "</select>" +
-      "&nbsp;<span><input type='text' maxlength='9' class='registerday' size='6' />天</span>";
+      "&nbsp;<span><input type='text' maxlength='9' class='registerday el-input__inner' style='width:100px;' size='6' />天</span>";
     $(selthis).parent().next().html(addcont);
   }
   //选择登录地区
@@ -521,10 +521,10 @@ var cdnChange = function cdnChange(selthis, k) {
       "<option value='3'>N天内到期</option>" +
       "<option value='4'>过期N天内未续费</option>" +
       "</select>";
-    addcont += "<div style='float:left;width:650px;'>";
+    addcont += "<div style='float:left;width:650px;line-height:40px;'>";
     for (var i = 0; i < buytype.length; i++) {
       if (i == 0) {
-        addcont += "<input type='checkbox' name='btp_checkbox" + k + "' onclick='checkAll(this.name)' value='" + i + "'>" + buytype[i] + "&nbsp;&nbsp;";
+        addcont += "<input type='checkbox' style='margin-top:14px;' name='btp_checkbox" + k + "' onclick='checkAll(this.name)' value='" + i + "'>" + buytype[i] + "&nbsp;&nbsp;";
       } else {
         addcont += "&nbsp;<input type='checkbox' name='btp_checkbox" + k + "' value='" + i + "'>" + buytype[i];
       }
@@ -548,22 +548,22 @@ var cdnChange = function cdnChange(selthis, k) {
         var prevED = $("input[class='Wdate endDate']:last").val() ? $("input[class='Wdate endDate']:last").val() : "";
         prevSD = $("input[name='fst']:last").val() ? $("input[name='fst']:last").val() : prevSD;
         prevED = $("input[name='fet']:last").val() ? $("input[name='fet']:last").val() : prevED;
-        var addcont = "时间范围：<input class='Wdate startDate' name='fst' value='" + prevSD + "' id='sd" + k + "' type='text' size='12' onChange='fstChange(this)' onClick=WdatePicker({errDealMode:1,readOnly:true,isShowClear:false,maxDate:'#F{$dp.$D(ed" + k + ")||\\'%y-%M-%d\\'}'})> ~ " +
+        var addcont = "<div style='position: absolute;top: 0;bottom: 0;margin: auto;height: 83px;'>时间范围：<input class='Wdate startDate' name='fst' value='" + prevSD + "' id='sd" + k + "' type='text' size='12' onChange='fstChange(this)' onClick=WdatePicker({errDealMode:1,readOnly:true,isShowClear:false,maxDate:'#F{$dp.$D(ed" + k + ")||\\'%y-%M-%d\\'}'})> ~ " +
           "<input   type='text' size='12' value='" + prevED + "' name='fet' id='ed" + k + "' class='Wdate endDate' onChange='fetChange(this)' onClick=WdatePicker({isShowClear:false,readOnly:true,minDate:'#F{$dp.$D(sd" + k + ")}',maxDate:'%y-%M-%d'})> <br/>" +
-          "<select class='functionType' onchange='funChange(this," + k + ")' style='float:left' >";
+          "<select class='functionType' onchange='funChange(this," + k + ")' style='float:left;height:40px;line-height40px;margin-top:10px;border-radius:4px' >";
         for (var i = 0; i < functionTypes.length; i++) {
           addcont += "<option value='" + functionTypes[i] + "' >" + functionTypes[i] + "</option>"
         }
-        addcont += "</select>";
+        addcont += "</select></div>";
         addcont += "<div style='width:710px;float:right'>";
-        addcont += "<div style='float:left;width:710px;'><div style='float:left;width:236px;'><input type='checkbox'  name='fun_checkbox" + k + "' onclick='unfunCheck(this.name," + k + ")' value='不限功能,0' style='float:left' ><span style='color:orange;float:left'>不限功能</span>";
+        addcont += "<div style='float:left;width:710px;'><div style='float:left;width:236px;line-height:40px;'><input type='checkbox'  name='fun_checkbox" + k + "' onclick='unfunCheck(this.name," + k + ")' value='不限功能,0' style='float:left;margin-top:14px;' ><span style='color:orange;float:left'>不限功能</span>";
         addcont += "<div style='float:right;margin-right:10px;'><select class='funType'>" +
           "<option value='3' selected='select'>></option>" +
           "<option value='1'><</option>" +
           "<option value='2'>=</option>" +
           "</select>" +
-          "<input type='text' maxlength='9' class='funTimes' style='width:30px' />次</div></div></div>";
-        addcont += "<div id='left" + k + "' style='float:left;width:236px;'></div><div id='center" + k + "' style='float:left;width:236px;'></div><div id='right" + k + "' style='float:left;width:236px;'></div>"
+          "<input type='text' maxlength='9' class='funTimes el-input__inner' style='width:30px' />次</div></div></div>";
+        addcont += "<div id='left" + k + "' style='float:left;width:236px;line-height:40px;'></div><div id='center" + k + "' style='float:left;width:236px;line-height:40px;'></div><div id='right" + k + "' style='float:left;width:236px;line-height:40px;'></div>"
         addcont += "</div>";
         $(selthis).parent().next().html(addcont);
         var results = new Array();
@@ -580,13 +580,13 @@ var cdnChange = function cdnChange(selthis, k) {
         for (var i = 0; i < results.length; i++) {
           var funName = results[i].functionName + "(" + results[i].productAlias + ")";
           var funNames = funName.substr(0, 10);
-          var addconts = "<div style='float:left;width:236px'><input type='checkbox' name='fun_checkbox" + k + "' value='" + results[i].functionName + "," + results[i].productId + "' onclick='funCheck(this.name," + i + "," + k + ")' style='float:left' ><span title='" + funName + "' style='float:left;cursor:pointer' >" + funNames + "</span>";
+          var addconts = "<div style='float:left;width:236px;line-height:40px;'><input type='checkbox' name='fun_checkbox" + k + "' value='" + results[i].functionName + "," + results[i].productId + "' onclick='funCheck(this.name," + i + "," + k + ")' style='float:left;margin-top:14px;' ><span title='" + funName + "' style='float:left;cursor:pointer' >" + funNames + "</span>";
           addconts += "<div style='float:right;margin-right:10px;'><select class='funType'>" +
             "<option value='3' selected='select'>></option>" +
             "<option value='1'><</option>" +
             "<option value='2'>=</option>" +
             "</select>" +
-            "<input type='text' maxlength='9' class='funTimes' style='width:30px' />次</div></div>";
+            "<input type='text' maxlength='9' class='funTimes el-input__inner' style='width:30px' />次</div></div>";
           if (results[i].productId == 3) {
             $("#left" + k).append(addconts);
           } else if (results[i].productId == 2) {
@@ -632,7 +632,7 @@ var cdnChange = function cdnChange(selthis, k) {
       "<option value='1'><</option>" +
       "<option value='2'>=</option>" +
       "</select>" +
-      "&nbsp;<span><input type='text' maxlength='9' class='lgCount' size='6' />次/天</span>";
+      "&nbsp;<span><input type='text' maxlength='9' class='lgCount el-input__inner' size='6' style='width:100px' />次/天</span>";
     $(selthis).parent().next().html(addcont);
 
   }
@@ -649,7 +649,7 @@ var cdnChange = function cdnChange(selthis, k) {
       "<option value='1'><</option>" +
       "<option value='2'>=</option>" +
       "</select>" +
-      "&nbsp;<span><input type='text' maxlength='9' class='onlineHour' size='6' />小时/天</span>";
+      "&nbsp;<span><input type='text' maxlength='9' class='onlineHour el-input__inner' size='6'  style='width:100px' />小时/天</span>";
     $(selthis).parent().next().html(addcont);
 
   }
@@ -703,17 +703,17 @@ var funChange = function funChange(cthis, k) {
     url: basePath + "rest/dataming/functionType",
     type: 'get',
     success: function (res) {
-      debugger
+      // debugger
       var result = res.data
       var addcont = "<div style='width:710px;float:right'>";
-      addcont += "<div style='float:left;width:710px;'><div style='float:left;width:236px'><input type='checkbox'  name='fun_checkbox" + k + "' onclick='unfunCheck(this.name," + k + ")' value='不限功能,0' style='float:left' ><span style='color:orange;float:left'>不限功能</span>";
+      addcont += "<div style='float:left;width:710px;'><div style='float:left;width:236px;line-height:40px;'><input  type='checkbox'  name='fun_checkbox" + k + "' onclick='unfunCheck(this.name," + k + ")' value='不限功能,0' style='float:left;margin-top:14px;' ><span style='color:orange;float:left'>不限功能</span>";
       addcont += "<div style='float:right;margin-right:10px;'><select class='funType'>" +
         "<option value='3' selected='select'>></option>" +
         "<option value='1'><</option>" +
         "<option value='2'>=</option>" +
         "</select>" +
-        "<input type='text' maxlength='9' class='funTimes' style='width:30px' />次</div></div></div>";
-      addcont += "<div id='left" + k + "' style='float:left;width:236px;'></div><div id='center" + k + "' style='float:left;width:236px;'></div><div id='right" + k + "' style='float:left;width:236px;'></div>"
+        "<input type='text' maxlength='9' class='funTimes el-input__inner' style='width:30px' />次</div></div></div>";
+      addcont += "<div id='left" + k + "' style='float:left;width:236px;line-height:40px;'></div><div id='center" + k + "' style='float:left;width:236px;line-height:40px;'></div><div id='right" + k + "' style='float:left;width:236px;line-height:40px;'></div>"
       addcont += "</div>";
       $(cthis).next().html(addcont);
       var results = new Array();
@@ -731,13 +731,13 @@ var funChange = function funChange(cthis, k) {
         var funName = results[i].functionName + "(" + results[i].productAlias + ")";
         var funNames = "";
         funNames = funName.substr(0, 12);
-        var addconts = "<div style='float:left;width:236px'><input type='checkbox' name='fun_checkbox" + k + "' value='" + results[i].functionName + "," + results[i].productId + "' onclick='funCheck(this.name," + i + "," + k + ")' style='float:left' ><span title='" + funName + "' style='float:left;cursor:pointer' >" + funNames + "</span>";
+        var addconts = "<div style='float:left;width:236px;line-height:40px;'><input type='checkbox' name='fun_checkbox" + k + "' value='" + results[i].functionName + "," + results[i].productId + "' onclick='funCheck(this.name," + i + "," + k + ")' style='float:left;margin-top:14px;' ><span title='" + funName + "' style='float:left;cursor:pointer' >" + funNames + "</span>";
         addconts += "<div style='float:right;margin-right:10px;'><select class='funType'>" +
           "<option value='3' selected='select'>></option>" +
           "<option value='1'><</option>" +
           "<option value='2'>=</option>" +
           "</select>" +
-          "<input type='text' maxlength='9' class='funTimes' style='width:30px' />次</div></div>";
+          "<input type='text' maxlength='9' class='funTimes el-input__inner' style='width:30px' />次</div></div>";
         $.cookie("ckb" + (i), null)
         if (results[i].productId == 3) {
           $("#left" + k).append(addconts);

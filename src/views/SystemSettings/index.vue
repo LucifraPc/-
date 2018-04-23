@@ -77,7 +77,7 @@ export default {
                   }
                 // 到期时间设置
                   if(key=='datamining_expireTime'){
-                      this.curtomerCount2=this.formatDuring(res.data);
+                      this.curtomerCount2=this.formatDuring(res.data.holdCustomerTotal);
                   } 
               }
           })
@@ -109,7 +109,7 @@ export default {
               this.getSystemSettingsSaveFun(status,saveParam)
           }else{
               let saveParam ={
-                "data": parseInt(this.curtomerCount2 * 24 * 60 * 60 * 1000)
+                "holdCustomerTotal": parseInt(this.curtomerCount2 * 24 * 60 * 60 * 1000)
               }
               this.getSystemSettingsSaveFun(status,saveParam)
           }

@@ -330,10 +330,9 @@ $(document).ready(function () {
 
 //增加左侧选择条件
 var addLeft = function addLeft(ct, k, condition, addcont) {
-  var newTr = "<tr><td colspan='3' style='height:10px;background: #EEEFF4'></td></tr>" +
-    "<tr style='line-height: 20px;padding:20px;' class='ctr' id='ctr" + k + "'>" +
-    "<td width='14%' style='background: white;border: 1px solid #C7C7C7;'>" +
-    "<select class='condition' id='condition_id" + k + "' onchange='cdnChange(this," + k + ")'>";
+  var newTr = "<tr style='line-height: 20px;padding:20px;' class='ctr' id='ctr" + k + "'>" +
+    "<td width='14%' style='background: white;'>" +
+    "<select class='condition' style='margin: 0px 10px; width: calc(100% - 20px);' id='condition_id" + k + "' onchange='cdnChange(this," + k + ")'>";
 
 
   for (var cn in condition) {
@@ -345,10 +344,10 @@ var addLeft = function addLeft(ct, k, condition, addcont) {
   }
   newTr += "</select>" +
     "</td>" +
-    "<td width='80%' style='background: white;border: 1px solid #C7C7C7;text-align: left;'>" + addcont +
+    "<td width='80%' style='background: white;text-align: left;padding-left:15px!important;'>" + addcont +
     "</td>" +
     "<td width='6%'>" +
-    "<input type='button' onclick='cdndelete(this)' class='fdd' value='删除'/>" +
+    "<input type='button' onclick='cdndelete(this)' class='fdd el-button el-button--primary' value='删除'/>" +
     "</td> </tr>";
   $("#cenditionList").append(newTr);
   $(".fdd").show();

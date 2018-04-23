@@ -37,23 +37,25 @@
                 <template slot-scope="scope">{{ scope.row.enterTime/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
               <el-table-column prop="totalPrice" label="订单金额" width="150" show-overflow-tooltip></el-table-column>
-              <el-table-column label="购买内容" >
+              <el-table-column label="购买内容" width="300">
+
                 <template slot-scope="scope">
-                  <el-popover
-                      ref="popover1"
-                      placement="right"
-                      title="购买内容"
-                      width="220"
-                      trigger="hover">
-                      <div style="max-height:300px;overflow-y:auto">
-                          <div v-for="item in scope.row.content">{{item}}</div>
+                      <div class="ellipsis" :title="scope.row.contentInner">
+                          <span v-for="(item,i) in scope.row.content" :key='i'>{{item}}</span>
                       </div>
-                  </el-popover>
-                  <span class="ellipsis">
-                    <span v-popover:popover1>
-                        <span v-for="item in scope.row.content">{{item}}</span>
-                    </span>
-                  </span>
+                      <!-- <el-popover
+                          ref="aaaaaa"
+                          placement="right"
+                          title="购买内容"
+                          width="220"
+                          trigger="hover">
+                          <div style="max-height:300px;overflow-y:auto">
+                              <div v-for="(item,i) in scope.row.content" :key='i'>{{item}}</div>
+                          </div>
+                      </el-popover>
+                      <span v-popover:aaaaaa class="ellipsis" >
+                          <span v-for="(item,i) in scope.row.content" :key='i'>{{item}}</span>
+                      </span> -->
                 </template>
               </el-table-column>
               <el-table-column label="支付方式" show-overflow-tooltip>
@@ -115,7 +117,18 @@ export default {
           getDataReportList(this.customerParam).then((res)=>{
               if(res.msg=='success'){
                   this.loading=false;
+                  res.data.content.forEach(function (item,i) {
+                      item.contentInner='';
+                      item.content.forEach(function (iitem,j) {
+                          iitem=(iitem+'  ')
+                          item.contentInner += iitem;
+                          // item.contentInner=item.contentInner.replace(/<br\/>/g, "&#10;")
+                      })
+                  })
+                  // console.log(res.data.content)
+                  // let serviceContent = res.data.content.replace(/<br\/>/g, "&#13;&#10;");
                   this.customerData=res.data.content;
+                  this.customerData.pop()
               }
           })
       },
