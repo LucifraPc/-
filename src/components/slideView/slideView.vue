@@ -13,34 +13,37 @@
 						    <span>{{customerDetail.username}}</span>
 						</el-form-item>
 						<el-form-item label="姓名：" prop="customerName">
-						    <el-input v-model="customerDetail.customerName"></el-input>
+						    <el-input v-if="$route.name!=='客户公海'" v-model="customerDetail.customerName"></el-input>
+						    <span v-else>{{customerDetail.customerName}}</span>
 						</el-form-item>
 						<el-form-item label="手机号码：" prop="mobile">
-						    <el-input v-model="customerDetail.mobile"></el-input>
+						    <el-input v-if="$route.name!=='客户公海'" v-model="customerDetail.mobile"></el-input>
+						    <span v-else>{{customerDetail.mobile}}</span>
 						</el-form-item>
 						<el-form-item label="QQ号：" prop="qq">
-						    <el-input v-model="customerDetail.qq"></el-input>
+						    <el-input v-if="$route.name!=='客户公海'" v-model="customerDetail.qq"></el-input>
+						    <span v-else>{{customerDetail.qq}}</span>
 						</el-form-item>
 						<el-form-item label="注册时间：" prop="registedTime">
-						    <span>{{customerDetail.registedTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span>
+						    <span>{{customerDetail.registedTime==0?'-':customerDetail.registedTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span>
 						</el-form-item>
 						<el-form-item label="挖掘时间：" prop="registedTime">
-						    <span>{{customerDetail.registedTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span>
+						    <span>{{customerDetail.registedTime==0?'-':customerDetail.registedTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span>
 						</el-form-item>
-						<el-form-item label="跟进结果：" prop="classId">
+						<el-form-item label="跟进结果：" prop="classId" v-if="$route.name!=='客户公海'">
 						    <el-select v-model="customerDetail.classId" placeholder="请选择跟进结果">
 						      	<el-option v-for="item in getCustomerClass" v-if="item.classId<90" :label="item.className" :value="item.classId" ></el-option>
 						    </el-select>
 						</el-form-item>
-						<el-form-item label="拨打结果：" prop="followupId">
+						<el-form-item label="拨打结果：" prop="followupId" v-if="$route.name!=='客户公海'">
 						    <el-radio-group v-model="customerDetail.followupId">
 						      	<el-radio v-for="item in followupList" :label="item.followupId">{{item.followup}}</el-radio>
 						    </el-radio-group>
 						</el-form-item>
-						<el-form-item label="跟进说明：" prop="followupExplan">
+						<el-form-item label="跟进说明：" prop="followupExplan" v-if="$route.name!=='客户公海'">
 						    <el-input type="textarea" v-model="customerDetail.followupExplan"  :rows="4"></el-input>
 						</el-form-item>
-						<el-form-item>
+						<el-form-item v-if="$route.name!=='客户公海'">
 						    <el-button type="primary" @click="submitcustomerDetail('customerDetail')">提交</el-button>
 						    <el-button @click="resetcustomerDetail('customerDetail')">取消</el-button>
 						</el-form-item>
@@ -65,7 +68,7 @@
 								<p v-for="item in allowanceCloud">
 									<span class="width168 ellipsis" :title="item.packageServiceName">套餐：{{item.packageServiceName}}</span>
 									<span class="width70 ellipsis">状态：{{allowanceStatus[item.status]}}</span>
-									<span class="width290 ellipsis" :title="'剩余'+changeTimeDifference(item.startTime,item.endTime)+'天'">服务时间：{{item.startTime}}~{{item.endTime}}(剩余{{changeTimeDifference(item.startTime,item.endTime)}}天)</span>
+									<span class="width290 ellipsis" :title="'剩余'+changeTimeDifference(item.startTime,item.endTime)+'天'">服务时间：{{item.startTime/1000 | moment("YYYY-MM-DD")}}~{{item.endTime/1000 | moment("YYYY-MM-DD")}}(剩余{{changeTimeDifference(item.startTime,item.endTime)}}天)</span>
 								</p>
 							</div>
 						</div>
@@ -76,7 +79,7 @@
 								<p v-for="item in allowanceBim">
 									<span class="width168 ellipsis" :title="item.packageServiceName">套餐：{{item.packageServiceName}}</span>
 									<span class="width70 ellipsis">状态：{{allowanceStatus[item.status]}}</span>
-									<span class="width290 ellipsis" :title="'剩余'+changeTimeDifference(item.startTime,item.endTime)+'天'">服务时间：{{item.startTime}}~{{item.endTime}}(剩余{{changeTimeDifference(item.startTime,item.endTime)}}天)</span>
+									<span class="width290 ellipsis" :title="'剩余'+changeTimeDifference(item.startTime,item.endTime)+'天'">服务时间：{{item.startTime/1000 | moment("YYYY-MM-DD")}}~{{item.endTime/1000 | moment("YYYY-MM-DD")}}(剩余{{changeTimeDifference(item.startTime,item.endTime)}}天)</span>
 								</p>
 							</div>
 						</div>
@@ -138,7 +141,7 @@
 							</div>
 							<hr style="height:1px;border:none;border-top:1px dashed #ccc;margin:30px 0px" />
 						</div>
-				    	<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+				    	<el-form v-if="$route.name!=='客户公海'" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 				    		<el-form-item label="订单编号：" prop="name">
 							    <el-input placeholder="请输入内容" v-model="searchNum" class="input-with-select select-clear" style="width:390px;">
 							    	<i slot="append" class="el-icon-circle-close" v-show="searchNum.length>0" @click="searchNum='';"></i>
@@ -177,6 +180,7 @@
 								</div>
 							</div>
 						</div>
+						<div v-if="bottomOrderList.length<1 && $route.name=='客户公海'" style="text-align:center;line-height:100px;">暂无数据</div>
 					</div>
 			    </el-tab-pane>
 			    <el-tab-pane label="挖掘记录" name="挖掘记录">
@@ -311,9 +315,10 @@
 		        // 套餐余量
 		        allowanceCloud:[],
 		        allowanceBim:[],
-		        allowanceStatus:{//套餐状态 0:无效 1:有效
-			        "0":"无效",
-			        "1":"有效" 
+		        allowanceStatus:{//套餐状态0:已过期 1:有效,2:未生效
+			        "0":"已过期",
+			        "1":"有效" ,
+			        "2":"未生效"
 			    },
 			    cstomerFunctionLogParam1:{
 				  "customerName": "",//客户通行证名
@@ -621,8 +626,8 @@
 		            	this.loading=false;
 		            	if(res.data){
 		            		res.data.forEach(function (item) {
-		            			item.startTime = item.startTime.replace('年', '-').replace('月', '-').replace('日', '')
-								item.endTime = item.endTime.replace('年', '-').replace('月', '-').replace('日', '')
+		            			// item.startTime = item.startTime.replace('年', '-').replace('月', '-').replace('日', '')
+								// item.endTime = item.endTime.replace('年', '-').replace('月', '-').replace('日', '')
 		            			// console.log(item.packageType)
 								if(item.packageType==12){
 									vm.allowanceBim.push(item)

@@ -77,7 +77,7 @@ export default {
                   }
                 // 到期时间设置
                   if(key=='datamining_expireTime'){
-                      this.curtomerCount2=this.formatDuring(res.data.holdCustomerTotal);
+                      this.curtomerCount2=this.formatDuring(res.data.expirationInterval);
                   } 
               }
           })

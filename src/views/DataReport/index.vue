@@ -128,7 +128,7 @@ export default {
                   // console.log(res.data.content)
                   // let serviceContent = res.data.content.replace(/<br\/>/g, "&#13;&#10;");
                   this.customerData=res.data.content;
-                  this.customerData.pop()
+                  // this.customerData.pop()
               }
           })
       },
