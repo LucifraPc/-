@@ -110,8 +110,22 @@ export function getQuarterStartMonth() {
 }
 //获得本周的开始日期
 export function getWeekStartDate() {
-  var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek + 1);
-  return formatDate(weekStartDate);
+  //按周日为一周的最后一天计算    
+  var date = new Date();
+  //今天是这周的第几天    
+  var today = date.getDay();
+  //上周日距离今天的天数（负数表示）    
+  var stepSunDay = -today + 1;
+  // 如果今天是周日    
+  if (today == 0) {
+    stepSunDay = -6;
+  }
+  // 周一距离今天的天数（负数表示）    
+  var stepMonday = 7 - today;
+  var time = date.getTime();
+  var monday = new Date(time + stepSunDay * 24 * 3600 * 1000);
+  //本周一的日期 （起始日期）    
+  return monday;
 }
 //获得本周的结束日期
 export function getWeekEndDate() {

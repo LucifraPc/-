@@ -23,6 +23,17 @@ export function cancleMining(miningId) {
     method: 'delete',
   })
 }
+/* 导入挖掘信息*/
+export function importMiningInfo(miningId) {
+  return request({
+    url: '/rest/dataming/task/import/' + miningId,
+    method: 'get',
+  })
+}
+
+
+
+
 /* 查看数据挖掘结果用户信息 */
 export function getMiningResultUserInfo(param) {
   return request({
@@ -75,13 +86,20 @@ export function getMembers(param) {
   return request({
     url: '/rest/common/members',
     method: 'post',
-    data: [64,65]
+    data: [65,66]
   })
 }
 /* 获取可分配客户总数量 */
 export function getCurToAllocateNum() {
   return request({
     url: '/rest/resAlloc/count/readyToAlloc',
+    method: 'get'
+  })
+}
+/*查询指定电销人员剩余可分配的人员数量*/
+export function getRemainConut(username) {
+  return request({
+    url: '/rest/resAlloc/count/remain/' + username,
     method: 'get'
   })
 }

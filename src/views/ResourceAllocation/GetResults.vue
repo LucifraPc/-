@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-row class="el-row-wrap">
-      <span style="display:inline-block;font-size: 18px;font-weight: bold;line-height: 38px;">任务名称：5555 时间：2018-04-09 14:34:26</span>
+      <span style="display:inline-block;font-size: 18px;font-weight: bold;line-height: 38px;">任务名称：{{curUserInfo.name}} 时间：{{curUserInfo.addTime}}</span>
       <el-button size="small" round @click="backToPrevious" style="float:right;margin-top:5px">返回</el-button>
     </el-row>
     <el-row class="el-row-wrap">
@@ -30,34 +30,40 @@
       <el-table :data="miningResultData" border style="width: 100%;margin-top:10px" v-loading="loading_miningResultData">
         <el-table-column prop="username" label="用户名">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="userDialogVisible = true;getMiningResultUserInfo(scope.row.username)">{{scope.row.username}}</el-button>
+            <!-- @click="userDialogVisible = true;getMiningResultUserInfo(scope.row.username)" -->
+            <el-button type="text" size="small">{{scope.row.username}}</el-button>
           </template>
         </el-table-column>
         <el-table-column prop="registerTime" label="注册时间">
         </el-table-column>
         <el-table-column prop="address" label="有效云套餐(个人/企业)">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="cloudPackageDialogVisible=true;getUserPackageServices(scope.row.id,2,1,5,'有效云套餐')">{{`${scope.row.personalBimPackageNumber}/${scope.row.enterpriseBimPackageNumber}`}}</el-button>
+            <!-- @click="cloudPackageDialogVisible=true;getUserPackageServices(scope.row.id,2,1,5,'有效云套餐')" -->
+            <el-button type="text" size="small">{{`${scope.row.personalBimPackageNumber}/${scope.row.enterpriseBimPackageNumber}`}}</el-button>
           </template>
         </el-table-column>
         <el-table-column prop="address" label="有效BIM套餐(个人/企业)">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="cloudPackageDialogVisible=true;getUserPackageServices(scope.row.id,12,1,5,'有效BIM套餐')">{{`${scope.row.personalCloudPackageNumber}/${scope.row.enterpriseCloudPackageNumber}`}}</el-button>
+            <!-- @click="cloudPackageDialogVisible=true;getUserPackageServices(scope.row.id,12,1,5,'有效BIM套餐')" -->
+            <el-button type="text" size="small">{{`${scope.row.personalCloudPackageNumber}/${scope.row.enterpriseCloudPackageNumber}`}}</el-button>
           </template>
         </el-table-column>
         <el-table-column prop="useCloudFunctionTimes" label="使用云功能次数">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="cloudCountDialogVisible=true;getUserFunctionUsingLog(scope.row.username, '云功能')">{{scope.row.useCloudFunctionTimes}}</el-button>
+            <!-- @click="cloudCountDialogVisible=true;getUserFunctionUsingLog(scope.row.username, '云功能')" -->
+            <el-button type="text" size="small">{{scope.row.useCloudFunctionTimes}}</el-button>
           </template>
         </el-table-column>
         <el-table-column prop="useBimFunctionTimes" label="使用BIM应用次数">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="cloudCountDialogVisible=true;getUserFunctionUsingLog(scope.row.username, 'BIM应用')">{{scope.row.useBimFunctionTimes}}</el-button>
+            <!-- @click="cloudCountDialogVisible=true;getUserFunctionUsingLog(scope.row.username, 'BIM应用')" -->
+            <el-button type="text" size="small">{{scope.row.useBimFunctionTimes}}</el-button>
           </template>
         </el-table-column>
         <el-table-column prop="follow" label="跟进">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="followUpDialogVisible=true;getFollowUps(scope.row.username,scope.row.isFollowUp!=1)">{{scope.row.isFollowUp==2?'未跟进':'已跟进'}}</el-button>
+            <!-- @click="followUpDialogVisible=true;getFollowUps(scope.row.username,scope.row.isFollowUp!=1)" -->
+            <el-button type="text" size="small">{{scope.row.isFollowUp==2?'未跟进':'已跟进'}}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -126,7 +132,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <i class="el-icon-circle-check-outline" ></i>表示符合挖掘条件的套餐
+      <i class="el-icon-circle-check-outline"></i>表示符合挖掘条件的套餐
       <div class="block">
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage" :page-sizes="[5, 10, 15]"
           :page-size="5" layout="sizes, prev, pager, next" :total="50">
@@ -230,8 +236,8 @@
         miningResultData: [],
         cloudPackageData: [],
         cloudCountData: [],
-        followUpData: []
-
+        followUpData: [],
+        curUserInfo: null
       };
     },
     watch: {
@@ -244,7 +250,7 @@
       isFilterEnterpriseCloudPackage() {
         this.getDataMiningResult()
       },
-      startDateAndEndDate() {
+      startDateAndEndDate(val) {
         this.getDataMiningResult()
       }
     },
@@ -267,17 +273,17 @@
         this.loading_miningResultData = true
         let taskResultParam = {
           page: this.currentPage,
-          endDate: this.startDateAndEndDate[1],
+          endDate: this.startDateAndEndDate ? this.startDateAndEndDate[1] : '',
           isFilterEnterpriseBimPackage: this.isFilterEnterpriseBimPackage ? 1 : 0,
           isFilterEnterpriseCloudPackage: this.isFilterEnterpriseCloudPackage ? 1 : 0,
           miningID: this.miningID,
           size: this.pageSize,
-          startDate: this.startDateAndEndDate[0],
+          startDate: this.startDateAndEndDate ? this.startDateAndEndDate[0] : '',
           username: this.username,
         }
         api.getDataMiningResult(taskResultParam).then(res => {
           this.miningResultData = res.data.content;
-          this.total =res.data.totalElements;
+          this.total = res.data.totalElements;
           this.loading_miningResultData = false
         })
       },
@@ -322,7 +328,7 @@
       },
       getFollowUps(username, isShowAddRecords) {
         this.curUserName = username //记录当前username 添加记录使用
-        this.loading_followUptData=true
+        this.loading_followUptData = true
         setTimeout(() => {
           this.$refs.followUpDataTable.bodyWrapper.style.display = 'block' //暂无数据提示
         }, 0);
@@ -334,7 +340,7 @@
         api.getFollowUps(param).then(res => {
           // console.log(JSON.parse(res)[0].result)
           this.followUpData = JSON.parse(res)[0].result;
-          this.loading_followUptData=false
+          this.loading_followUptData = false
           if (this.followUpData.length == 0) {
             this.$refs.followUpDataTable.bodyWrapper.style.display = 'none' //隐藏暂无数据提示
           }
@@ -351,6 +357,9 @@
           this.getDataMiningResult()
         })
       }
+    },
+    created() {
+      this.curUserInfo = JSON.parse(sessionStorage.getItem('curUserInfo'))
     },
     mounted() {
       this.miningID = this.$route.params.id

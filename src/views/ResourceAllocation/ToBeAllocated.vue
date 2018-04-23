@@ -31,7 +31,7 @@
               </el-table-column>
               <el-table-column prop="address" label="本次分配数量">
                 <template slot-scope="scope">
-                  <el-input placeholder="请输入内容" style="width:50%" v-model.trim="scope.row.allocatedThisTime" @blur='handleBlur($event)'></el-input>
+                  <el-input placeholder="请输入内容" style="width:50%" v-model.trim="scope.row.allocatedThisTime" @blur='handleBlur($event,scope.row.username)'></el-input>
                 </template>
               </el-table-column>
             </el-table>
@@ -142,7 +142,8 @@
     methods: {
       handleClick(tab, event) {
         this.searchValue = '';
-        this.isResourcesByPeople = tab.label == "按人员分配"
+        this.isResourcesByPeople = tab.label == "按人员分配";
+        this.getAllocatedByResourceList()
       },
       handleSizeChange(val) {
         this.pageSize = val
@@ -160,14 +161,15 @@
         this.currentPage_ = val
         this.getAllocatedByResourceList()
       },
-      handleBlur(event) {
+      handleBlur(event, username) {
         let reg = /^\+?[1-9]\d*$/
         if (!reg.test(event.target.value) && event.target.value) {
           this.$message.error('请输入正确的数字！');
         }
-        if (event.target.value > this.CurToAllocateNum) {
-          this.$message.error(`当前时刻剩余待分配客户数为 ${this.CurToAllocateNum}，大于申请的数量，无法分配`);
+        if (event.target.value) {
+          this.getRemainConut(username, event.target.value)
         }
+
       },
       getMembers() {
         api.getMembers().then(res => {
@@ -185,6 +187,15 @@
           this.CurToAllocateNum = res.data
         })
       },
+      /*查询指定电销人员剩余可分配的人员数量*/
+      getRemainConut(username, value) {
+        api.getRemainConut(username).then(res => {
+          if (value > res.data) {
+            this.$message.error(`当前时刻剩余待分配客户数为 ${res.data}，大于申请的数量，无法分配`);
+          }
+        })
+      },
+      /*获取按人员分配列表*/
       getAllocatedByPeopleList() {
         let param = {
           "orders": [{
@@ -204,6 +215,7 @@
           this.total = res.data.totalElements
         })
       },
+      /*获取按资源分配列表*/
       getAllocatedByResourceList() {
         let param = {
           "orders": [{
@@ -224,6 +236,7 @@
           this.total_ = res.data.totalElements
         })
       },
+       /*提交按资源分配*/
       handleAllocateData(type) {
         //按人员分配
         if (type == 1) {
@@ -278,23 +291,22 @@
           console.log(params)
 
 
-          // api.handleAllocateDateByResource(params).then(res => {
-          //   if (res.code == '1') {
-          //     this.$message({
-          //       message: res.msg,
-          //       type: 'success'
-          //     });
-          //     this.getAllocatedByResourceList()
-          //   } else {
-          //     this.$message.error(res.msg)
-          //   }
-          // })
+          api.handleAllocateDateByResource(params).then(res => {
+            if (res.code == '1') {
+              this.$message({
+                message: res.msg,
+                type: 'success'
+              });
+              this.getAllocatedByResourceList()
+            } else {
+              this.$message.error(res.msg)
+            }
+          })
         }
       }
     },
     mounted() {
       this.getAllocatedByPeopleList()
-      this.getAllocatedByResourceList()
       this.getCurToAllocateNum()
       this.getMembers()
     }

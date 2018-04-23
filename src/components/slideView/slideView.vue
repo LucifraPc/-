@@ -1,10 +1,10 @@
 <template>
-	<transition name="slide-fade">
-	    <div id="slide-window" v-if="showDetialBoxCon">
-	    	<div class="slide-window-header">
-	    		<h4>客户详情</h4>
-	    		<i class="el-icon-close" @click="showDetialBoxConfalse();showDetialBoxCon=!showDetialBoxCon"></i>
-	    	</div>
+  <transition name="slide-fade">
+    <div id="slide-window" v-if="showDetialBoxCon">
+      <div class="slide-window-header">
+        <h4>客户详情</h4>
+        <i class="el-icon-close" @click="showDetialBoxConfalse();showDetialBoxCon=!showDetialBoxCon"></i>
+      </div>
 
 	        <el-tabs v-model="activeName" @tab-click="handleClick">
 			    <el-tab-pane label="基本情况" name="基本情况">
@@ -211,106 +211,118 @@
   	</transition>
 </template>
 <script>
-	import {getCustomerDetail,getCustomerClassification,getCustomerFollowUpResult,getCustomerDetailSubmint,getCustomerOrder,getCustomerFun,getCustomerFunCount,getCustomerPackage,getCustomerMining,getCustomerOrderSearchNumber,bindingOrdersFun,delbindingOrdersFun} from '@/api/table.js'
+  import {
+    getCustomerDetail,
+    getCustomerClassification,
+    getCustomerFollowUpResult,
+    getCustomerDetailSubmint,
+    getCustomerOrder,
+    getCustomerFun,
+    getCustomerFunCount,
+    getCustomerPackage,
+    getCustomerMining,
+    getCustomerOrderSearchNumber,
+    bindingOrdersFun,
+    delbindingOrdersFun
+  } from '@/api/table.js'
 
-	import moment from 'moment'
-	export default {
-		props:["showDetialBox","passwordId"],
-	    created(){
-	    	this.getCustomerClassList();
-	    	this.getCallList();
-	    },
-	    data() {
-		    var checkMobile = (rule, value, callback) => {
-          		if (!(/^1[0-9]{10}$/.test(value))) {
-		          callback(new Error('请输入正确的手机号'));
-		        } else {
-		          callback();
-		        }
-		   	};
-	      	return {
-		      	loading:true,
-		      	type:{// 客户分类结果集
-			        "新客户": 1,
-			        "高意向": 2,
-			        "可跟进": 3,
-			        "成交客户": 4,
-			        "即将到期客户": -1,
-			        "到期未续费": -2,
-			        "无法接通": 5,
-			        "无效线索": 6
-			    },
-			    callResult:{// 客户分类结果集
-			        "0": "无",
-			        "1": "接通",
-			        "2": "未接",
-			        "3": "关机",
-			        "4": "无人接听",
-			        "5": "停机",
-			        "6": "空号",
-			        "7": "使用其他软件",
-			      },
+  import moment from 'moment'
+  export default {
+    props: ["showDetialBox", "passwordId"],
+    created() {
+      this.getCustomerClassList();
+      this.getCallList();
+    },
+    data() {
+      var checkMobile = (rule, value, callback) => {
+        if (!(/^1[0-9]{10}$/.test(value))) {
+          callback(new Error('请输入正确的手机号'));
+        } else {
+          callback();
+        }
+      };
+      return {
+        loading: true,
+        type: { // 客户分类结果集
+          "新客户": 1,
+          "高意向": 2,
+          "可跟进": 3,
+          "成交客户": 4,
+          "即将到期客户": -1,
+          "到期未续费": -2,
+          "无法接通": 5,
+          "无效线索": 6
+        },
+        callResult: { // 客户分类结果集
+          "0": "无",
+          "1": "接通",
+          "2": "未接",
+          "3": "关机",
+          "4": "无人接听",
+          "5": "停机",
+          "6": "空号",
+          "7": "使用其他软件",
+        },
 
 
-		      	searchNum:'',
-		        showDetialBoxCon:false,
-		        activeName: '基本情况',
-
-		        
-		        getCustomerClass:[],// 客户分类跟进结果
-		        followResult:[],//拨打类型
+        searchNum: '',
+        showDetialBoxCon: false,
+        activeName: '基本情况',
 
 
-		        // 基本情况
-		        customerDetail:{},
-		        
-				// 历史跟进记录
-				followupLog: [],
-				followupList:[],
+        getCustomerClass: [], // 客户分类跟进结果
+        followResult: [], //拨打类型
 
-		        ruleForm: {},
-		        rules: {
-		          classId: [
-		            {   required: true,message: '请选择跟进结果', trigger: 'change' }
-		          ],
-		          mobile: [
-		            { required: true,message: '请输入手机号', trigger: 'blur' },
-		            { validator: checkMobile, trigger: 'blur'},
-		          ]
-		        },
-		        tableData: [],
-		        showDetialOrder:false,//订单详情
-		        topOrderList:[],//上可点击订单
-		        bottomOrderList:[],//下不可点击订单
-		        invoicetype:{ // 发票类型 -1:不需要发票 0:普通发票 2:增值税专用发票 3:专用发票 ,
-			        "-1":"不需要发票",
-			        "0":"普通发票",
-			        "2":"增值税专用发票",
-			        "3":"专用发票 "
-			    },
-			    paytype:{// 支付方式，0网银 1支付宝 2银行电汇 3人工订单 4微信 ,
-			        "0":"网银",
-			        "1":"支付宝",
-			        "2":"银行电汇",
-			        "3":"人工订单",
-			        "4":"微信"
-			    },
-			    paystatus:{// 支付状态，0 未支付。2 已支付到账, -1支付失败 -2 已取消,-3已退款 ,
-			        "0":"未支付",
-			        "2":"已支付到账" ,
-			        "-1":"支付失败" ,
-			        "-2":"已取消" ,
-			        "-3":"已退款" 
-			    },
 
-			    // 功能使用
-		        userCloudTimes:0,
-		        useBimTimes:0,
-		        customerFunctionLog1:[],
-		        customerFunctionLog2:[],
-		        totalElements1:0,
-		        totalElements2:0,
+        // 基本情况
+        customerDetail: {},
 
+        // 历史跟进记录
+        followupLog: [],
+        followupList: [],
+
+        ruleForm: {},
+        rules: {
+          classId: [{
+            required: true,
+            message: '请选择跟进结果',
+            trigger: 'change'
+          }],
+          mobile: [{
+              required: true,
+              message: '请输入手机号',
+              trigger: 'blur'
+            },
+            {
+              validator: checkMobile,
+              trigger: 'blur'
+            },
+          ]
+        },
+        tableData: [],
+        showDetialOrder: false, //订单详情
+        topOrderList: [], //上可点击订单
+        bottomOrderList: [], //下不可点击订单
+        invoicetype: { // 发票类型 -1:不需要发票 0:普通发票 2:增值税专用发票 3:专用发票 ,
+          "-1": "不需要发票",
+          "0": "普通发票",
+          "2": "增值税专用发票",
+          "3": "专用发票 "
+        },
+        paytype: { // 支付方式，0网银 1支付宝 2银行电汇 3人工订单 4微信 ,
+          "0": "网银",
+          "1": "支付宝",
+          "2": "银行电汇",
+          "3": "人工订单",
+          "4": "微信"
+        },
+        paystatus: { // 支付状态，0 未支付。2 已支付到账, -1支付失败 -2 已取消,-3已退款 ,
+          "0": "未支付",
+          "2": "已支付到账",
+          "-1": "支付失败",
+          "-2": "已取消",
+          "-3": "已退款"
+        },
 
 		        // 套餐余量
 		        allowanceCloud:[],
@@ -654,26 +666,30 @@
 	}
 </script>
 <style>
-	.floatRightBox{
-		height:40px;
-		line-height:40px;
-	}
-	.floatRight{
-		float:right;
-	}
-	.floatRight span{
-		margin:0px!important;
-	}
-	.select-clear .el-input-group__append{
-		position:relative;
-	}
-	.select-clear .el-input-group__append .el-icon-circle-close{
-		display: inline-block;
-		font-size:16px;
-		left:-22px;
-		top:11px;
-		color: #a5a5a5;
-		position: absolute;
-	}
+  .floatRightBox {
+    height: 40px;
+    line-height: 40px;
+  }
+
+  .floatRight {
+    float: right;
+  }
+
+  .floatRight span {
+    margin: 0px !important;
+  }
+
+  .select-clear .el-input-group__append {
+    position: relative;
+  }
+
+  .select-clear .el-input-group__append .el-icon-circle-close {
+    display: inline-block;
+    font-size: 16px;
+    left: -22px;
+    top: 11px;
+    color: #a5a5a5;
+    position: absolute;
+  }
 
 </style>
