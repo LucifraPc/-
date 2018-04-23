@@ -17,7 +17,7 @@
     data() {
       return {
         miningId: '',
-        src: '../../../static/dataMining/showCondition.html'
+        src: '/static/dataMining/showCondition.html'
       }
     },
     methods: {
