@@ -3,10 +3,8 @@
     <el-row style="margin-bottom:15px;" class="el-row-wrap">
       <div class="date-picker-wrap">
         <span>时间：</span>
-        <el-date-picker v-model="startDateAndEndDate" type="daterange" 
-         style="width:40%"
-        range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"
-        value-format='yyyy-MM-dd'>
+        <el-date-picker v-model="startDateAndEndDate" type="daterange" style="width:40%" range-separator="至" start-placeholder="开始日期"
+          end-placeholder="结束日期" value-format='yyyy-MM-dd'>
         </el-date-picker>
         <el-button @click="selectDate('all')">全部</el-button>
         <el-button @click="selectDate('today')">今天</el-button>
@@ -29,7 +27,7 @@
             </el-option>
           </el-select>
           <el-button @click="getDataMiningInfo">搜索</el-button>
-          <el-button type="primary"            @click="startMining">发起挖掘</el-button>
+          <el-button type="primary" @click="startMining">发起挖掘</el-button>
         </div>
       </div>
     </el-row>
@@ -57,9 +55,11 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <span class="el-icon-info " title="查看挖掘条件" @click="getMiningConditions(scope.row)"></span>
-            <span class="el-icon-delete " title="取消挖掘"  @click="cancleMining(scope.row.id)" v-if='scope.row.status==1'></span>
+            <span class="el-icon-delete " title="取消挖掘" @click="cancleMining(scope.row.id)" v-if='scope.row.status==1'></span>
             <span class="el-icon-tickets " title="查看挖掘结果" @click="getResults(scope.row)" v-if="scope.row.status==2"></span>
             <span class="el-icon-refresh " title="重新挖掘" @click="reMining(scope.row)"></span>
+            <span class="el-icon-download " title="导入" @click="importMiningInfo(scope.row.id)" v-if='scope.row.status!=1'></span>
+
           </template>
         </el-table-column>
       </el-table>
@@ -89,7 +89,7 @@
         status: "0",
         currentPage: 1,
         pageSize: 25,
-        total:0,
+        total: 0,
         statusOptions: [{
             value: "0",
             label: "全部"
@@ -164,7 +164,7 @@
             break;
           case "yesterday":
             start.setTime(start.getTime() - 3600 * 1000 * 24 * 1);
-            this.startDateAndEndDate = [start, end];
+            this.startDateAndEndDate = [start, start];
             break;
           case "thisWeek":
             this.startDateAndEndDate = [getWeekStartDate(), end];
@@ -183,7 +183,7 @@
         this.$emit("pick", new Date());
       },
       getDataMiningInfo() {
-        let startDateAndEndDate_ = this.startDateAndEndDate.slice();
+        let startDateAndEndDate_ = this.startDateAndEndDate?this.startDateAndEndDate.slice():[];
         let startDate = this.formatDate(startDateAndEndDate_[0]) ?
           this.formatDate(startDateAndEndDate_[0]) :
           "";
@@ -202,7 +202,7 @@
         api.getDataMiningInfo(taskParam).then(res => {
           console.log(res)
           this.tableData = res.data.content;
-          this.total=res.data.totalElements
+          this.total = res.data.totalElements
           console.log(this.tableData);
         });
       },
@@ -212,7 +212,7 @@
         });
       },
       getResults(row) {
-        sessionStorage.setItem('curUserInfo',JSON.stringify(row))
+        sessionStorage.setItem('curUserInfo', JSON.stringify(row))
         this.$router.push({
           path: `/resource-allocation/get-results/${row.id}`
         });
@@ -227,13 +227,24 @@
           path: `/resource-allocation/startmining`
         });
       },
-      cancleMining(miningId){
-        api.cancleMining(miningId).then(res=>{
-          if(res.code==1){
+      importMiningInfo(miningId) {
+        api.importMiningInfo(miningId).then(res => {
+          if (res.code == 1) {
             this.$message({
-                message: res.msg,
-                type: 'success'
-              });
+              message: res.msg,
+              type: 'success'
+            });
+          }
+        })
+
+      },
+      cancleMining(miningId) {
+        api.cancleMining(miningId).then(res => {
+          if (res.code == 1) {
+            this.$message({
+              message: res.msg,
+              type: 'success'
+            });
             this.getDataMiningInfo()
           }
         })

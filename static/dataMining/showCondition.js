@@ -315,7 +315,7 @@ var areaList = function areaList(url, pid, st, et) {
     datatype: 'json',
     type: 'get',
     success: function (result) {
-      var onlyRead = "onmousemove=this.setCapture(); onmouseout=this.releaseCapture(); onfocus=this.blur();";
+      var onlyRead = "readonly='readonly'";
       var useArea_cont = "";
       useArea_cont += "<div style='float:left'><input class='Wdate startDate' value='" + st + "'  " + onlyRead + "  type='text' size='12'>" +
         " ~ <input type='text' value='" + et + "' " + onlyRead + " size='12' class='Wdate endDate'>&nbsp;</div><br/><br/>";
