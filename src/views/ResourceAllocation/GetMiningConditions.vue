@@ -1,8 +1,11 @@
 <template>
   <div class="app-container">
+    <el-row class="el-row-wrap" v-show='isShowBack'>
+      <span style="display:inline-block;font-size: 18px;font-weight: bold;line-height: 38px;">任务名称：{{curUserInfo.name}} 时间：{{curUserInfo.addTime}}</span>
+      <el-button size="small" round @click="backToPrevious" style="float:right;margin-top:5px">返回</el-button>
+    </el-row>
     <el-row class="el-row-wrap">
-      <el-button size="small" round @click="backToPrevious" style="float:right;margin-top:5px" v-show="isShowBack">返回</el-button>
-      <iframe id="mainFrame" name="mainFrame" scrolling="no" :src="src" frameborder="0" style="padding: 0px; width: 100%;"></iframe>
+      <iframe id="mainFrame" name="mainFrame" scrolling="no" :src="src" frameborder="0" style="padding: 0px; width: 100%;height:800px"></iframe>
     </el-row>
   </div>
 </template>
@@ -27,6 +30,9 @@
         });
       }
     },
+    created() {
+      this.curUserInfo = JSON.parse(sessionStorage.getItem('curUserInfo'))
+    },
     mounted() {
       window.mainFrame.miningId = this.$route.params.id;
       window.miningId = this.$route.params.id;
@@ -36,6 +42,8 @@
 
 </script>
 <style rel="stylesheet/scss" lang="scss" scope>
-
+ .el-row+.el-row {
+    margin-top: 15px;
+  }
 
 </style>

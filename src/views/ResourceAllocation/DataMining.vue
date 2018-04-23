@@ -58,7 +58,7 @@
             <span class="el-icon-delete " title="取消挖掘" @click="cancleMining(scope.row.id)" v-if='scope.row.status==1'></span>
             <span class="el-icon-tickets " title="查看挖掘结果" @click="getResults(scope.row)" v-if="scope.row.status==2"></span>
             <span class="el-icon-refresh " title="重新挖掘" @click="reMining(scope.row)"></span>
-            <span class="el-icon-download " title="导入" @click="importMiningInfo(scope.row.id)" v-if='scope.row.status!=1'></span>
+            <span class="el-icon-download " title="导入" @click="importMiningInfo(scope.row.id)" v-if='scope.row.status!=1&&scope.row.status!=3'></span>
 
           </template>
         </el-table-column>
@@ -207,6 +207,7 @@
         });
       },
       getMiningConditions(row) {
+         sessionStorage.setItem('curUserInfo', JSON.stringify(row))
         this.$router.push({
           path: `/resource-allocation/get-mining-conditions/${row.id}`
         });

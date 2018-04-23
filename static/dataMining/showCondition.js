@@ -317,11 +317,11 @@ var areaList = function areaList(url, pid, st, et) {
     success: function (result) {
       var onlyRead = "readonly='readonly'";
       var useArea_cont = "";
-      useArea_cont += "<div style='float:left'><input class='Wdate startDate' value='" + st + "'  " + onlyRead + "  type='text' size='12'>" +
-        " ~ <input type='text' value='" + et + "' " + onlyRead + " size='12' class='Wdate endDate'>&nbsp;</div><br/><br/>";
+      useArea_cont += "<div ><input class='Wdate startDate' value='" + st + "'  " + onlyRead + "  type='text' size='12'>" +
+        " ~ <input type='text' value='" + et + "' " + onlyRead + " size='12' class='Wdate endDate'>&nbsp;</div>";
       proInfo = result.data;
       for (var j = 0; j < pid.length; j++) {
-        useArea_cont += "<div style='float:left;width:70px;'><input type='checkbox' disabled='disabled'  checked='checked' />";
+        useArea_cont += "<div style='float:left;width:71px;'><input type='checkbox' disabled='disabled'  checked='checked' />";
         for (var k = 0; k < proInfo.length; k++) {
           if (proInfo[k].provinceId == pid[j]) {
 

@@ -4,7 +4,7 @@
       <span style="display:inline-block;font-size: 18px;font-weight: bold;line-height: 38px;">任务名称：{{curUserInfo.name}} 时间：{{curUserInfo.addTime}}</span>
       <el-button size="small" round @click="backToPrevious" style="float:right;margin-top:5px">返回</el-button>
     </el-row>
-    <el-row class="el-row-wrap">
+    <el-row class="el-row-wrap" style='height:400px;overflow:scroll'>
       <get-minconditions :isShowBack='false'></get-minconditions>
     </el-row>
     <el-row class="el-row-wrap">
@@ -21,7 +21,7 @@
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
-      <el-button type="success" style="float:right">导出Excel</el-button>
+      <!-- <el-button type="success" style="float:right">导出Excel</el-button> -->
     </el-row>
     <el-row class="el-row-wrap">
       <el-checkbox v-model="isFilterEnterpriseCloudPackage">隐藏已有企业云套餐的用户</el-checkbox>

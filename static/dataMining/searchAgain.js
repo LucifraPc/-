@@ -146,7 +146,7 @@ $(document).ready(function () {
             } else {
               addcont += "<option value='4' >过期N天内未续费</option>";
             }
-            addcont += "</select><div style='float:left;width:650px;'>";
+            addcont += "</select><div style='float:left;width:650px;line-height:40px'>";
 
             var a = "",
               b = "",
@@ -246,7 +246,7 @@ $(document).ready(function () {
 
           //功能使用情况
           if (result[i].ct == 6) {
-
+            debugger
             var funUse = result[i].dc6;
             var url = basePath + "rest/dataming/functionType";
             funList(url, funUse, k, condition);
@@ -411,7 +411,7 @@ var funList = function funList(url, funUse, k, condition) {
       }
       unique(functionTypes);
       var funCheck = funUse.param;
-      var addcont = "时间范围：<input  value='" + funUse.st + "' id='sd" + k + "' class='Wdate startDate' name='fst' type='text' size='12' onChange='fstChange(this)' onClick=WdatePicker({errDealMode:1,readOnly:true,isShowClear:false,maxDate:'#F{$dp.$D(ed" + k + ")||\\'%y-%M-%d\\'}'})> ~ " +
+      var addcont = "<div style='position: absolute;top: 0;bottom: 0;margin: auto;height: 83px;'>时间范围：<input  value='" + funUse.st + "' id='sd" + k + "' class='Wdate startDate' name='fst' type='text' size='12' onChange='fstChange(this)' onClick=WdatePicker({errDealMode:1,readOnly:true,isShowClear:false,maxDate:'#F{$dp.$D(ed" + k + ")||\\'%y-%M-%d\\'}'})> ~ " +
         "<input   type='text' size='12' value='" + funUse.et + "' id='ed" + k + "' class='Wdate endDate' name='fet' onChange='fetChange(this)' onClick=WdatePicker({isShowClear:false,readOnly:true,minDate:'#F{$dp.$D(sd" + k + ")}',maxDate:'%y-%M-%d'})> <br/>";
       addcont += "<select class='functionType' onchange='funChange(this," + k + ")' style='float:left' >";
       for (var h = 0; h < functionTypes.length; h++) {
@@ -423,10 +423,10 @@ var funList = function funList(url, funUse, k, condition) {
 
       }
 
-      addcont += "</select>";
-      addcont += "<div style='width:710px;float:right'>";
+      addcont += "</select></div>";
+      addcont += "<div style='width:710px;margin-left:355px'>";
       if (funCheck[0].fn == "不限功能") {
-        addcont += "<div style='float:left;width:710px;'><div style='float:left;width:236px;'><input type='checkbox'  name='fun_checkbox" + k + "' onclick='unfunCheck(this.name," + k + ")' value='不限功能,0'  checked='checked' style='float:left' ><span style='color:orange;float:left'>不限功能</span>";
+        addcont += "<div style='float:left;width:710px;'><div style='float:left;width:236px;line-height:40px;'><input type='checkbox'  name='fun_checkbox" + k + "' onclick='unfunCheck(this.name," + k + ")' value='不限功能,0'  checked='checked' style='float:left;margin-top:14px' ><span style='color:orange;float:left'>不限功能</span>";
         addcont += "<div style='float:right;margin-right:10px;'><select class='funType'>"
         if (funCheck[0].type == 3) {
           addcont += "<option value='3' selected='select'>></option>"
@@ -446,7 +446,7 @@ var funList = function funList(url, funUse, k, condition) {
         addcont += "</select>"
         addcont += "<input type='text' class='funTimes' maxlength='9' style='width:30px' value='" + funCheck[0].count + "' />次</div></div></div>";
       } else {
-        addcont += "<div style='float:left;width:710px;'><div style='float:left;width:236px;'><input type='checkbox'  name='fun_checkbox" + k + "' onclick='unfunCheck(this.name," + k + ")' value='不限功能,0' style='float:left' ><span style='color:orange;float:left'>不限功能</span>";
+        addcont += "<div style='float:left;width:710px;'><div style='float:left;width:236px;line-height:40px'><input type='checkbox'  name='fun_checkbox" + k + "' onclick='unfunCheck(this.name," + k + ")' value='不限功能,0' style='float:left;margin-top:14px' ><span style='color:orange;float:left'>不限功能</span>";
         addcont += "<div style='float:right;margin-right:10px;'><select class='funType'>" +
           "<option value='3' selected='select'>></option>" +
           "<option value='1'><</option>" +
@@ -454,7 +454,7 @@ var funList = function funList(url, funUse, k, condition) {
           "</select>" +
           "<input type='text' class='funTimes' maxlength='9' style='width:30px' />次</div></div></div>";
       }
-      addcont += "<div id='left" + k + "' style='float:left;width:236px;'></div><div id='center" + k + "' style='float:left;width:236px;'></div><div id='right" + k + "' style='float:left;width:236px;'></div>"
+      addcont += "<div id='left" + k + "' style='float:left;width:236px;line-height:40px'></div><div id='center" + k + "' style='float:left;width:236px;line-height:40px'></div><div id='right" + k + "' style='float:left;width:236px;line-height:40px'></div>"
       addcont += "</div>";
       addLeft("functionUseTimes", k, condition, addcont);
       var results = new Array();
@@ -473,7 +473,7 @@ var funList = function funList(url, funUse, k, condition) {
 
             var funName = results[i].functionName + "(" + results[i].productAlias + ")";
             var funNames = funName.substr(0, 10);
-            var addconts = "<div style='float:left;width:236px'><input type='checkbox' name='fun_checkbox" + k + "' value='" + results[i].functionName + "," + results[i].productId + "' onclick='funCheck(this.name," + i + "," + k + ")' checked='checked' style='float:left'><span title='" + funName + "' style='float:left'>" + funNames + "</span>";
+            var addconts = "<div style='float:left;width:236px'><input type='checkbox' name='fun_checkbox" + k + "' value='" + results[i].functionName + "," + results[i].productId + "' onclick='funCheck(this.name," + i + "," + k + ")' checked='checked' style='float:left;margin-top:14px'><span title='" + funName + "' style='float:left'>" + funNames + "</span>";
             addconts += "<div style='float:right;margin-right:10px;'><select class='funType'>"
             if (funCheck[b].type == 3) {
               addconts += "<option value='3' selected='select'>></option>"
@@ -508,7 +508,7 @@ var funList = function funList(url, funUse, k, condition) {
           var funName = results[i].functionName + "(" + results[i].productAlias + ")";
           var funNames = funName.substr(0, 10);
 
-          var addconts = "<div style='float:left;width:236px'><input type='checkbox' name='fun_checkbox" + k + "' value='" + results[i].functionName + "," + results[i].productId + "' onclick='funCheck(this.name," + i + "," + k + ")' style='float:left' ><span title='" + funName + "' style='float:left'>" + funNames + "</span>";
+          var addconts = "<div style='float:left;width:236px'><input type='checkbox' name='fun_checkbox" + k + "' value='" + results[i].functionName + "," + results[i].productId + "' onclick='funCheck(this.name," + i + "," + k + ")' style='float:left;margin-top:14px' ><span title='" + funName + "' style='float:left'>" + funNames + "</span>";
           addconts += "<div style='float:right;margin-right:10px;'><select class='funType'>" +
             "<option value='3' selected='select'>></option>" +
             "<option value='1'><</option>" +

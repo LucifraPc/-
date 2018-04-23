@@ -86,7 +86,7 @@ export function getMembers(param) {
   return request({
     url: '/rest/common/members',
     method: 'post',
-    data: [65,66]
+    data: [66]
   })
 }
 /* 获取可分配客户总数量 */

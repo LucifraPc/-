@@ -3,9 +3,7 @@
 
         <head>
             <link href="My97DatePicker/skin/WdatePicker.css" rel="stylesheet" type="text/css">
-
             <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-
             <script language="javascript" type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
             <script src="jquery-1.4.2.min.js"></script>
             <script src="jquery.cookie.js"></script>
@@ -14,12 +12,13 @@
             <script type="text/javascript" src="conditionSelect.js"></script>
             <style>
                 select{
-                    height:40px;
+                    height:39px;
                     line-height:40px;
                     border: 1px solid #dcdfe6;
                     min-width:70px;
                     margin-right:5px;
                     border-radius:4px;
+                    box-sizing: border-box
                  }
                  .funTimes.el-input__inner{
                     padding:0px!important;
@@ -54,6 +53,10 @@
                  #cenditionList tbody{
                     border-top:1px solid #ebeef5
                  }
+                 #cenditionList tbody tr:nth-of-type(1) td:nth-of-type(3){
+                    text-align: center
+                 }
+                 
             </style>
         </head>
 

@@ -2,6 +2,7 @@
 
 <head>
   <link href="My97DatePicker/skin/WdatePicker.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
   <!-- My97Date 时间控件 -->
   <script language="javascript" type="text/javascript" src="My97DatePicker/WdatePicker.js"></script>
   <script src="jquery-1.4.2.min.js"></script>
@@ -9,7 +10,7 @@
   <script type="text/javascript" src="common.js"></script>
   <script type="text/javascript" src="showCondition.js"></script>
   <title></title>
-
+ 
   <style type="text/css">
     #backWindow {
       display: none;
@@ -35,6 +36,39 @@
       z-index: 1002;
       overflow: auto;
     }
+    select{
+       height:39px;
+      line-height:40px;
+      border: 1px solid #dcdfe6;
+      min-width:70px;
+      margin-right:5px;
+      border-radius:4px;
+      box-sizing: border-box
+      }
+      input[type=text]{
+                    -webkit-appearance: none;
+                    background-color: #fff;
+                    background-image: none;
+                    border-radius: 4px;
+                    border: 1px solid #dcdfe6;
+                    -webkit-box-sizing: border-box;
+                    box-sizing: border-box;
+                    color: #606266;
+                    display: inline-block;
+                    font-size: inherit;
+                    height: 40px;
+                    line-height: 40px;
+                    outline: 0;
+                    padding: 0 15px;
+                    -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+                    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+                 }
+      #cenditionList tbody tr td{
+       padding-left:15px
+      }      
+      #cenditionList tbody tr td:nth-of-type(2){
+       border-top:1px solid #ebeef5
+      }       
 
   </style>
 </head>
@@ -48,7 +82,7 @@
       <!-- <input type="hidden" id="mid" value="${miningtaskInfo.id}" /> -->
     </div>
     <div style="width:100%;">
-      <table id="cenditionList" class="timeMenuAds" style="width: 100%;margin-top: 10px;border-collapse:collapse">
+      <table id="cenditionList" class="timeMenuAds el-table el-table--fit el-table--border el-table--scrollable-y el-table--enable-row-hover el-table--enable-row-transition" style="width: 100%;margin-top: 10px;border-collapse:collapse">
 
       </table>
       <br/>

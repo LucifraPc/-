@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    
     <el-row class="el-row-wrap">
       <el-button size="small" round @click="backToPrevious" style="float:right;margin-top:5px">返回</el-button>
       <iframe src="/static/dataMining/searchAgain.html" frameborder="0" style="width:100%;height:80vh"></iframe>
@@ -120,6 +121,7 @@
         });
       }
     },
+    
     mounted() {
       window.basePath = process.env.BASE_API
       window.miningId = this.$route.params.id;

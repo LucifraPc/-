@@ -16,42 +16,35 @@ $(document).ready(function () {
     "loginCount": "账号登陆次数",
     "onlineTime": "账号在线时长"
   };
-
-  //增加条件
-  $("#add").click(function () {
-    var k = $("#tr_count").val();
-
-
-    var newTr = "<tr style='line-height: 20px;padding:20px;' class='ctr' id='ctr" + k + "'>" +
-      "<td width='14%' style='background: white;'>" +
-      "<select class='condition' id='condition_id" + k + "' onchange='cdnChange(this," + k + ")' style='margin:0px 10px;width:calc(100% - 20px);height: 40px;border-radius:4px;'";
-
-
-    for (var cn in condition) {
-      newTr += "<option value='" + cn + "' >" + condition[cn] + "</option>";
-    }
-    var prevSD = $("input[class='Wdate startDate']:last").val() ? $("input[class='Wdate startDate']:last").val() : "";
-    var prevED = $("input[class='Wdate endDate']:last").val() ? $("input[class='Wdate endDate']:last").val() : "";
-    newTr += "</select>" +
-      "</td>" +
-      "<td width='80%' style='background: white;padding-left:15px!important;text-align: left;'>" +
-      "时间范围：<input class='Wdate startDate' value='" + prevSD + "' id='sd" + k + "' type='text' size='12' onClick=WdatePicker({errDealMode:1,readOnly:true,isShowClear:false,maxDate:'#F{$dp.$D(ed" + k + ")||\\'%y-%M-%d\\'}'})> ~ " +
-      "<input   type='text' size='12' value='" + prevED + "' id='ed" + k + "' class='Wdate endDate' onClick=WdatePicker({isShowClear:false,readOnly:true,minDate:'#F{$dp.$D(sd" + k + ")}',maxDate:'%y-%M-%d'})> <br/>" +
-      "<input type='checkbox' name='pdt_checkbox" + k + "' onclick='checkAll(this.name)' value=''>全部" +
-      "&nbsp;&nbsp;<input type='checkbox' name='pdt_checkbox" + k + "' value='3'>土建" +
-      "&nbsp;&nbsp;<input type='checkbox' name='pdt_checkbox" + k + "' value='2'>钢筋" +
-      "&nbsp;&nbsp;<input type='checkbox' name='pdt_checkbox" + k + "' value='5'>安装" +
-      "</td>" +
-      "<td width='6%'  style='padding-left:15px!important;'>" +
-      "<input type='button' onclick='cdndelete(this)' class='fdd el-button el-button--primary' value='删除'/>" +
-      "</td> </tr>";
-
-    //        $("#fd").html("<input type='button' onclick='cdndelete(0)'  value='删除'/>");
-    k++;
-    $("#tr_count").val(k);
-    $("#cenditionList").append(newTr);
-    $(".fdd").show();
-  });
+    $("#add").click(function() {
+    	var k=$("#tr_count").val();    	
+        var newTr = "<tr style='border:none'><td colspan='3' style='height:0px;'></td></tr>"
+                + "<tr style='line-height: 20px;padding:20px;box-shadow: 0 1px 12px 0 rgba(0,0,0,.1)' class='ctr' id='ctr"+k+"'>"
+                + "<td width='14%' style='background: white;border: 1px solid #ebeef5'>"
+                + "<select class='condition' id='condition_id"+k+"' onchange='cdnChange(this,"+k+")' style='margin:0px 10px;width:calc(100% - 20px);height: 40px;border-radius:4px;' >";        
+       for(var cn in condition){
+    	   		newTr+="<option value='"+cn+"' >"+condition[cn]+"</option>";  	   
+       }
+       			var prevSD = $("input[class='Wdate startDate']:last").val()?$("input[class='Wdate startDate']:last").val():"";
+    			var prevED = $("input[class='Wdate endDate']:last").val()?$("input[class='Wdate endDate']:last").val():"";
+                newTr+= "</select>"
+                + "</td>"
+                + "<td width='80%' style='padding-left:15px;background: white;border: 1px solid #ebeef5;text-align: left;'>" 
+                +"时间范围：<input class='Wdate startDate' value='"+prevSD+"' id='sd"+k+"' type='text' size='12' onClick=WdatePicker({errDealMode:1,readOnly:true,isShowClear:false,maxDate:'#F{$dp.$D(ed"+k+")||\\'%y-%M-%d\\'}'})> ~ "
+                      +  "<input   type='text' size='12' value='"+prevED+"' id='ed"+k+"' class='Wdate endDate' onClick=WdatePicker({isShowClear:false,readOnly:true,minDate:'#F{$dp.$D(sd"+k+")}',maxDate:'%y-%M-%d'})> <br/>"
+                      +"<input type='checkbox' name='pdt_checkbox"+k+"' onclick='checkAll(this.name)' value=''>全部"
+					+"&nbsp;&nbsp;<input type='checkbox' name='pdt_checkbox"+k+"' value='3'>土建"
+         			+"&nbsp;&nbsp;<input type='checkbox' name='pdt_checkbox"+k+"' value='2'>钢筋"
+         			+"&nbsp;&nbsp;<input type='checkbox' name='pdt_checkbox"+k+"' value='5'>安装"
+                +"</td>"
+                + "<td width='6%' style='text-align:center'>"
+                + "<input type='button' onclick='cdndelete(this)' class='fdd el-button el-button--primary' value='删除'/>"
+                + "</td> </tr>";
+                k++;
+        $("#tr_count").val(k);
+        $("#cenditionList").append(newTr);
+        $(".fdd").show();
+    }); 
 
   //开始挖掘
   $("#start").click(function () {
@@ -450,9 +443,7 @@ var cdndelete = function cdndelete(delthis) {
   if ($(".fdd").length == 1) {
     $(".fdd").hide();
   }
-
 };
-
 var cdnChange = function cdnChange(selthis, k) {
   var sc = $(selthis).val();
 
@@ -555,7 +546,7 @@ var cdnChange = function cdnChange(selthis, k) {
           addcont += "<option value='" + functionTypes[i] + "' >" + functionTypes[i] + "</option>"
         }
         addcont += "</select></div>";
-        addcont += "<div style='width:710px;float:right'>";
+        addcont += "<div style='width:710px;margin-left:355px'>";
         addcont += "<div style='float:left;width:710px;'><div style='float:left;width:236px;line-height:40px;'><input type='checkbox'  name='fun_checkbox" + k + "' onclick='unfunCheck(this.name," + k + ")' value='不限功能,0' style='float:left;margin-top:14px;' ><span style='color:orange;float:left'>不限功能</span>";
         addcont += "<div style='float:right;margin-right:10px;'><select class='funType'>" +
           "<option value='3' selected='select'>></option>" +
