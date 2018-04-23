@@ -27,8 +27,8 @@
 						<el-form-item label="注册时间：" prop="registedTime">
 						    <span>{{customerDetail.registedTime==0 ?'-':customerDetail.registedTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span>
 						</el-form-item>
-						<el-form-item label="挖掘时间：" prop="registedTime">
-						    <span>{{customerDetail.registedTime==0?'-':customerDetail.registedTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span>
+						<el-form-item label="挖掘时间：" prop="nearestDMTime">
+						    <span>{{customerDetail.nearestDMTime==0?'-':customerDetail.nearestDMTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span>
 						</el-form-item>
 						<el-form-item label="跟进结果：" prop="classId" v-if="$route.name!=='客户公海'">
 						    <el-select v-model="customerDetail.classId" placeholder="请选择跟进结果">
@@ -375,6 +375,7 @@
 		      		this.showDetialBoxCon=this.showDetialBox;
 		      		this.activeName='基本情况';
 		      		if(this.showDetialBox){
+		      			this.loading=true;
 		      			this.getCustomerDetailFun();
 		      			this.customerDetail={};
 		      		}
@@ -568,7 +569,8 @@
 		            	if(res.data.customerDetail){
 		            		this.customerDetail=res.data.customerDetail;
 		            		if(this.customerDetail.followupId==0){
-		            			this.customerDetail.followupId=1
+		            			this.customerDetail.followupId=1;
+		            			this.customerDetail.nearestDMTime=res.data.nearestDMTime;
 		            		}
 		            	}else{
 		            		this.customerDetail.registedTime=0;
@@ -579,6 +581,11 @@
 		            	}
 		            	// this.customerDetail.followupExplan=null;
 		            	// this.customerDetail.followupExplan=" ";
+		            }else{
+		            	this.$message({
+			                type: 'error',
+			                message: res.msg
+		                });
 		            }
 		        })
 	    	},
