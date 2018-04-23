@@ -28,10 +28,10 @@
               </el-table-column>
               <el-table-column prop="name" label="客户姓名" align="center" show-overflow-tooltip></el-table-column>
               <el-table-column label="注册时间" align="center" show-overflow-tooltip>
-                <template slot-scope="scope">{{ scope.row.regDate/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
+                <template slot-scope="scope">{{ showTimeNull(scope.row.regDate)==0?'-':scope.row.regDate/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
               <el-table-column label="入海时间" align="center" show-overflow-tooltip>
-                <template slot-scope="scope">{{ scope.row.enterHighSeasDate/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
+                <template slot-scope="scope">{{ showTimeNull(scope.row.enterHighSeasDate)==0?'-':scope.row.enterHighSeasDate/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
 
               <el-table-column prop="useCloudFunctionTimes" label="使用云功能次数" align="center" show-overflow-tooltip></el-table-column>
@@ -168,7 +168,7 @@ export default {
           }else{
               this.$message({
                 type: 'errow',
-                message: '认领失败!'
+                message: res.msg
               });
           }
       })
@@ -194,6 +194,12 @@ export default {
       this.customerParam.page=1;
       this.customerParam.query=this.searcKey,
       this.getCustomerList();
+    },
+    showTimeNull(time){
+        if(time<946656000000){
+            time='0'
+        }
+        return time
     }
   }
 }

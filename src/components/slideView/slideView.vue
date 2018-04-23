@@ -13,34 +13,37 @@
 						    <span>{{customerDetail.username}}</span>
 						</el-form-item>
 						<el-form-item label="姓名：" prop="customerName">
-						    <el-input v-model="customerDetail.customerName"></el-input>
+						    <el-input v-if="$route.name!=='客户公海'" v-model="customerDetail.customerName"></el-input>
+						    <span v-else>{{customerDetail.customerName}}</span>
 						</el-form-item>
 						<el-form-item label="手机号码：" prop="mobile">
-						    <el-input v-model="customerDetail.mobile"></el-input>
+						    <el-input v-if="$route.name!=='客户公海'" v-model="customerDetail.mobile"></el-input>
+						    <span v-else>{{customerDetail.mobile}}</span>
 						</el-form-item>
 						<el-form-item label="QQ号：" prop="qq">
-						    <el-input v-model="customerDetail.qq"></el-input>
+						    <el-input v-if="$route.name!=='客户公海'" v-model="customerDetail.qq"></el-input>
+						    <span v-else>{{customerDetail.qq}}</span>
 						</el-form-item>
 						<el-form-item label="注册时间：" prop="registedTime">
-						    <span>{{customerDetail.registedTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span>
+						    <span>{{customerDetail.registedTime==0 ?'-':customerDetail.registedTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span>
 						</el-form-item>
 						<el-form-item label="挖掘时间：" prop="registedTime">
-						    <span>{{customerDetail.registedTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span>
+						    <span>{{customerDetail.registedTime==0?'-':customerDetail.registedTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span>
 						</el-form-item>
-						<el-form-item label="跟进结果：" prop="classId">
+						<el-form-item label="跟进结果：" prop="classId" v-if="$route.name!=='客户公海'">
 						    <el-select v-model="customerDetail.classId" placeholder="请选择跟进结果">
 						      	<el-option v-for="item in getCustomerClass" v-if="item.classId<90" :label="item.className" :value="item.classId" ></el-option>
 						    </el-select>
 						</el-form-item>
-						<el-form-item label="拨打结果：" prop="followupId">
+						<el-form-item label="拨打结果：" prop="followupId" v-if="$route.name!=='客户公海'">
 						    <el-radio-group v-model="customerDetail.followupId">
 						      	<el-radio v-for="item in followupList" :label="item.followupId">{{item.followup}}</el-radio>
 						    </el-radio-group>
 						</el-form-item>
-						<el-form-item label="跟进说明：" prop="followupExplan">
+						<el-form-item label="跟进说明：" prop="followupExplan" v-if="$route.name!=='客户公海'">
 						    <el-input type="textarea" v-model="customerDetail.followupExplan"  :rows="4"></el-input>
 						</el-form-item>
-						<el-form-item>
+						<el-form-item v-if="$route.name!=='客户公海'">
 						    <el-button type="primary" @click="submitcustomerDetail('customerDetail')">提交</el-button>
 						    <el-button @click="resetcustomerDetail('customerDetail')">取消</el-button>
 						</el-form-item>
@@ -65,7 +68,7 @@
 								<p v-for="item in allowanceCloud">
 									<span class="width168 ellipsis" :title="item.packageServiceName">套餐：{{item.packageServiceName}}</span>
 									<span class="width70 ellipsis">状态：{{allowanceStatus[item.status]}}</span>
-									<span class="width290 ellipsis" :title="'剩余'+changeTimeDifference(item.startTime,item.endTime)+'天'">服务时间：{{item.startTime}}~{{item.endTime}}(剩余{{changeTimeDifference(item.startTime,item.endTime)}}天)</span>
+									<span class="width290 ellipsis" :title="'剩余'+changeTimeDifference(item.startTime,item.endTime)+'天'">服务时间：{{item.startTime/1000 | moment("YYYY-MM-DD")}}~{{item.endTime/1000 | moment("YYYY-MM-DD")}}(剩余{{changeTimeDifference(item.startTime,item.endTime)}}天)</span>
 								</p>
 							</div>
 						</div>
@@ -76,7 +79,7 @@
 								<p v-for="item in allowanceBim">
 									<span class="width168 ellipsis" :title="item.packageServiceName">套餐：{{item.packageServiceName}}</span>
 									<span class="width70 ellipsis">状态：{{allowanceStatus[item.status]}}</span>
-									<span class="width290 ellipsis" :title="'剩余'+changeTimeDifference(item.startTime,item.endTime)+'天'">服务时间：{{item.startTime}}~{{item.endTime}}(剩余{{changeTimeDifference(item.startTime,item.endTime)}}天)</span>
+									<span class="width290 ellipsis" :title="'剩余'+changeTimeDifference(item.startTime,item.endTime)+'天'">服务时间：{{item.startTime/1000 | moment("YYYY-MM-DD")}}~{{item.endTime/1000 | moment("YYYY-MM-DD")}}(剩余{{changeTimeDifference(item.startTime,item.endTime)}}天)</span>
 								</p>
 							</div>
 						</div>
@@ -138,7 +141,7 @@
 							</div>
 							<hr style="height:1px;border:none;border-top:1px dashed #ccc;margin:30px 0px" />
 						</div>
-				    	<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+				    	<el-form v-if="$route.name!=='客户公海'" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 				    		<el-form-item label="订单编号：" prop="name">
 							    <el-input placeholder="请输入内容" v-model="searchNum" class="input-with-select select-clear" style="width:390px;">
 							    	<i slot="append" class="el-icon-circle-close" v-show="searchNum.length>0" @click="searchNum='';"></i>
@@ -177,6 +180,7 @@
 								</div>
 							</div>
 						</div>
+						<div v-if="bottomOrderList.length<1 && $route.name=='客户公海'" style="text-align:center;line-height:100px;">暂无数据</div>
 					</div>
 			    </el-tab-pane>
 			    <el-tab-pane label="挖掘记录" name="挖掘记录">
@@ -230,102 +234,125 @@
       this.getCallList();
     },
     data() {
-      var checkMobile = (rule, value, callback) => {
-        if (!(/^1[0-9]{10}$/.test(value))) {
-          callback(new Error('请输入正确的手机号'));
-        } else {
-          callback();
-        }
-      };
-      return {
-        loading: true,
-        type: { // 客户分类结果集
-          "新客户": 1,
-          "高意向": 2,
-          "可跟进": 3,
-          "成交客户": 4,
-          "即将到期客户": -1,
-          "到期未续费": -2,
-          "无法接通": 5,
-          "无效线索": 6
-        },
-        callResult: { // 客户分类结果集
-          "0": "无",
-          "1": "接通",
-          "2": "未接",
-          "3": "关机",
-          "4": "无人接听",
-          "5": "停机",
-          "6": "空号",
-          "7": "使用其他软件",
-        },
+	      	var checkMobile = (rule, value, callback) => {
+	        	if (!(/^1[0-9]{10}$/.test(value))) {
+	          		callback(new Error('请输入正确的手机号'));
+	        	} else {
+	         	 callback();
+	        	}
+	      	};
+	      	return {
+		        loading: true,
+		        type: { // 客户分类结果集
+		          "新客户": 1,
+		          "高意向": 2,
+		          "可跟进": 3,
+		          "成交客户": 4,
+		          "即将到期客户": -1,
+		          "到期未续费": -2,
+		          "无法接通": 5,
+		          "无效线索": 6
+		        },
+		        callResult: { // 客户分类结果集
+		          "0": "无",
+		          "1": "接通",
+		          "2": "未接",
+		          "3": "关机",
+		          "4": "无人接听",
+		          "5": "停机",
+		          "6": "空号",
+		          "7": "使用其他软件",
+		        },
 
 
-        searchNum: '',
-        showDetialBoxCon: false,
-        activeName: '基本情况',
+		        searchNum: '',
+		        showDetialBoxCon: false,
+		        activeName: '基本情况',
 
 
-        getCustomerClass: [], // 客户分类跟进结果
-        followResult: [], //拨打类型
+		        getCustomerClass: [], // 客户分类跟进结果
+		        followResult: [], //拨打类型
 
 
-        // 基本情况
-        customerDetail: {},
+		        // 基本情况
+		        customerDetail: {},
 
-        // 历史跟进记录
-        followupLog: [],
-        followupList: [],
+		        // 历史跟进记录
+		        followupLog: [],
+		        followupList: [],
 
-        ruleForm: {},
-        rules: {
-          classId: [{
-            required: true,
-            message: '请选择跟进结果',
-            trigger: 'change'
-          }],
-          mobile: [{
-              required: true,
-              message: '请输入手机号',
-              trigger: 'blur'
-            },
-            {
-              validator: checkMobile,
-              trigger: 'blur'
-            },
-          ]
-        },
-        tableData: [],
-        showDetialOrder: false, //订单详情
-        topOrderList: [], //上可点击订单
-        bottomOrderList: [], //下不可点击订单
-        invoicetype: { // 发票类型 -1:不需要发票 0:普通发票 2:增值税专用发票 3:专用发票 ,
-          "-1": "不需要发票",
-          "0": "普通发票",
-          "2": "增值税专用发票",
-          "3": "专用发票 "
-        },
-        paytype: { // 支付方式，0网银 1支付宝 2银行电汇 3人工订单 4微信 ,
-          "0": "网银",
-          "1": "支付宝",
-          "2": "银行电汇",
-          "3": "人工订单",
-          "4": "微信"
-        },
-        paystatus: { // 支付状态，0 未支付。2 已支付到账, -1支付失败 -2 已取消,-3已退款 ,
-          "0": "未支付",
-          "2": "已支付到账",
-          "-1": "支付失败",
-          "-2": "已取消",
-          "-3": "已退款"
-        },
+		        ruleForm: {},
+		        rules: {
+		          classId: [{
+		            required: true,
+		            message: '请选择跟进结果',
+		            trigger: 'change'
+		          }],
+		          customerName: [{
+		            required: true,
+		            message: '请输入姓名',
+		            trigger: 'change'
+		          }],
+		          followupId: [{
+		            required: true,
+		            message: '请选择拨打结果',
+		            trigger: 'change'
+		          }],
+		          followupExplan: [{
+		            required: true,
+		            message: '请输入说明',
+		            trigger: 'change'
+		          }],
+		          mobile: [{
+		              required: true,
+		              message: '请输入手机号',
+		              trigger: 'blur'
+		            },
+		            {
+		              validator: checkMobile,
+		              trigger: 'blur'
+		            },
+		          ]
+		        },
+		        tableData: [],
+		        showDetialOrder: false, //订单详情
+		        topOrderList: [], //上可点击订单
+		        bottomOrderList: [], //下不可点击订单
+		        invoicetype: { // 发票类型 -1:不需要发票 0:普通发票 2:增值税专用发票 3:专用发票 ,
+		          "-1": "不需要发票",
+		          "0": "普通发票",
+		          "2": "增值税专用发票",
+		          "3": "专用发票 "
+		        },
+		        paytype: { // 支付方式，0网银 1支付宝 2银行电汇 3人工订单 4微信 ,
+		          "0": "网银",
+		          "1": "支付宝",
+		          "2": "银行电汇",
+		          "3": "人工订单",
+		          "4": "微信"
+		        },
+		        paystatus: { // 支付状态，0 未支付。2 已支付到账, -1支付失败 -2 已取消,-3已退款 ,
+		          "0": "未支付",
+		          "2": "已支付到账",
+		          "-1": "支付失败",
+		          "-2": "已取消",
+		          "-3": "已退款"
+		        },
+		        // 功能使用
+		        userCloudTimes:0,
+		        useBimTimes:0,
+		        customerFunctionLog1:[],
+		        customerFunctionLog2:[],
+		        totalElements1:0,
+		        totalElements2:0,
 
-		        // 套餐余量
-		        allowanceCloud:[],
-		        allowanceBim:[],
-		        allowanceStatus:{//套餐状态 0:无效 1:有效
-			        "0":"无效",
-			        "1":"有效" 
+			    // 套餐余量
+			    allowanceCloud:[],
+			    allowanceBim:[],
+			    allowanceStatus:{//套餐状态0:已过期 1:有效,2:未生效
+			        "0":"已过期",
+			        "1":"有效" ,
+			        "2":"未生效"
 			    },
 			    cstomerFunctionLogParam1:{
 				  "customerName": "",//客户通行证名
@@ -339,7 +366,7 @@
 				  "page": 1,
 				  "size": 10,
 				}
-	      	}
+	    	}
 	    },
 	    watch: {
 	    	// 监测弹窗key
@@ -349,6 +376,7 @@
 		      		this.activeName='基本情况';
 		      		if(this.showDetialBox){
 		      			this.getCustomerDetailFun();
+		      			this.customerDetail={};
 		      		}
 		      	}
 	      	},
@@ -429,12 +457,15 @@
 		    },
 		    // 提交客户详情
 		    submitcustomerDetail(formName) {
+		   //  	if(this.customerDetail.followupExplan==" "){
+					// this.customerDetail.followupExplan="";
+		   //  	}
 		        this.$refs[formName].validate((valid) => {
 		          if (valid) {
 		            	let submitCustomerDetailParam={
 						  "customerName": this.customerDetail.customerName,
 						  "customerType": this.customerDetail.classId,
-						  "followupExplan": this.customerDetail.followupExplan?this.customerDetail.followupExplan:'',
+						  "followupExplan": this.customerDetail.followupExplan,
 						  "followupId": this.customerDetail.followupId,
 						  "mobile": this.customerDetail.mobile,
 						  "qq": this.customerDetail.qq,
@@ -446,8 +477,10 @@
 					                type: 'success',
 					                message: '修改成功!'
 				                });
+				                this.$refs[formName].resetFields();
 				                this.getCustomerDetailFun();
 				                this.changeListView();
+
 				            }else{
 				            	this.$message({
 					                type: 'error',
@@ -534,11 +567,18 @@
 		            	this.loading=false;
 		            	if(res.data.customerDetail){
 		            		this.customerDetail=res.data.customerDetail;
+		            		if(this.customerDetail.followupId==0){
+		            			this.customerDetail.followupId=1
+		            		}
+		            	}else{
+		            		this.customerDetail.registedTime=0;
+		            		this.customerDetail.followupId=1;
 		            	}
 		            	if(this.followupLog){
 		            		this.followupLog=res.data.followupLog;
 		            	}
-		                
+		            	// this.customerDetail.followupExplan=null;
+		            	// this.customerDetail.followupExplan=" ";
 		            }
 		        })
 	    	},
@@ -633,8 +673,8 @@
 		            	this.loading=false;
 		            	if(res.data){
 		            		res.data.forEach(function (item) {
-		            			item.startTime = item.startTime.replace('年', '-').replace('月', '-').replace('日', '')
-								item.endTime = item.endTime.replace('年', '-').replace('月', '-').replace('日', '')
+		            			// item.startTime = item.startTime.replace('年', '-').replace('月', '-').replace('日', '')
+								// item.endTime = item.endTime.replace('年', '-').replace('月', '-').replace('日', '')
 		            			// console.log(item.packageType)
 								if(item.packageType==12){
 									vm.allowanceBim.push(item)

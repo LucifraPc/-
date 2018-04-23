@@ -7,7 +7,7 @@
               <el-checkbox-group v-model="searchAll" style="float:right;margin-left:20px;margin-top:10px">
                   <el-checkbox label="搜全部" name="searchAll" ></el-checkbox>
               </el-checkbox-group>
-              <el-input class="search-input-box"
+              <el-input @keyup.enter.native="searchBtn" class="search-input-box"
                 placeholder="请输入通行证/姓名/手机号/QQ号搜索"
                 v-model="searcKey">
                 <i slot="prefix" class="el-input__icon el-icon-circle-close" v-show="searcKey" @click="searcKey='';searchBtn()"></i>
@@ -89,18 +89,20 @@
                 <template slot-scope="scope">{{ scope.row.userName}}</template>
               </el-table-column>
               <el-table-column prop="userName" label="姓名" align="center" show-overflow-tooltip></el-table-column>
-              <el-table-column prop="mobile" label="手机号码" align="center" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="mobile" label="手机号码" align="center" show-overflow-tooltip>
+                  <template slot-scope="scope">{{ scope.row.mobile?scope.row.mobile:'-'}}</template>
+              </el-table-column>
               <el-table-column v-if="$route.name=='新客户' || $route.name=='高意向' || $route.name=='可跟进'|| $route.name=='无法接通'|| $route.name=='无效线索' " label="QQ号" align="center" show-overflow-tooltip>
-                <template slot-scope="scope">{{ scope.row.qq}}</template>
+                <template slot-scope="scope">{{ scope.row.qq?scope.row.qq:'-'}}</template>
               </el-table-column>
               <el-table-column label="注册时间" prop="registerDate" sortable="custom" align="center" show-overflow-tooltip>
-                <template slot-scope="scope">{{ scope.row.registerDate/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
+                <template slot-scope="scope">{{ showTimeNull(scope.row.registerDate)==0?'-':scope.row.registerDate/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
               <el-table-column label="成交时间"  prop="transactionTime" sortable="custom" v-if="$route.name=='成交客户' || $route.name=='即将到期客户' || $route.name=='到期未续费' " align="center" show-overflow-tooltip>
-                <template slot-scope="scope">{{ scope.row.transactionTime/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
+                <template slot-scope="scope">{{ showTimeNull(scope.row.transactionTime)==0?'-':scope.row.transactionTime/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
               <el-table-column label="到期时间"  prop="expiredTime" sortable="custom" v-if="$route.name=='成交客户' || $route.name=='即将到期客户' || $route.name=='到期未续费' " align="center" show-overflow-tooltip>
-                <template slot-scope="scope">{{ scope.row.expiredTime/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
+                <template slot-scope="scope">{{ showTimeNull(scope.row.expiredTime)/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
               <el-table-column
                   show-overflow-tooltip
@@ -126,7 +128,7 @@
                   </template>
               </el-table-column>
               <el-table-column label="最新跟进时间"  prop="lastFollowupDate" sortable="custom" align="center" show-overflow-tooltip>
-                <template slot-scope="scope">{{ scope.row.lastFollowupDate/1000 | moment("YYYY-MM-DD HH:mm:ss")  }}</template>
+                <template slot-scope="scope">{{ showTimeNull(scope.row.lastFollowupDate)==0?'-':scope.row.lastFollowupDate/1000 | moment("YYYY-MM-DD HH:mm:ss")  }}</template>
               </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
@@ -674,6 +676,12 @@ export default {
       }
       this.getCustomerList();
     },
+    showTimeNull(time){
+        if(time<946656000000){
+            time='0'
+        }
+        return time
+    }
   }
 }
 </script>
