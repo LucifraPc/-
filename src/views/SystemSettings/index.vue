@@ -109,7 +109,7 @@ export default {
               this.getSystemSettingsSaveFun(status,saveParam)
           }else{
               let saveParam ={
-                "holdCustomerTotal": parseInt(this.curtomerCount2 * 24 * 60 * 60 * 1000)
+                "expirationInterval": parseInt(this.curtomerCount2 * 24 * 60 * 60 * 1000)
               }
               this.getSystemSettingsSaveFun(status,saveParam)
           }
