@@ -95,8 +95,8 @@
               <el-table-column v-if="$route.name=='新客户' || $route.name=='高意向' || $route.name=='可跟进'|| $route.name=='无法接通'|| $route.name=='无效线索' " label="QQ号" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">{{ scope.row.qq?scope.row.qq:'-'}}</template>
               </el-table-column>
-              <el-table-column label="注册时间" prop="registerDate" sortable="custom" align="center" show-overflow-tooltip>
-                <template slot-scope="scope">{{ showTimeNull(scope.row.registerDate)==0?'-':scope.row.registerDate/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
+              <el-table-column label="注册时间" prop="registedTime" sortable="custom" align="center" show-overflow-tooltip>
+                <template slot-scope="scope">{{ showTimeNull(scope.row.registedTime)==0?'-':scope.row.registedTime/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
               <el-table-column label="成交时间"  prop="transactionTime" sortable="custom" v-if="$route.name=='成交客户' || $route.name=='即将到期客户' || $route.name=='到期未续费' " align="center" show-overflow-tooltip>
                 <template slot-scope="scope">{{ showTimeNull(scope.row.transactionTime)==0?'-':scope.row.transactionTime/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
@@ -107,13 +107,13 @@
               <el-table-column
                   show-overflow-tooltip
                   align="center"
-                  prop="serviceName"
+                  prop="service"
                   label="销售人员"
                   column-key="serviceName"
                   :filters="followResultUser"
                   filter-placement="bottom-end">
                   <template slot-scope="scope">
-                    <el-tag close-transition>{{scope.row.serviceName}}</el-tag>
+                    <el-tag close-transition>{{scope.row.service}}</el-tag>
                   </template>
               </el-table-column>
               <el-table-column
@@ -124,11 +124,11 @@
                   :filters="followResult"
                   filter-placement="bottom-end">
                   <template slot-scope="scope">
-                    <el-tag close-transition>{{callResult[scope.row.followupResult]}}</el-tag>
+                    <el-tag close-transition>{{callResult[scope.row.followupId]}}</el-tag>
                   </template>
               </el-table-column>
-              <el-table-column label="最新跟进时间"  prop="lastFollowupDate" sortable="custom" align="center" show-overflow-tooltip>
-                <template slot-scope="scope">{{ showTimeNull(scope.row.lastFollowupDate)==0?'-':scope.row.lastFollowupDate/1000 | moment("YYYY-MM-DD HH:mm:ss")  }}</template>
+              <el-table-column label="最新跟进时间"  prop="lastFollowTime" sortable="custom" align="center" show-overflow-tooltip>
+                <template slot-scope="scope">{{ showTimeNull(scope.row.lastFollowTime)==0?'-':scope.row.lastFollowTime/1000 | moment("YYYY-MM-DD HH:mm:ss")  }}</template>
               </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
