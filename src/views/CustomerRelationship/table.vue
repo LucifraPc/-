@@ -4,8 +4,8 @@
           <!-- 搜索 -->
           <el-col :span="24">
               <bread-crumb style="float:left;line-height:40px"></bread-crumb>
-              <el-input class="search-input-box"
-                placeholder="请输入通行证/姓名/手机号/QQ号搜索"
+              <el-input @keyup.enter.native="searchBtn"  class="search-input-box"
+                placeholder="请输入通行证/姓名"
                 v-model="searcKey">
                 <i slot="prefix" class="el-input__icon el-icon-circle-close" v-show="searcKey" @click="searcKey='';searchBtn()"></i>
                 <i slot="prefix" class="el-input__icon el-icon-search" @click="searchBtn"></i>
