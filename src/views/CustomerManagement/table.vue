@@ -287,14 +287,11 @@ export default {
 
       customerParam:{
         "customerClass":1,
-        "dealDateSort": 0,//成交时间排序
         "endDealDate": "",//截止成交时间
         "endExpireDate": "",//结束到期时间 
         "endFollowupDate": "",//截止跟进时间 
         "endRegisterDate": "",//截止注册时间 
-        "expireDateSort": 0,//到期时间排序
         "expired": 0,//是否查询已经过期用户 1:是 ,
-        "followupDateSort": 0,//按跟进时间排序 
         "followupResult": [],//拨打结果条件
         "isAll": "1",//是否搜全部:1部分范围搜索/2全部范围搜索
         "orders": [//排序条件,为null或长度为0表示不用排序 
