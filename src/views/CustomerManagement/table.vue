@@ -88,7 +88,7 @@
               <el-table-column label="通行证账号" align="center" show-overflow-tooltip>
                 <template slot-scope="scope">{{ scope.row.userName}}</template>
               </el-table-column>
-              <el-table-column prop="userName" label="姓名" align="center" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="customerName" label="姓名" align="center" show-overflow-tooltip></el-table-column>
               <el-table-column prop="mobile" label="手机号码" align="center" show-overflow-tooltip>
                   <template slot-scope="scope">{{ scope.row.mobile?scope.row.mobile:'-'}}</template>
               </el-table-column>
@@ -291,7 +291,6 @@ export default {
         "endExpireDate": "",//结束到期时间 
         "endFollowupDate": "",//截止跟进时间 
         "endRegisterDate": "",//截止注册时间 
-        "expired": 0,//是否查询已经过期用户 1:是 ,
         "followupResult": [],//拨打结果条件
         "isAll": "1",//是否搜全部:1部分范围搜索/2全部范围搜索
         "orders": [//排序条件,为null或长度为0表示不用排序 
@@ -302,7 +301,6 @@ export default {
         "searchCondition": "",//搜索值
         "serviceName": [],//客户专员,姓名 
         "size": 10,//每页的记录数,不指定表示不分页 ,
-        "soontoexpire": 0,//查询即将到期用户 1:是 ,
         "startDealDate": "",//起始成交时间 
         "startExpireDate": "",//开始到期时间
         "startFollowupDate": "",//起始跟进时间 
