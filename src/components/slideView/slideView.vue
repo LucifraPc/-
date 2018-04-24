@@ -64,22 +64,22 @@
 			    	<div v-loading="loading" element-loading-text="拼命加载中...">
 				    	<div class="mealAllowancebox">
 							<p class="fontW">有效云套餐  (个人)  ：({{allowanceCloud.length}})</p>
-							<div>
+							<div style="max-height:300px;overflow-y: auto;">
 								<p v-for="item in allowanceCloud">
 									<span class="width168 ellipsis" :title="item.packageServiceName">套餐：{{item.packageServiceName}}</span>
-									<span class="width70 ellipsis">状态：{{allowanceStatus[item.status]}}</span>
-									<span class="width290 ellipsis" :title="'剩余'+changeTimeDifference(item.startTime,item.endTime)+'天'">服务时间：{{item.startTime/1000 | moment("YYYY-MM-DD")}}~{{item.endTime/1000 | moment("YYYY-MM-DD")}}(剩余{{changeTimeDifference(item.startTime,item.endTime)}}天)</span>
+									<span class="width90 ellipsis">状态：{{allowanceStatus[item.status]}}</span>
+									<span class="width290 ellipsis" :title="changeTimeDifference(item.endTime)">服务时间：{{item.startTime/1000 | moment("YYYY-MM-DD")}}~{{item.endTime/1000 | moment("YYYY-MM-DD")}}<span v-if="item.status!=0">({{changeTimeDifference(item.endTime)}})</span></span>
 								</p>
 							</div>
 						</div>
 						<hr style="height:1px;border:none;border-top:1px dashed #ccc;margin:30px 0px" />
 						<div class="mealAllowancebox">
 							<p class="fontW">有效BIM套餐  (个人)  ：({{allowanceBim.length}})</p>
-							<div>
+							<div style="max-height:300px;overflow-y: auto;">
 								<p v-for="item in allowanceBim">
 									<span class="width168 ellipsis" :title="item.packageServiceName">套餐：{{item.packageServiceName}}</span>
-									<span class="width70 ellipsis">状态：{{allowanceStatus[item.status]}}</span>
-									<span class="width290 ellipsis" :title="'剩余'+changeTimeDifference(item.startTime,item.endTime)+'天'">服务时间：{{item.startTime/1000 | moment("YYYY-MM-DD")}}~{{item.endTime/1000 | moment("YYYY-MM-DD")}}(剩余{{changeTimeDifference(item.startTime,item.endTime)}}天)</span>
+									<span class="width90 ellipsis">状态：{{allowanceStatus[item.status]}}</span>
+									<span class="width290 ellipsis" :title="changeTimeDifference(item.endTime)">服务时间：{{item.startTime/1000 | moment("YYYY-MM-DD")}}~{{item.endTime/1000 | moment("YYYY-MM-DD")}}<span v-if="item.status!=0">({{changeTimeDifference(item.endTime)}})</span></span>
 								</p>
 							</div>
 						</div>
@@ -718,7 +718,7 @@
 								if(item.packageType==12){
 									vm.allowanceBim.push(item)
 								}
-								if(item.packageType==16){
+								if(item.packageType==2){
 									vm.allowanceCloud.push(item)
 								}
 							});
@@ -732,9 +732,15 @@
 		        })
 		    },
 		    // 时间差
-		    changeTimeDifference(time1,time2){
-		    	console.log(time1,time2)
-		    	return moment(time1).diff(time2, 'days');
+		    changeTimeDifference(endTime){
+		    	let now = new Date().getTime();
+		    	let days=moment(endTime).diff(now, 'days');
+		    	if(days<0){
+					days='已过期'
+		    	}else{
+		    		days=('剩余'+days+'天')
+		    	}
+		    	return days;
 		    }
 	    }
 	}
