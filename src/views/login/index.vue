@@ -152,6 +152,9 @@
 
               this.loading = false;
               if(res.msg=='success'){
+                // 当前登录的角色 MEMBER:电销人员 ，MANAGER:电销经理 ,
+                // 使用客服登录的时候客户管理列表的销售人员字段不用展示筛选列表
+                  this.$cookies.set("roleCrm", res.data.role);
                   this.$cookies.set("usernameCrm", loginForm.username);
                   if(this.automaticLogin){
                       this.$cookies.set("passwordCrm", this.loginForm.password);
