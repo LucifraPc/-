@@ -6,7 +6,7 @@
 //分页对象
 var LBSMSSendInnerTestAccountMgt = {};
 LBSMSSendInnerTestAccountMgt.pagebar = new Array();
-var basePath = window.parent.basePath
+var basePath = 'http://192.168.3.121:8084/crm/'
 // console.log(window.parent.miningId)
 $(document).ready(function () {
   // var mid = $("#mid").val();
