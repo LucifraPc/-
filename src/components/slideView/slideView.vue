@@ -32,12 +32,12 @@
 						</el-form-item>
 						<el-form-item label="跟进结果：" prop="classId" v-if="$route.name!=='客户公海'">
 						    <el-select v-model="customerDetail.classId" placeholder="请选择跟进结果">
-						      	<el-option v-for="item in getCustomerClass" v-if="item.classId<90" :label="item.className" :value="item.classId" ></el-option>
+						      	<el-option v-for="(item,i) in getCustomerClass" :key='i' v-if="item.classId<90" :label="item.className" :value="item.classId" ></el-option>
 						    </el-select>
 						</el-form-item>
 						<el-form-item label="拨打结果：" prop="followupId" v-if="$route.name!=='客户公海'">
 						    <el-radio-group v-model="customerDetail.followupId">
-						      	<el-radio v-for="item in followupList" :label="item.followupId">{{item.followup}}</el-radio>
+						      	<el-radio v-for="(item,i) in followupList" :key='i' :label="item.followupId">{{item.followup}}</el-radio>
 						    </el-radio-group>
 						</el-form-item>
 						<el-form-item label="跟进说明：" prop="followupExplan" v-if="$route.name!=='客户公海'">

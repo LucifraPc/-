@@ -16,11 +16,11 @@
       <el-date-picker value-format='yyyy-MM-dd' v-model="startDateAndEndDate" type="daterange" range-separator="至" start-placeholder="开始日期"
         end-placeholder="结束日期">
       </el-date-picker>
-      <span>跟进：</span>
+      <!-- <span>跟进：</span>
       <el-select v-model="isFollowUp" placeholder="请选择">
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
-      </el-select>
+      </el-select> -->
       <!-- <el-button type="success" style="float:right">导出Excel</el-button> -->
     </el-row>
     <el-row class="el-row-wrap">
@@ -38,14 +38,14 @@
         </el-table-column>
         <el-table-column prop="address" label="有效云套餐(个人/企业)">
           <template slot-scope="scope">
-            <!-- @click="cloudPackageDialogVisible=true;getUserPackageServices(scope.row.id,2,1,5,'有效云套餐')" -->
-            <el-button type="text" size="small">{{`${scope.row.personalBimPackageNumber}/${scope.row.enterpriseBimPackageNumber}`}}</el-button>
+            <!-- @click="cloudPackageDialogVisible=true;getUserPackageServices(scope.row.id,12,1,5,'有效BIM套餐')" -->
+            <el-button type="text" size="small">{{`${scope.row.personalCloudPackageNumber}/${scope.row.enterpriseCloudPackageNumber}`}}</el-button>
           </template>
         </el-table-column>
         <el-table-column prop="address" label="有效BIM套餐(个人/企业)">
           <template slot-scope="scope">
-            <!-- @click="cloudPackageDialogVisible=true;getUserPackageServices(scope.row.id,12,1,5,'有效BIM套餐')" -->
-            <el-button type="text" size="small">{{`${scope.row.personalCloudPackageNumber}/${scope.row.enterpriseCloudPackageNumber}`}}</el-button>
+            <!-- @click="cloudPackageDialogVisible=true;getUserPackageServices(scope.row.id,2,1,5,'有效云套餐')" -->
+            <el-button type="text" size="small">{{`${scope.row.personalBimPackageNumber}/${scope.row.enterpriseBimPackageNumber}`}}</el-button>
           </template>
         </el-table-column>
         <el-table-column prop="useCloudFunctionTimes" label="使用云功能次数">
@@ -60,12 +60,12 @@
             <el-button type="text" size="small">{{scope.row.useBimFunctionTimes}}</el-button>
           </template>
         </el-table-column>
-        <el-table-column prop="follow" label="跟进">
+        <!-- @click="followUpDialogVisible=true;getFollowUps(scope.row.username,scope.row.isFollowUp!=1)" -->
+        <!-- <el-table-column prop="follow" label="跟进">
           <template slot-scope="scope">
-            <!-- @click="followUpDialogVisible=true;getFollowUps(scope.row.username,scope.row.isFollowUp!=1)" -->
             <el-button type="text" size="small">{{scope.row.isFollowUp==2?'未跟进':'已跟进'}}</el-button>
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
       <div class="block">
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 25, 50]"
