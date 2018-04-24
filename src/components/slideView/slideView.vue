@@ -241,6 +241,20 @@
 	         	 callback();
 	        	}
 	      	};
+	      	var checkQQ = (rule, value, callback) => {
+	      		if(value!=""){
+	      			if (!(/^[1-9][0-9]{4,14}$/.test(value))) {
+		          		callback(new Error('请输入正确的qq号'));
+		        	} else {
+		         	 callback();
+		        	}
+	      		}else{
+	      			callback();
+	      		}
+	        	
+	      	};
+
+	      	
 	      	return {
 		        loading: true,
 		        type: { // 客户分类结果集
@@ -310,6 +324,12 @@
 		            },
 		            {
 		              validator: checkMobile,
+		              trigger: 'blur'
+		            },
+		          ],
+		          qq: [
+		            {
+		              validator: checkQQ,
 		              trigger: 'blur'
 		            },
 		          ]
@@ -568,9 +588,9 @@
 		            	this.loading=false;
 		            	if(res.data.customerDetail){
 		            		this.customerDetail=res.data.customerDetail;
+		            		this.customerDetail.nearestDMTime=res.data.nearestDMTime;
 		            		if(this.customerDetail.followupId==0){
 		            			this.customerDetail.followupId=1;
-		            			this.customerDetail.nearestDMTime=res.data.nearestDMTime;
 		            		}
 		            	}else{
 		            		this.customerDetail.registedTime=0;
@@ -579,6 +599,7 @@
 		            	if(this.followupLog){
 		            		this.followupLog=res.data.followupLog;
 		            	}
+
 		            	// this.customerDetail.followupExplan=null;
 		            	// this.customerDetail.followupExplan=" ";
 		            }else{
