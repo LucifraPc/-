@@ -74,7 +74,7 @@
       
 
           <!-- 表格数据 -->
-          <el-table
+          <el-table :class="{ eltablebodywrapperheight: showHeightTable }"
               v-loading="loading"
               element-loading-text="拼命加载中..."
               ref="multipleTable"
@@ -226,6 +226,7 @@ export default {
   },
   data() {
     return {
+      showHeightTable:false,
       loading:true,
 
       searcKey:'',//搜索值
@@ -348,6 +349,16 @@ export default {
         //     vthis.customerParam.expired=0;
         //     vthis.customerParam.customerClass=vthis.type[vthis.$route.name];
         // }
+        if(this.$route.name=='成交客户' || this.$route.name=='即将到期客户' || this.$route.name=='到期未续费' ){
+          this.customerParam.orders[0]={};
+          this.customerParam.orders[0].direction=1;
+          this.customerParam.orders[0].ignoreCase=false;
+          this.customerParam.orders[0].property="transactionTime";
+          this.showHeightTable=true;
+        }else{
+          this.customerParam.orders=new Array();
+          this.showHeightTable=false;
+        }
       // 初始化获取列表
       this.getCustomerList();
       // 初始化获取客户专员筛选
