@@ -9,7 +9,7 @@
     </el-row>
     <el-row class="el-row-wrap">
       <span>用户名：</span>
-      <el-input placeholder="请输入用户名" style="width:180px" v-model="username"></el-input>
+      <el-input placeholder="请输入用户名" style="width:180px" v-model="username" @keyup.enter.native='getDataMiningResult'></el-input>
       <el-button @click="getDataMiningResult()">搜索</el-button>
       <el-button @click="isFollowUp='0';username='';startDateAndEndDate=[];isFilterEnterpriseBimPackage=false,isFilterEnterpriseCloudPackage=false,getDataMiningResult()">显示全部</el-button>
       <span>注册时间：</span>

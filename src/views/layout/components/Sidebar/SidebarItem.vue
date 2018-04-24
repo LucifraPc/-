@@ -45,7 +45,7 @@
         type: Boolean,
         default: false
       },
-      curToAllocateNum: {
+      curToAllocateNum:{
         type: Number
       }
     }

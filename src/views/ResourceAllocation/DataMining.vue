@@ -16,7 +16,7 @@
       <div style="margin-top:20px">
         <div>
           <span>任务名称：</span>
-          <el-input placeholder="请输入名称" style="width:280px;" v-model="taskName">
+          <el-input placeholder="请输入名称" style="width:280px;" v-model="taskName" @keyup.enter.native='getDataMiningInfo'>
           </el-input>
           <!-- <span>发起人：</span>
           <el-input placeholder="请输入发起人" style="width:180px" v-model="addUser"> -->

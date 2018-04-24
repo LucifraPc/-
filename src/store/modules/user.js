@@ -7,7 +7,7 @@ const user = {
     name: '',
     avatar: '',
     roles: [],
-    curToAllocateNum:'',
+    curToAllocateNum:0,
   },
 
   mutations: {
