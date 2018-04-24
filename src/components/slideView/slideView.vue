@@ -50,7 +50,7 @@
 					</el-form>
 					<hr style="height:1px;border:none;border-top:1px dashed #ccc;" />
 					<div class="historyBox">
-						<p>历史跟进记录</p>
+						<p class="fontW">历史跟进记录</p>
 						<div  v-if="followupLog.length>0" style="max-height: 300px;overflow-y: auto">
 							<div  v-for="item in followupLog">
 								<p><span>{{item.followupTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span><span>{{item.classId}}</span><span>{{callResult[item.followupId]}}</span></p>
@@ -63,7 +63,7 @@
 			    <el-tab-pane label="套餐余量" name="套餐余量">
 			    	<div v-loading="loading" element-loading-text="拼命加载中...">
 				    	<div class="mealAllowancebox">
-							<p>有效云套餐  (个人)  ：({{allowanceCloud.length}})</p>
+							<p class="fontW">有效云套餐  (个人)  ：({{allowanceCloud.length}})</p>
 							<div>
 								<p v-for="item in allowanceCloud">
 									<span class="width168 ellipsis" :title="item.packageServiceName">套餐：{{item.packageServiceName}}</span>
@@ -74,7 +74,7 @@
 						</div>
 						<hr style="height:1px;border:none;border-top:1px dashed #ccc;margin:30px 0px" />
 						<div class="mealAllowancebox">
-							<p>有效BIM套餐  (个人)  ：({{allowanceBim.length}})</p>
+							<p class="fontW">有效BIM套餐  (个人)  ：({{allowanceBim.length}})</p>
 							<div>
 								<p v-for="item in allowanceBim">
 									<span class="width168 ellipsis" :title="item.packageServiceName">套餐：{{item.packageServiceName}}</span>
@@ -88,39 +88,37 @@
 			    <el-tab-pane label="功能使用" name="功能使用">
 			    	<div v-loading="loading" element-loading-text="拼命加载中...">
 				    	<div class="mealAllowancebox">
-							<p>使用云功能次数  ：{{userCloudTimes}} 次</p>
+							<p class="fontW">使用云功能次数  ：{{userCloudTimes}} 次</p>
 							<div>
 								<p v-for="(item,i) in customerFunctionLog1"><span>{{item.usingTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span><span>{{item.city}}({{item.ip}})</span><span>{{item.functionType}}</span><span>{{item.functionName}}</span></p>
 							</div>
 						</div>
 						<!-- 分页 -->
-			          	<div class="block" v-show="customerFunctionLog1.length>0" style="text-align: center;margin-top:20px;text-align:left;">
+			          	<div class="block" v-show="customerFunctionLog1.length>0" style="text-align: center;margin-top:20px;">
 				            <el-pagination
 				                @size-change="handleSizeChange1"
 				                @current-change="handleCurrentChange1"
 				                :current-page="cstomerFunctionLogParam1.page"
-				                :page-sizes="[10, 20, 50, 100]"
 				                :page-size="cstomerFunctionLogParam1.size"
-				                layout="total, sizes, prev, pager, next, jumper"
+				                layout="total, prev, pager, next"
 				                :total="totalElements1">
 				            </el-pagination>
 			          	</div>
 						<hr style="height:1px;border:none;border-top:1px dashed #ccc;margin:30px 0px" />
 						<div class="mealAllowancebox">
-							<p>使用BIM应用次数  ：{{useBimTimes}} 次</p>
+							<p class="fontW">使用BIM应用次数  ：{{useBimTimes}} 次</p>
 							<div>
 								<p v-for="(item,i) in customerFunctionLog2"><span>{{item.usingTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span><span>{{item.city}}({{item.ip}})</span><span>{{item.functionType}}</span><span>{{item.functionName}}</span></p>
 							</div>
 						</div>
 						<!-- 分页 -->
-			          	<div class="block" v-show="customerFunctionLog2.length>0" style="text-align: center;margin-top:20px;text-align:left;">
+			          	<div class="block" v-show="customerFunctionLog2.length>0" style="text-align: center;margin-top:20px;">
 				            <el-pagination
 				                @size-change="handleSizeChange2"
 				                @current-change="handleCurrentChange2"
 				                :current-page="cstomerFunctionLogParam2.page"
-				                :page-sizes="[10, 20, 50, 100]"
 				                :page-size="cstomerFunctionLogParam2.size"
-				                layout="total, sizes, prev, pager, next, jumper"
+				                layout="total, prev, pager, next"
 				                :total="totalElements2">
 				            </el-pagination>
 			          	</div>
@@ -130,7 +128,7 @@
 			    	<div v-loading="loading" element-loading-text="拼命加载中...">
 				    	<div v-show="topOrderList.length>0" v-if="$route.name=='成交客户' || $route.name=='即将到期客户' || $route.name=='到期未续费' ">
 							<div class="mealAllowancebox">
-								<p>已绑定订单：</p>
+								<p class="fontW">已绑定订单：</p>
 								<div >  
 								 <!-- topOrderList -->
 								 	<p class="floatRightBox" v-for="item in topOrderList">
@@ -173,7 +171,7 @@
 						<div v-show="bottomOrderList.length>0" v-if="$route.name=='新客户' || $route.name=='高意向' || $route.name=='可跟进'|| $route.name=='无法接通'|| $route.name=='无效线索' || $route.name=='客户公海' " >
 							<hr style="height:1px;border:none;border-top:1px dashed #ccc;margin:30px 0px" />
 							<div class="mealAllowancebox" >
-								<p>已绑定订单：</p>
+								<p class="fontW">已绑定订单：</p>
 								<div>
 									<!--bottomOrderList -->
 									<p v-for="item in bottomOrderList">订单编号：{{item.outTradeOrderId}}</p>
@@ -467,9 +465,22 @@
 		        }else if(this.activeName=='套餐余量'){
 		        	this.getCustomerPackageList();
 		        }else if(this.activeName=='功能使用'){
+		        	this.cstomerFunctionLogParam1.customerName="";
+		        	this.cstomerFunctionLogParam1.functionType=2;
+		        	this.cstomerFunctionLogParam1.page=1;
+		        	this.cstomerFunctionLogParam1.size=10;
+
+		        	this.cstomerFunctionLogParam2.customerName="";
+		        	this.cstomerFunctionLogParam2.functionType=2;
+		        	this.cstomerFunctionLogParam2.page=1;
+		        	this.cstomerFunctionLogParam2.size=10;
+
+
 		        	this.getCustomerFunCountList();
 		        	this.getCustomerFunList(this.cstomerFunctionLogParam1);
 		        	this.getCustomerFunList(this.cstomerFunctionLogParam2);
+
+
 		        }else if(this.activeName=='订单记录'){
 		        	this.getCustomerOrderList();
 		        }else if(this.activeName=='挖掘记录'){

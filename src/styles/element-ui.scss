@@ -51,6 +51,15 @@
   font-size:16px;
 }
 
-
+.el-table__body-wrapper{
+  height: calc(100vh - 404px);
+  overflow-y:auto;
+}
+.el-table::before{
+  height:0px;
+}
+.fontW{
+   font-weight: bold;
+}
 
 

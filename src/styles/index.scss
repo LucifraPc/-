@@ -151,6 +151,10 @@ a:hover {
       box-shadow: -7px 0 10px #edeff2;
       overflow: hidden;
       overflow-y: auto;
+      .el-tabs__content{
+        height: calc(100vh - 200px);
+        overflow-y: auto;
+      }
       .el-icon-close{
           font-size:22px;
           color:#000;
@@ -294,5 +298,11 @@ a:hover {
   }
   .width290{
     width:290px;
+  }
+  
+  .eltablebodywrapperheight{
+    .el-table__body-wrapper{
+        height:calc(100vh - 475px);
+    }
   }
   
