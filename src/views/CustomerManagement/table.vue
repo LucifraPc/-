@@ -565,9 +565,9 @@ export default {
       let vm = this ;
       vm.multipleSelection.forEach((item,index,arr) => {
           let obj={};
-          obj.currentStaff=item.serviceName
+          obj.currentStaff=item.service
           obj.customerPassport=item.userName
-          vm.assignedCount.push(item.serviceName)
+          vm.assignedCount.push(item.service)
           vm.assignedCountList.push(obj)
       })
 
