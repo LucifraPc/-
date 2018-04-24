@@ -25,7 +25,7 @@
               </el-table-column>
               <el-table-column prop="totalCustomer" label="客户总数">
               </el-table-column>
-              <el-table-column prop="allocatedToday" label="今日已分配数量" sortable >
+              <el-table-column prop="allocatedToday" label="今日已分配数量" sortable>
               </el-table-column>
               <el-table-column prop="allocatedLastTime" label="上次分配数量">
               </el-table-column>
@@ -100,7 +100,7 @@
           resource: '',
           desc: ''
         },
-        direction:0,
+        direction: 0,
         activeName: 'first',
         CurToAllocateNum: '',
         currentPage: 1,
@@ -151,11 +151,11 @@
         return time
       },
       tableSort(column) {
-                console.log(column)
-                column.order == "descending" ? (this.direction = 1) : (this.direction = 0);
-                this.property = column.prop ? column.prop : 'allocatedToday';
-                getAllocatedByPeopleList
-      
+        console.log(column)
+        column.order == "descending" ? (this.direction = 1) : (this.direction = 0);
+        this.property = column.prop ? column.prop : 'allocatedToday';
+        getAllocatedByPeopleList
+
       },
       handleClick(tab, event) {
         this.searchValue = '';
@@ -202,12 +202,15 @@
       getCurToAllocateNum() {
         api.getCurToAllocateNum().then(res => {
           this.CurToAllocateNum = res.data;
-          // this.$store.dispatch('setCurToAllocateNum', this.CurToAllocateNum)
+          this.$store.dispatch('setCurToAllocateNum', this.CurToAllocateNum)
         })
       },
       /*查询指定电销人员剩余可分配的人员数量*/
       getRemainConut(username, value) {
         api.getRemainConut(username).then(res => {
+          if (res.data < 0) {
+            this.$message.error(`当前时刻剩余待分配客户数为0，小于申请的数量，无法分配`);
+          }
           if (value > res.data) {
             this.$message.error(`当前时刻剩余待分配客户数为 ${res.data}，大于申请的数量，无法分配`);
           }
@@ -260,10 +263,12 @@
         if (type == 1) {
           let params = []
           this.allocationMemberData.forEach(item => {
-            params.push({
-              "allocCount": item.allocatedThisTime,
-              "username": item.username
-            })
+            if (item.allocatedThisTime) {
+              params.push({
+                "allocCount": item.allocatedThisTime,
+                "username": item.username
+              })
+            }
           })
           api.handleAllocateDateByPeople(params).then(res => {
             if (res.code == '1') {

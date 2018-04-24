@@ -137,6 +137,11 @@ export default {
             if(res.data){
               this.getCustomerClass=res.data;
               this.getCustomerItem=this.getCustomerClass;
+              this.getCustomerItem.forEach((item,i) =>{
+                if(item.classId==0){
+                  this.getCustomerItem.splice(i,1)
+                }
+              } )
             }
           } 
         })
