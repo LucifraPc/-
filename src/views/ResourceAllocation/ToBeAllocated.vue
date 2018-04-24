@@ -20,12 +20,12 @@
             <div style="text-align:right">
               <el-button type="text" @click="handleAllocateData(1)">提交分配数据</el-button>
             </div>
-            <el-table :data="allocationMemberData" style="width: 100%">
+            <el-table :data="allocationMemberData" style="width: 100%" @sort-change="tableSort">
               <el-table-column prop="username" label="员工姓名">
               </el-table-column>
               <el-table-column prop="totalCustomer" label="客户总数">
               </el-table-column>
-              <el-table-column prop="allocatedToday" label="今日已分配数量">
+              <el-table-column prop="allocatedToday" label="今日已分配数量" sortable >
               </el-table-column>
               <el-table-column prop="allocatedLastTime" label="上次分配数量">
               </el-table-column>
@@ -57,6 +57,9 @@
               <el-table-column prop="miningTaskName" label="挖掘任务名称">
               </el-table-column>
               <el-table-column prop="miningDate" label="挖掘时间">
+                <template slot-scope="scope">
+                  {{ showTimeNull(scope.row.miningDate)==0?'-':scope.row.miningDate/1000 |moment("YYYY-MM-DD HH:mm:ss") }}
+                </template>
               </el-table-column>
               <el-table-column prop="address" label="分配给">
                 <template slot-scope="scope">
@@ -97,6 +100,7 @@
           resource: '',
           desc: ''
         },
+        direction:0,
         activeName: 'first',
         CurToAllocateNum: '',
         currentPage: 1,
@@ -140,6 +144,19 @@
       }
     },
     methods: {
+      showTimeNull(time) {
+        if (time < 946656000000) {
+          time = '0'
+        }
+        return time
+      },
+      tableSort(column) {
+                console.log(column)
+                column.order == "descending" ? (this.direction = 1) : (this.direction = 0);
+                this.property = column.prop ? column.prop : 'allocatedToday';
+                getAllocatedByPeopleList
+      
+      },
       handleClick(tab, event) {
         this.searchValue = '';
         this.isResourcesByPeople = tab.label == "按人员分配";
@@ -185,7 +202,7 @@
       getCurToAllocateNum() {
         api.getCurToAllocateNum().then(res => {
           this.CurToAllocateNum = res.data;
-          this.$store.dispatch('setCurToAllocateNum',this.CurToAllocateNum)
+          this.$store.dispatch('setCurToAllocateNum', this.CurToAllocateNum)
         })
       },
       /*查询指定电销人员剩余可分配的人员数量*/
@@ -200,7 +217,7 @@
       getAllocatedByPeopleList() {
         let param = {
           "orders": [{
-            "direction": 0,
+            "direction": this.direction,
             "ignoreCase": false,
             "property": "allocatedToday"
           }],
@@ -237,7 +254,7 @@
           this.total_ = res.data.totalElements
         })
       },
-       /*提交按资源分配*/
+      /*提交按资源分配*/
       handleAllocateData(type) {
         //按人员分配
         if (type == 1) {
