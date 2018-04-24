@@ -476,7 +476,7 @@
 		        	this.cstomerFunctionLogParam2.size=10;
 
 
-		        	this.getCustomerFunCountList();
+		        	// this.getCustomerFunCountList();
 		        	this.getCustomerFunList(this.cstomerFunctionLogParam1);
 		        	this.getCustomerFunList(this.cstomerFunctionLogParam2);
 
@@ -668,11 +668,13 @@
 		            	if(cstomerFunctionLogParam.functionType==2){
 		            		this.totalElements1=res.data.totalElements;
 		            		this.customerFunctionLog1=res.data.content;
+		            		this.userCloudTimes=res.data.totalElements;
 		            		// console.log(this.customerFunctionLog1)
 		            	}
 		            	if(cstomerFunctionLogParam.functionType==12){
 		            		this.totalElements2=res.data.totalElements;
 		            		this.customerFunctionLog2=res.data.content;
+		            		this.useBimTimes=res.data.totalElements;
 		            		// console.log(this.customerFunctionLog2)
 		            	}
 		            }else{
