@@ -5,7 +5,7 @@
       <el-button size="small" round @click="backToPrevious" style="float:right;margin-top:5px">返回</el-button>
     </el-row>
     <el-row class="el-row-wrap">
-      <iframe id="mainFrame" name="mainFrame" scrolling="no" :src="src" frameborder="0" style="padding: 0px; width: 100%;height:750px"></iframe>
+      <iframe id="mainFrame" name="mainFrame" scrolling="no" :src="src" frameborder="0" style="padding: 0px; width: 100%;"></iframe>
     </el-row>
   </div>
 </template>
@@ -21,6 +21,7 @@
       return {
         miningId: '',
         src: `${process.env.BASE_API}static/dataMining/showCondition.html`
+        // src: `/static/dataMining/showCondition.html`
       }
     },
     methods: {
@@ -32,27 +33,26 @@
       setIframeHeight(id) {
         try {
           var iframe = document.getElementById(id);
+          var _iframe = iframe.contentWindow;
           if (iframe.attachEvent) {
             iframe.attachEvent("onload", function () {
-              iframe.height = iframe.contentWindow.document.documentElement.scrollHeight;
+              var _div =_iframe.document.getElementById('cenditionListWrap');
+              iframe.height = _div.currentStyle["height"];
             });
             return;
           } else {
             iframe.onload = function () {
-
-              iframe.height = iframe.contentDocument.body.scrollHeight;
-              var _iframe = document.getElementById(id).contentWindow;
-              var _div =_iframe.document.getElementById('cenditionList');
-              console.log(_div.offsetHeight);
-              console.log(window.getComputedStyle(_div).height);
-              // window.getComputedStyle(box).height
-              // console.log(iframe.contentDocument.body,'qq')
-              
+              var _div =_iframe.document.getElementById('cenditionListWrap');
+              setTimeout(() => {
+                iframe.height=getComputedStyle(_div,false)['height'];
+                console.log(getComputedStyle(_div,false)['height']);
+              }, 50);              
             };
             return;
           }
         } catch (e) {
           throw new Error('setIframeHeight Error');
+          iframe.height='750px'
         }
       }
     },
@@ -63,7 +63,7 @@
       window.mainFrame.miningId = this.$route.params.id;
       window.miningId = this.$route.params.id;
       window.basePath = process.env.BASE_API
-      // this.setIframeHeight('mainFrame')  
+      this.setIframeHeight('mainFrame')  
     }
   }
 

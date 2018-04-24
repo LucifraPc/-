@@ -212,7 +212,7 @@
             this.$message.error(`当前时刻剩余待分配客户数为0，小于申请的数量，无法分配`);
           }
           if (value > res.data) {
-            this.$message.error(`当前时刻剩余待分配客户数为 ${res.data}，大于申请的数量，无法分配`);
+            this.$message.error(`当前时刻剩余待分配客户数为 ${res.data>0?res.data:0}，大于申请的数量，无法分配`);
           }
         })
       },
