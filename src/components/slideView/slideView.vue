@@ -27,8 +27,8 @@
 						<el-form-item label="注册时间：" prop="registedTime">
 						    <span>{{customerDetail.registedTime==0 ?'-':customerDetail.registedTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span>
 						</el-form-item>
-						<el-form-item label="挖掘时间：" prop="registedTime">
-						    <span>{{customerDetail.registedTime==0?'-':customerDetail.registedTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span>
+						<el-form-item label="挖掘时间：" prop="nearestDMTime">
+						    <span>{{customerDetail.nearestDMTime==0?'-':customerDetail.nearestDMTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span>
 						</el-form-item>
 						<el-form-item label="跟进结果：" prop="classId" v-if="$route.name!=='客户公海'">
 						    <el-select v-model="customerDetail.classId" placeholder="请选择跟进结果">
@@ -241,6 +241,20 @@
 	         	 callback();
 	        	}
 	      	};
+	      	var checkQQ = (rule, value, callback) => {
+	      		if(value!=""){
+	      			if (!(/^[1-9][0-9]{4,14}$/.test(value))) {
+		          		callback(new Error('请输入正确的qq号'));
+		        	} else {
+		         	 callback();
+		        	}
+	      		}else{
+	      			callback();
+	      		}
+	        	
+	      	};
+
+	      	
 	      	return {
 		        loading: true,
 		        type: { // 客户分类结果集
@@ -312,6 +326,12 @@
 		              validator: checkMobile,
 		              trigger: 'blur'
 		            },
+		          ],
+		          qq: [
+		            {
+		              validator: checkQQ,
+		              trigger: 'blur'
+		            },
 		          ]
 		        },
 		        tableData: [],
@@ -375,6 +395,7 @@
 		      		this.showDetialBoxCon=this.showDetialBox;
 		      		this.activeName='基本情况';
 		      		if(this.showDetialBox){
+		      			this.loading=true;
 		      			this.getCustomerDetailFun();
 		      			this.customerDetail={};
 		      		}
@@ -567,8 +588,9 @@
 		            	this.loading=false;
 		            	if(res.data.customerDetail){
 		            		this.customerDetail=res.data.customerDetail;
+		            		this.customerDetail.nearestDMTime=res.data.nearestDMTime;
 		            		if(this.customerDetail.followupId==0){
-		            			this.customerDetail.followupId=1
+		            			this.customerDetail.followupId=1;
 		            		}
 		            	}else{
 		            		this.customerDetail.registedTime=0;
@@ -577,8 +599,14 @@
 		            	if(this.followupLog){
 		            		this.followupLog=res.data.followupLog;
 		            	}
+
 		            	// this.customerDetail.followupExplan=null;
 		            	// this.customerDetail.followupExplan=" ";
+		            }else{
+		            	this.$message({
+			                type: 'error',
+			                message: res.msg
+		                });
 		            }
 		        })
 	    	},
