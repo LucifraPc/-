@@ -219,8 +219,7 @@ import slideView from '../../components/slideView/slideView'
 
 
 import {getCustomerManagementList,getCustomerFollowUpResult,getCommissionerList,deleteCustomer,getCommissionerCustomerList,getCommissionerCustomerCount,getSubmitAssignment,getSubmitAssignmentAll} from '@/api/table.js'
-
-
+import * as api from "@/api/ppc";
 export default {
   components: {
     slideView
@@ -355,6 +354,8 @@ export default {
       this.getCommissionerList();
       // 初始化获取拨打结果筛选
       this.getCallList();
+      // 获取待分配资源
+      this.getCurToAllocateNum()
   },
   watch: {
     // 检测路由切换页面
@@ -388,6 +389,11 @@ export default {
     }
   },
   methods: {
+    getCurToAllocateNum() {
+        api.getCurToAllocateNum().then(res => {
+          this.$store.dispatch('setCurToAllocateNum', res.data)
+        })
+      },
     // 初始化获取客户专员筛选
     getCommissionerList(){
         let vthis=this;
