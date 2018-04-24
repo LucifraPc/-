@@ -176,7 +176,7 @@ export function getCommissionerCustomerList(params) {
 // ---客户指派  获取专员下客户数
 export function getCommissionerCustomerCount(stuff) {
   return request({
-    url: `rest/resAlloc/count/remain/${stuff}`,
+    url: `rest/resAlloc/count/total/${stuff}`,
     method: 'get'
   })
 }
