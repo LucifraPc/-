@@ -2,7 +2,7 @@
   <el-breadcrumb class="app-breadcrumb" separator="/">
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(item,index)  in levelList" :key="item.path" v-if="item.meta.title">
-        <span v-if="item.redirect==='noredirect'||index==levelList.length-1" class="no-redirect">{{item.meta.title}}</span>
+        <span v-if="item.redirect==='noredirect'||index==levelList.length-1" class="no-redirect"><span class="firstRouteClass" v-if="$route.name=='客户公海' || $route.name=='系统设置' || $route.name=='数据报表'">{{item.meta.title}}</span><span v-else>{{item.meta.title}} </span><span v-if="$route.name=='客户公海'"> / 新客户资源</span><span v-if="$route.name=='系统设置'"> / 规则设置</span><span v-if="$route.name=='数据报表'"> / 成交统计</span></span>
         <router-link v-else :to="item.redirect||item.path">{{item.meta.title}}</router-link>
       </el-breadcrumb-item>
     </transition-group>
@@ -49,5 +49,13 @@
       cursor: text;
     }
   }
+  .firstRouteClass{
+      color :#303133;
+      font-weight:bold;
+      cursor: pointer;
+  }
+  .firstRouteClass:hover{
+        color: #409EFF;
+      }
 
 </style>
