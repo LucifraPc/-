@@ -102,9 +102,13 @@
                 <template slot-scope="scope">{{ showTimeNull(scope.row.transactionTime)==0?'-':scope.row.transactionTime/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
               <el-table-column label="到期时间"  prop="expiredTime" sortable="custom" v-if="$route.name=='成交客户' || $route.name=='即将到期客户' || $route.name=='到期未续费' " align="center" show-overflow-tooltip>
-                <template slot-scope="scope">{{ showTimeNull(scope.row.expiredTime)/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
+                <template slot-scope="scope">{{ showTimeNull(scope.row.expiredTime)==0?'-':scope.row.expiredTime/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
+              </el-table-column>
+              <el-table-column prop="service" v-if="roleCrm=='MEMBER'" label="销售人员" align="center" show-overflow-tooltip>
+                <template slot-scope="scope">{{ scope.row.userName}}</template>
               </el-table-column>
               <el-table-column
+                  v-if="roleCrm=='MANAGER'"
                   show-overflow-tooltip
                   align="center"
                   prop="service"
@@ -116,6 +120,7 @@
                     <el-tag close-transition>{{scope.row.service}}</el-tag>
                   </template>
               </el-table-column>
+              
               <el-table-column
                   prop="tag"
                   label="拨打结果"
@@ -226,6 +231,7 @@ export default {
   },
   data() {
     return {
+      roleCrm:this.$cookies.get("roleCrm"),
       showHeightTable:false,
       loading:true,
 
