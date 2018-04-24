@@ -424,7 +424,7 @@ $(document).ready(function () {
         contentType: "application/json;charset=utf-8",
         data: JSON.stringify({conditions:condtitions,name:taskName}),
         success: function () {
-          window.parent.location.href = "http://"+basePath+"#/resource-allocation/data-mining";
+          window.parent.location.href = basePath+"#/resource-allocation/data-mining";
         }
       })   
     }
