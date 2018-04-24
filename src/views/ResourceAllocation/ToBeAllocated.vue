@@ -6,7 +6,7 @@
         <el-badge :value="CurToAllocateNum" class="el-row-wrap--badge">
           <bread-crumb style="float:left;line-height:40px"></bread-crumb>
         </el-badge>
-        <el-input class="search-input-box" placeholder="请输入通行证/姓名/手机号/QQ号搜索" @keyup.enter.native="isResourcesByPeople?getAllocatedByPeopleList():getAllocatedByResourceList()"
+        <el-input class="search-input-box" placeholder="请输入通行证/手机号搜索" @keyup.enter.native="isResourcesByPeople?getAllocatedByPeopleList():getAllocatedByResourceList()"
           v-show='!isResourcesByPeople' v-model="searchValue">
           <i slot="prefix" class="el-input__icon el-icon-circle-close" v-show="searchValue" @click="searchValue='';isResourcesByPeople?getAllocatedByPeopleList():getAllocatedByResourceList()"></i>
           <i slot="prefix" class="el-input__icon el-icon-search" @click="isResourcesByPeople?getAllocatedByPeopleList():getAllocatedByResourceList()"></i>
