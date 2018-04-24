@@ -6,7 +6,8 @@ const user = {
     token: getToken(),
     name: '',
     avatar: '',
-    roles: []
+    roles: [],
+    curToAllocateNum:'',
   },
 
   mutations: {
@@ -21,6 +22,9 @@ const user = {
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles
+    },
+    SET_CUR_TOAllOCATENUM: (state, curToAllocateNum)=>{
+      state.curToAllocateNum = curToAllocateNum
     }
   },
 
@@ -76,6 +80,10 @@ const user = {
         removeToken()
         resolve()
       })
+    },
+    
+    setCurToAllocateNum ({ commit }, param) {
+      commit('SET_CUR_TOAllOCATENUM', param)
     }
   }
 }

@@ -184,7 +184,8 @@
       },
       getCurToAllocateNum() {
         api.getCurToAllocateNum().then(res => {
-          this.CurToAllocateNum = res.data
+          this.CurToAllocateNum = res.data;
+          this.$store.dispatch('setCurToAllocateNum',this.CurToAllocateNum)
         })
       },
       /*查询指定电销人员剩余可分配的人员数量*/

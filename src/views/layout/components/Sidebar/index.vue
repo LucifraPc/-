@@ -3,7 +3,7 @@
     <el-menu mode="vertical" :unique-opene='true'  :default-active="$route.path" 
       :collapse="isCollapse" background-color="#000" text-color="#fff"
       active-text-color="#409EFF">
-      <sidebar-item :routes="routes"></sidebar-item>
+      <sidebar-item :routes="routes" :curToAllocateNum='curToAllocateNum'></sidebar-item>
     </el-menu>
   </scroll-bar>
 </template>
@@ -24,7 +24,7 @@
     },
     computed: {
       ...mapGetters([
-        'sidebar'
+        'sidebar','curToAllocateNum'
       ]),
       routes() {
         return this.$router.options.routes

@@ -4,7 +4,7 @@
       <span style="display:inline-block;font-size: 18px;font-weight: bold;line-height: 38px;">任务名称：{{curUserInfo.name}} 时间：{{curUserInfo.addTime}}</span>
       <el-button size="small" round @click="backToPrevious" style="float:right;margin-top:5px">返回</el-button>
     </el-row>
-    <el-row class="el-row-wrap" style='height:400px;overflow:scroll'>
+    <el-row class="el-row-wrap" style='height:350px;overflow-y:scroll'>
       <get-minconditions :isShowBack='false'></get-minconditions>
     </el-row>
     <el-row class="el-row-wrap">

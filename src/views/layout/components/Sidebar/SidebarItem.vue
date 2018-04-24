@@ -2,7 +2,8 @@
   <div class="menu-wrapper">
     <template v-for="item in routes" v-if="!item.hidden&&item.children">
 
-      <router-link v-if="item.children.length===1 && !item.children[0].children && !item.alwaysShow" :to="item.path+'/'+item.children[0].path" :key="item.children[0].name">
+      <router-link v-if="item.children.length===1 && !item.children[0].children && !item.alwaysShow" :to="item.path+'/'+item.children[0].path"
+        :key="item.children[0].name">
         <el-menu-item :index="item.path+'/'+item.children[0].path" :class="{'submenu-title-noDropdown':!isNest}">
           <svg-icon v-if="item.children[0].meta&&item.children[0].meta.icon" :icon-class="item.children[0].meta.icon"></svg-icon>
           <span v-if="item.children[0].meta&&item.children[0].meta.title">{{item.children[0].meta.title}}</span>
@@ -22,6 +23,8 @@
             <el-menu-item :index="item.path+'/'+child.path">
               <!-- <svg-icon v-if="child.meta&&child.meta.icon" :icon-class="child.meta.icon"></svg-icon> -->
               <span v-if="child.meta&&child.meta.title">{{child.meta.title}}</span>
+              <el-badge :value="curToAllocateNum" class="el-row-wrap--badge" v-if="child.meta.title=='待分配资源'" style="margin-top:10px;margin-left:5px">
+              </el-badge>
             </el-menu-item>
           </router-link>
         </template>
@@ -32,16 +35,20 @@
 </template>
 
 <script>
-export default {
-  name: 'SidebarItem',
-  props: {
-    routes: {
-      type: Array
-    },
-    isNest: {
-      type: Boolean,
-      default: false
+  export default {
+    name: 'SidebarItem',
+    props: {
+      routes: {
+        type: Array
+      },
+      isNest: {
+        type: Boolean,
+        default: false
+      },
+      curToAllocateNum: {
+        type: Number
+      }
     }
   }
-}
+
 </script>
