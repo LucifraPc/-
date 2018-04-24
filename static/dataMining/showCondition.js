@@ -183,10 +183,10 @@ $(document).ready(function () {
             var tr = $("<tr>").appendTo($("#cenditionList"));
             $("<td>").attr("width", "14%").html("功能使用情况:").appendTo(tr);
             var functionUseTimes_cont = "";
-            functionUseTimes_cont += "<div style='float:left'><select " + onlyRead + " > <option value='1'>" + result[i].dc6.ft + "</option> </select></div>";
-            functionUseTimes_cont += "<div style='width:680px;margin-left:115px'>";
-            functionUseTimes_cont += "<div style='float:left;width:670px;'><input class='Wdate startDate' value='" + result[i].dc6.st + "'  " + onlyRead + "  type='text' size='12'>" +
-              " ~ <input type='text' value='" + result[i].dc6.et + "' " + onlyRead + " size='12' class='Wdate endDate'></div> ";
+            functionUseTimes_cont += "<div style='position: absolute;top: 0;bottom: 0;margin: auto;height: 83px;'>时间范围：<input class='Wdate startDate' value='" + result[i].dc6.st + "'  " + onlyRead + "  type='text' size='12'>" +
+              " ~ <input type='text' value='" + result[i].dc6.et + "' " + onlyRead + " size='12' class='Wdate endDate'><br/>";
+            functionUseTimes_cont += "<select  style='float:left;height:40px;line-height40px;margin-top:10px;border-radius:4px'    " + onlyRead + " > <option value='1'>" + result[i].dc6.ft + "</option> </select></div>";
+            functionUseTimes_cont += "<div style='width:780px;margin-left:355px'>";
             var ftInfo = result[i].dc6.param;
             for (var j = 0; j < ftInfo.length; j++) {
               if (ftInfo[j].type == 1) {
@@ -205,9 +205,10 @@ $(document).ready(function () {
               } else {
                 pa = "";
               }
-              functionUseTimes_cont += "<div style='float:left;width:225px;'><input type='checkbox' disabled='disabled'  checked='checked' />" + ftInfo[j].fn + pa +
-                "<select " + onlyRead + " > <option value='1'>" + type + "</option> </select>" +
-                "<input type='text'  value='" + ftInfo[j].count + "' size='2' " + onlyRead + " />次</div>";
+              debugger
+              functionUseTimes_cont += "<div style='float:left;width:260px;line-height:40px'><input style='float:left; margin-top:14px' type='checkbox' disabled='disabled'  checked='checked' />" + ftInfo[j].fn + pa +
+                "<div style='float:right;margin-right:10px;'><select " + onlyRead + " > <option value='1'>" + type + "</option> </select>" +
+                "<input type='text' style='width:50px' value='" + ftInfo[j].count + "' size='2' " + onlyRead + " />次</div></div>";
             }
             functionUseTimes_cont += "</div>";
             $("<td>").attr({
