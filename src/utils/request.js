@@ -30,16 +30,16 @@ service.interceptors.response.use(
   * code为非20000是抛错 可结合自己业务进行修改
   */
     const res = response.data
-    if(res.code==102){
-          Message({
-              message: '登录已过期！',
-              type: 'error'
-          })
-          router.replace({
-              path: '/login'
-          });
+    // if(res.code==102){
+    //       Message({
+    //           message: '登录已过期！',
+    //           type: 'error'
+    //       })
+    //       router.replace({
+    //           path: '/login'
+    //       });
 
-    }
+    // }
     return response.data
     
     
