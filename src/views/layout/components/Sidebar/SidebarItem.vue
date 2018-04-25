@@ -37,6 +37,11 @@
 <script>
   export default {
     name: 'SidebarItem',
+    data() {
+      return {
+        roleCrm:this.$cookies.get("roleCrm"),
+      }
+    },
     props: {
       routes: {
         type: Array

@@ -38,7 +38,7 @@ service.interceptors.response.use(
               message: '登录已过期！',
               type: 'error'
           })
-          return Promise.reject(error)
+          // return Promise.reject(error)
     }else{
          return response.data
     }

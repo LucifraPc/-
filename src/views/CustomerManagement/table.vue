@@ -101,7 +101,10 @@
               <el-table-column label="成交时间"  prop="transactionTime" sortable="custom" v-if="$route.name=='成交客户' || $route.name=='即将到期客户' || $route.name=='到期未续费' " align="center" show-overflow-tooltip>
                 <template slot-scope="scope">{{ showTimeNull(scope.row.transactionTime)==0?'-':scope.row.transactionTime/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
-              <el-table-column label="到期时间"  prop="expiredTime" sortable="custom" v-if="$route.name=='成交客户' || $route.name=='即将到期客户' || $route.name=='到期未续费' " align="center" show-overflow-tooltip>
+              <el-table-column label="到期时间"  prop="soonToExpireTime" sortable="custom" v-if="$route.name=='成交客户' || $route.name=='即将到期客户'" align="center" show-overflow-tooltip>
+                <template slot-scope="scope">{{ showTimeNull(scope.row.soonToExpireTime)==0?'-':scope.row.soonToExpireTime/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
+              </el-table-column>
+              <el-table-column label="到期时间"  prop="expiredTime" sortable="custom" v-if="$route.name=='到期未续费' " align="center" show-overflow-tooltip>
                 <template slot-scope="scope">{{ showTimeNull(scope.row.expiredTime)==0?'-':scope.row.expiredTime/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
               <el-table-column prop="service" v-if="roleCrm=='MEMBER'" label="销售人员" align="center" show-overflow-tooltip>
