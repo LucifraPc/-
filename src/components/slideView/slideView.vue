@@ -227,6 +227,8 @@
   } from '@/api/table.js'
 
   import moment from 'moment'
+
+  let Base64 = require('js-base64').Base64;
   export default {
     props: ["showDetialBox", "passwordId"],
     created() {
@@ -546,7 +548,8 @@
 		    },
 		    // 绑定订单
 		    bindingOrders(){
-		    	let username = this.passwordId;
+
+		    	let username = Base64.encodeURI(this.passwordId);
 		    	let oid = this.searchNum;
 		    	if(username!='' && oid!=''){
 		    		bindingOrdersFun(username,oid).then((res)=>{
@@ -568,7 +571,7 @@
 		    },
 		    // 解除绑定
 		    delBindOrder(oid){
-		    	let username = this.passwordId;
+		    	let username = Base64.encodeURI(this.passwordId);
 		    	delbindingOrdersFun(username,oid).then((res)=>{
 		            if(res.msg=='success'){
 		            	this.$message({
@@ -602,7 +605,8 @@
 		    },
 		    // 获取基本情况
 	    	getCustomerDetailFun(){
-	    		getCustomerDetail(this.passwordId).then((res)=>{
+	    		let username = Base64.encodeURI(this.passwordId);
+	    		getCustomerDetail(username).then((res)=>{
 		            if(res.msg=='success'){
 		            	this.loading=false;
 		            	if(res.data.customerDetail){
@@ -631,7 +635,7 @@
 	    	},
 		    // 订单记录
 		    getCustomerOrderList(){
-		    	let username = this.passwordId;
+		    	let username = Base64.encodeURI(this.passwordId);
 		    	getCustomerOrder(username).then((res)=>{
 		            if(res.msg=='success'){
 		            	this.loading=false;
@@ -649,7 +653,7 @@
 		    },
 		    // 功能使用
 		    getCustomerFunCountList(){
-		    	let username = this.passwordId;
+		    	let username = Base64.encodeURI(this.passwordId);
 		    	getCustomerFunCount(username).then((res)=>{
 		            if(res.msg=='success'){
 		            	this.loading=false;
@@ -695,7 +699,7 @@
 		    },
 		    // 挖掘记录
 		    getCustomerMiningList(){
-		    	let username = this.passwordId;
+		    	let username = Base64.encodeURI(this.passwordId);
 		    	getCustomerMining(username).then((res)=>{
 		            if(res.msg=='success'){
 		            	this.loading=false;
@@ -713,7 +717,7 @@
 		    // 套餐余量
 		    getCustomerPackageList(){
 		    	// 套餐类型：1 绑定锁套餐  2 vip套餐  5 普通套餐  6 正版套餐  7 线上套餐 8 线下套餐 9绑定锁绑定电脑并存的套餐（新11g） 11 鲁班库套餐 12 BIM应用套餐  13 材价 14 钢筋图集套餐 15 PDS云存储套餐 16个人pds应用套餐（暂时用2特殊处理）
-		    	let username = this.passwordId;
+		    	let username = Base64.encodeURI(this.passwordId);
 		    	this.allowanceBim=new Array();
 		    	this.allowanceCloud=new Array();
 		    	let vm=this;

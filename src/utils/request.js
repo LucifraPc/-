@@ -35,18 +35,9 @@ service.interceptors.response.use(
           router.replace({
               path: '/login'
           });
-          Message({
-              message: res.msg,
-              type: 'error',
-              duration: 5 * 1000
-          })
-          // return Promise.reject(error)
-    }else{
-         return response.data
+          Message.Message.error(res.msg);
     }
-    
-
-   // return response.data
+    return response.data
     
     
     // if (res.code !== 20000) {

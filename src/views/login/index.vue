@@ -96,17 +96,20 @@
     },
     created() {
         this.$cookies.get("automaticLogin")?this.automaticLogin=true:this.automaticLogin=false;
-        if(this.$cookies.get("formwhere") && this.$cookies.get("automaticLogin")){
+        this.$cookies.get("usernameCrm")?this.loginForm.username=this.$cookies.get("usernameCrm"):this.loginForm.username='';
+        this.$cookies.get("passwordCrm")?this.loginForm.password=this.$cookies.get("passwordCrm"):this.loginForm.password='';
+        
+        if(this.$cookies.get("formwhere") && this.$cookies.get("automaticLogin") && this.$cookies.get("usernameCrm") && this.$cookies.get("passwordCrm")){
             if(this.$cookies.get("formwhere")=='formLogin'){
-                this.$router.push({
-                    path: '/'
-                })
+                // this.$router.push({
+                //     path: '/'
+                // })
+                this.handleLogin()
             }
         }else{
             this.$cookies.set("passwordCrm",'');
         }
-        this.$cookies.get("usernameCrm")?this.loginForm.username=this.$cookies.get("usernameCrm"):this.loginForm.username='';
-        this.$cookies.get("passwordCrm")?this.loginForm.password=this.$cookies.get("passwordCrm"):this.loginForm.password='';
+        
 
         //阻止用户频繁点击登录
           this.handleLogin = this.debounce(this.handleLogin, 500)

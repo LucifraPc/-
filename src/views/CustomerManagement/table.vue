@@ -229,6 +229,9 @@ import slideView from '../../components/slideView/slideView'
 
 import {getCustomerManagementList,getCustomerFollowUpResult,getCommissionerList,deleteCustomer,getCommissionerCustomerList,getCommissionerCustomerCount,getSubmitAssignment,getSubmitAssignmentAll} from '@/api/table.js'
 import * as api from "@/api/ppc";
+
+let Base64 = require('js-base64').Base64;
+
 export default {
   components: {
     slideView
@@ -560,7 +563,7 @@ export default {
     },
     // 获取转走人员的客户数
     getOptionsCount(){
-        let stuff=this.fromOptionsValue;
+        let stuff=Base64.encodeURI(this.fromOptionsValue);
         getCommissionerCustomerCount(stuff).then((res)=>{
             if(res.msg=='success'){
                 if(res.data!=null){
@@ -606,7 +609,7 @@ export default {
     // 提交部分指派
     submitAssignment(){
         let forceAllocParam = this.assignedCountList;
-        let toStuff = this.assignedOptionsValue;
+        let toStuff = Base64.encodeURI(this.assignedOptionsValue);
         getSubmitAssignment(toStuff,forceAllocParam).then((res)=>{
             if(res.msg=='success'){
                 this.$message({
@@ -625,8 +628,8 @@ export default {
     },
     // 提交全部指派
     submitAssignmentAll(){
-        let fromStuff = this.fromOptionsValue;
-        let toStuff = this.gotoOptionsValue;
+        let fromStuff = Base64.encodeURI(this.fromOptionsValue);
+        let toStuff = Base64.encodeURI(this.gotoOptionsValue);
         if(this.fromOptionsCount>0){
             getSubmitAssignmentAll(fromStuff,toStuff).then((res)=>{
                 if(res.msg=='success'){
@@ -646,7 +649,7 @@ export default {
         }else{
             this.$message({
                 type: 'error',
-                message: res.msg
+                message: '此销售人员下无客户，请选择其他销售人员！'
             });
         }
         
