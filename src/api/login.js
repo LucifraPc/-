@@ -7,7 +7,13 @@ export function login(loginForm) {
     data: loginForm
   })
 }
-
+export function changePass(param) {
+  return request({
+    url: 'rest/user/passwd',
+    method: 'post',
+    data: param
+  })
+}
 export function getInfo(token) {
   return request({
     url: '/user/info',
@@ -22,3 +28,4 @@ export function logout() {
     method: 'get'
   })
 }
+
