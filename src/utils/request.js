@@ -30,21 +30,22 @@ service.interceptors.response.use(
   * code为非20000是抛错 可结合自己业务进行修改
   */
     const res = response.data
-    // if(res.code==102){
-    //       router.replace({
-    //           path: '/login'
-    //       });
-    //       Message({
-    //           message: '登录已过期！',
-    //           type: 'error'
-    //       })
-    //       // return Promise.reject(error)
-    // }else{
-    //      return response.data
-    // }
+    if(res.code==102){
+          console.log(res.msg)
+          router.replace({
+              path: '/login'
+          });
+          Message({
+              message: res.msg,
+              type: 'error'
+          })
+          // return Promise.reject(error)
+    }else{
+         return response.data
+    }
    
 
-   return response.data
+   // return response.data
     
     
     // if (res.code !== 20000) {
