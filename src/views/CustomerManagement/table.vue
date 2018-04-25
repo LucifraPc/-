@@ -108,7 +108,7 @@
                 <template slot-scope="scope">{{ showTimeNull(scope.row.expiredTime)==0?'-':scope.row.expiredTime/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
               <el-table-column prop="service" v-if="roleCrm=='MEMBER'" label="销售人员" align="center" show-overflow-tooltip>
-                <template slot-scope="scope">{{ scope.row.userName}}</template>
+                <template slot-scope="scope">{{ scope.row.service}}</template>
               </el-table-column>
               <el-table-column
                   v-if="roleCrm=='MANAGER'"
@@ -526,8 +526,8 @@ export default {
                 this.getCustomerList();
             }else{
                 this.$message({
-                  type: 'errow',
-                  message: '转入失败!'
+                  type: 'error',
+                  message: res.msg
                 });
             }
         })
@@ -646,7 +646,7 @@ export default {
         }else{
             this.$message({
                 type: 'error',
-                message: "该人员下无客户，请重新选择！"
+                message: res.msg
             });
         }
         

@@ -37,13 +37,14 @@ service.interceptors.response.use(
           });
           Message({
               message: res.msg,
-              type: 'error'
+              type: 'error',
+              duration: 5 * 1000
           })
           // return Promise.reject(error)
     }else{
          return response.data
     }
-   
+    
 
    // return response.data
     

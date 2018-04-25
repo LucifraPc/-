@@ -125,7 +125,7 @@ export default {
               }else{
                   this.$message({
                     type: 'errow',
-                    message: '设置失败!'
+                    message:res.msg
                   });
               }
           })
