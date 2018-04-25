@@ -109,6 +109,14 @@ export default {
       changeRegist(val){
           val?this.customerParam.startDate=new Date(val[0]).getTime():this.customerParam.startDate='';//起始注册时间
           val?this.customerParam.endDate=new Date(val[1]).getTime():this.customerParam.endDate='';//截止注册时间
+          if(val){
+              if(this.customerParam.startDate == this.customerParam.endDate){
+                  let startD=(val[0]+' 0:0:0');
+                  this.customerParam.startDate = new Date(startD).getTime();
+                  this.customerParam.endDate = new Date().setTime((this.customerParam.startDate/1000+24*60*60-1)*1000);
+                  // console.log(this.customerParam.startDate,this.customerParam.endDate)
+              }
+          }
           if(!val){
               this.getCustomerRepList();
           }
