@@ -142,7 +142,7 @@
 				    	<el-form v-if="$route.name!=='客户公海'" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 				    		<el-form-item label="订单编号：" prop="name">
 							    <el-input placeholder="请输入内容" v-model="searchNum" class="input-with-select select-clear" style="width:390px;">
-							    	<i slot="append" class="el-icon-circle-close" v-show="searchNum.length>0" @click="searchNum='';"></i>
+							    	<i slot="append" class="el-icon-circle-close" v-show="searchNum.length>0" @click="searchNum='';searchNumBtn(searchNum)"></i>
 								    <el-button slot="append" icon="el-icon-search" @click="searchNumBtn(searchNum)"></el-button>
 								</el-input>
 								<el-button type="primary" :disabled="!showDetialOrder" @click="bindingOrders">绑定订单</el-button>
@@ -482,6 +482,8 @@
 
 
 		        }else if(this.activeName=='订单记录'){
+		        	this.searchNum="";
+		        	this.ruleForm="";
 		        	this.getCustomerOrderList();
 		        }else if(this.activeName=='挖掘记录'){
 		        	this.getCustomerMiningList();
@@ -534,6 +536,9 @@
 		    	if(searchNum!=''){
 		    		let orderMsg=searchNum;
 		    		this.getCustomerOrderSearchNumberMsg(orderMsg);
+		    	}else{
+		    		this.ruleForm={};
+		            this.showDetialOrder=false;
 		    	}
 		    },
 		    // 绑定订单
@@ -652,7 +657,7 @@
 		            }else{
 		            	this.$message({
 			                type: 'error',
-			                message: '查询失败!'
+			                message: res.msg
 		                });
 		            }
 		        })
@@ -680,7 +685,7 @@
 		            }else{
 		            	this.$message({
 			                type: 'error',
-			                message: '查询失败!'
+			                message: res.msg
 		                });
 		            }
 		        })
@@ -697,7 +702,7 @@
 		            }else{
 		            	this.$message({
 			                type: 'error',
-			                message: '获取失败!'
+			                message: res.msg
 		                });
 		            }
 		        })

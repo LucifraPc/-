@@ -115,7 +115,8 @@
                   label="销售人员"
                   column-key="serviceName"
                   :filters="followResultUser"
-                  filter-placement="bottom-end">
+                  filter-placement="bottom-end">520.
+
                   <template slot-scope="scope">
                     <el-tag close-transition>{{scope.row.service}}</el-tag>
                   </template>
@@ -554,7 +555,7 @@ export default {
         let stuff=this.fromOptionsValue;
         getCommissionerCustomerCount(stuff).then((res)=>{
             if(res.msg=='success'){
-                if(res.data){
+                if(res.data!=null){
                     this.fromOptionsCount=res.data;
                 }
             }
@@ -577,6 +578,10 @@ export default {
     assignedAllCustomerBtn(){
       this.assignedCount=[];
       this.assignedCountList=[];
+      this.assignedOptionsValue=null;//部分指派给谁
+      this.fromOptionsValue=null;//全部转走谁的
+      this.gotoOptionsValue=null;//全部转给谁
+      this.fromOptionsCount=null;//全部转走谁的客户数
       // console.log(this.multipleSelection)
       this.qeryStaffList();
       let vm = this ;
@@ -614,21 +619,29 @@ export default {
     submitAssignmentAll(){
         let fromStuff = this.fromOptionsValue;
         let toStuff = this.gotoOptionsValue;
-        getSubmitAssignmentAll(fromStuff,toStuff).then((res)=>{
-            if(res.msg=='success'){
-                this.$message({
-                  type: 'success',
-                  message: '指派成功!'
-                });
-                this.dialogVisible=false;
-                this.getCustomerList();
-            }else{
-                this.$message({
-                  type: 'error',
-                  message: res.msg
-                });
-            }
-        })
+        if(this.fromOptionsCount>0){
+            getSubmitAssignmentAll(fromStuff,toStuff).then((res)=>{
+                if(res.msg=='success'){
+                    this.$message({
+                      type: 'success',
+                      message: '指派成功!'
+                    });
+                    this.dialogVisible=false;
+                    this.getCustomerList();
+                }else{
+                    this.$message({
+                      type: 'error',
+                      message: res.msg
+                    });
+                }
+            })
+        }else{
+            this.$message({
+                type: 'error',
+                message: "该人员下无客户，请重新选择！"
+            });
+        }
+        
     },
     // 表头筛选  专员   拨打
     filterChange(filters){

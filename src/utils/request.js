@@ -31,16 +31,18 @@ service.interceptors.response.use(
   */
     const res = response.data
     if(res.code==102){
+          router.replace({
+              path: '/login'
+          });
           Message({
               message: '登录已过期！',
               type: 'error'
           })
-          router.replace({
-              path: '/login'
-          });
-
+          return Promise.reject(error)
+    }else{
+         return response.data
     }
-    return response.data
+   
     
     
     // if (res.code !== 20000) {
