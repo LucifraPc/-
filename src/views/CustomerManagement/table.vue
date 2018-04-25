@@ -406,6 +406,11 @@ export default {
     },
     // 检测搜索全部操作
     'searchAll'(){
+        if(this.searchAll){
+            this.customerParam.isAll="2";
+        }else{
+            this.customerParam.isAll="1";
+        }
         this.getCustomerList();
     }
   },
