@@ -143,7 +143,7 @@ a:hover {
       top: 65px;
       bottom: 6px;
       background: #f5f8fc;
-      width:650px;
+      width:715px;
       position: absolute;
       bottom: 0;
       right: 0;
@@ -215,7 +215,7 @@ a:hover {
   }
   .slide-fade-enter-active {
     transition: all .3s ease;
-    width:650px;
+    width:715px;
     opacity: 1;
   }
   .slide-fade-leave-active {
@@ -288,7 +288,7 @@ a:hover {
     display:inline-block;
   }
   .width168{
-    width:168px;
+    width:180px;
   }
   .width90{
     width:90px;
@@ -297,12 +297,16 @@ a:hover {
     width:190px;
   }
   .width290{
-    width:260px;
+    width:315px;
   }
   
   .eltablebodywrapperheight{
     .el-table__body-wrapper{
         height:calc(100vh - 475px);
     }
+  }
+
+  #slide-window .mealAllowancebox span:nth-child(3n){
+    margin-right:0px;
   }
   

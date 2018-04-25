@@ -152,7 +152,7 @@
               <i class="el-icon-info" style="color:#1890FF"></i>
               <span style="color:#666;margin-left:5px">已选择 {{multipleSelection.length}} 项</span>
               <span class="operationBtn" @click="delAllCustomerBtn">批量删除</span>
-              <span class="operationBtn" @click="assignedAllCustomerBtn();dialogVisible=true;">客户指派</span>
+              <span class="operationBtn" v-if="roleCrm!='MEMBER'" @click="assignedAllCustomerBtn();dialogVisible=true;">客户指派</span>
           </div>
 
           <!-- 分页 -->

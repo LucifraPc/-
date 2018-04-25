@@ -8,7 +8,7 @@
 
 	        <el-tabs v-model="activeName" @tab-click="handleClick">
 			    <el-tab-pane label="基本情况" name="基本情况">
-			    	<el-form v-loading="loading" element-loading-text="拼命加载中..." :model="customerDetail" :rules="rules" ref="customerDetail" label-width="100px" class="demo-ruleForm">
+			    	<el-form v-loading="loading" element-loading-text="拼命加载中..." :model="customerDetail" :rules="rules" ref="customerDetail" label-width="100px" class="demo-ruleForm" style="padding-right: 20px">
 			    		<el-form-item label="通行证：" prop="username">
 						    <span>{{customerDetail.username}}</span>
 						</el-form-item>
@@ -68,7 +68,7 @@
 								<p v-for="item in allowanceCloud">
 									<span class="width168 ellipsis" :title="item.packageServiceName">套餐：{{item.packageServiceName}}</span>
 									<span class="width90 ellipsis">状态：{{allowanceStatus[item.status]}}</span>
-									<span class="width290 ellipsis" :title="changeTimeDifference(item.endTime)">服务时间：{{item.startTime/1000 | moment("YYYY-MM-DD")}}~{{item.endTime/1000 | moment("YYYY-MM-DD")}}<span v-if="item.status!=0">({{changeTimeDifference(item.endTime)}})</span></span>
+									<span class="width290 ellipsis" :title="changeTimeDifference(item.endTime)">服务时间：{{item.startTime/1000 | moment("YYYY-MM-DD")}}~{{item.endTime/1000 | moment("YYYY-MM-DD")}}<span >({{changeTimeDifference(item.endTime)}})</span></span>
 								</p>
 							</div>
 						</div>
@@ -79,7 +79,7 @@
 								<p v-for="item in allowanceBim">
 									<span class="width168 ellipsis" :title="item.packageServiceName">套餐：{{item.packageServiceName}}</span>
 									<span class="width90 ellipsis">状态：{{allowanceStatus[item.status]}}</span>
-									<span class="width290 ellipsis" :title="changeTimeDifference(item.endTime)">服务时间：{{item.startTime/1000 | moment("YYYY-MM-DD")}}~{{item.endTime/1000 | moment("YYYY-MM-DD")}}<span v-if="item.status!=0">({{changeTimeDifference(item.endTime)}})</span></span>
+									<span class="width290 ellipsis" :title="changeTimeDifference(item.endTime)">服务时间：{{item.startTime/1000 | moment("YYYY-MM-DD")}}~{{item.endTime/1000 | moment("YYYY-MM-DD")}}<span >({{changeTimeDifference(item.endTime)}})</span></span>
 								</p>
 							</div>
 						</div>
@@ -163,8 +163,10 @@
 								<el-form-item label="发票类型：" prop="invoiceType">
 								    <span>{{invoicetype[ruleForm.invoiceType]}}</span>
 								</el-form-item>
-								<el-form-item label="购买内容：" prop="content">
-								    <div style="margin-bottom:10px" v-for="item in ruleForm.content">{{item}}</div>
+								<el-form-item label="购买内容：" prop="content" >
+									<div style="padding-right:20px;max-height:300px;overflow-y: auto">
+										<span style="margin-right:10px" v-for="item in ruleForm.content">{{item}}</span>
+									</div>
 								</el-form-item>
 							</div>
 						</el-form>
@@ -471,7 +473,7 @@
 		        	this.cstomerFunctionLogParam1.size=10;
 
 		        	this.cstomerFunctionLogParam2.customerName="";
-		        	this.cstomerFunctionLogParam2.functionType=2;
+		        	this.cstomerFunctionLogParam2.functionType=12;
 		        	this.cstomerFunctionLogParam2.page=1;
 		        	this.cstomerFunctionLogParam2.size=10;
 
@@ -483,7 +485,8 @@
 
 		        }else if(this.activeName=='订单记录'){
 		        	this.searchNum="";
-		        	this.ruleForm="";
+		        	this.ruleForm={};
+		            this.showDetialOrder=false;
 		        	this.getCustomerOrderList();
 		        }else if(this.activeName=='挖掘记录'){
 		        	this.getCustomerMiningList();
