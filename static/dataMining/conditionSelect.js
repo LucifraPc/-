@@ -553,8 +553,8 @@ var cdnChange = function cdnChange(selthis, k) {
           "<option value='1'><</option>" +
           "<option value='2'>=</option>" +
           "</select>" +
-          "<input type='text' maxlength='9' class='funTimes el-input__inner' style='width:50px' />次</div></div></div>";
-        addcont += "<div id='left" + k + "' style='float:left;width:236px;line-height:40px;'></div><div id='center" + k + "' style='float:left;width:236px;line-height:40px;'></div><div id='right" + k + "' style='float:left;width:236px;line-height:40px;'></div>"
+          "<input type='text' maxlength='9' class='funTimes el-input__inner' style='width:30px' />次</div></div></div>";
+        addcont += "<div id='left" + k + "' style='float:left;width:260px;line-height:40px;margin-right:45px'></div><div id='center" + k + "' style='float:left;width:260px;line-height:40px;'></div><div id='right" + k + "' style='margin-left:550px;width:260px;line-height:40px;'></div>"
         addcont += "</div>";
         $(selthis).parent().next().html(addcont);
         var results = new Array();

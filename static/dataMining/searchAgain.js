@@ -38,7 +38,7 @@ $(document).ready(function () {
           //用户注册时间
           if (result[i].ct == 2) {
 
-            var addcont = "&nbsp;&nbsp;<select class='userRegister' onchange='usrChange(this," + k + ")'>";
+            var addcont = "<select class='userRegister' onchange='usrChange(this," + k + ")'>";
             if (result[i].dc2.type == 2) {
               addcont += "<option value='2' selected='select'>等于</option>";
             } else {
@@ -454,7 +454,7 @@ var funList = function funList(url, funUse, k, condition) {
           "</select>" +
           "<input type='text' class='funTimes' maxlength='9' style='width:30px' />次</div></div></div>";
       }
-      addcont += "<div id='left" + k + "' style='float:left;width:236px;line-height:40px'></div><div id='center" + k + "' style='float:left;width:236px;line-height:40px'></div><div id='right" + k + "' style='float:left;width:236px;line-height:40px'></div>"
+      addcont += "<div id='left" + k + "' style='float:left;width:260px;line-height:40px;margin-right:45px'></div><div id='center" + k + "' style='float:left;width:260px;line-height:40px'></div><div id='right" + k + "' style='margin-left:550px;width:260px;line-height:40px'></div>"
       addcont += "</div>";
       addLeft("functionUseTimes", k, condition, addcont);
       var results = new Array();
