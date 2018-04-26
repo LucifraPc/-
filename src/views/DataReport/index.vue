@@ -36,7 +36,7 @@
               <el-table-column label="下单时间"  align="center" show-overflow-tooltip>
                 <template slot-scope="scope">{{ scope.row.enterTime/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
-              <el-table-column prop="totalPrice" label="订单金额" width="150" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="totalPrice" label="订单金额" width="150" align="right"  show-overflow-tooltip></el-table-column>
               <el-table-column label="购买内容" width="400">
 
                 <template slot-scope="scope">
