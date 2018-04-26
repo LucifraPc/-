@@ -656,10 +656,16 @@ export default {
     },
     // 表头筛选  专员   拨打
     filterChange(filters){
-        filters.serviceName?this.customerParam.serviceName=filters.serviceName:this.customerParam.serviceName=[];
-        filters.tag?this.customerParam.followupResult=filters.tag:this.customerParam.followupResult=[];
-        console.log(this.customerParam.serviceName)
-        console.log(this.customerParam.followupResult)
+        this.customerParam.page=1;
+        // console.log(filters)
+        if(filters.serviceName){
+            this.customerParam.serviceName=filters.serviceName;
+        }
+        if(filters.tag){
+            this.customerParam.followupResult=filters.tag;
+        }
+        // console.log(this.customerParam.serviceName)
+        // console.log(this.customerParam.followupResult)
         this.getCustomerList();
     },
     // 格式化时间
