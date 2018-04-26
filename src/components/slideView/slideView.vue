@@ -622,9 +622,18 @@
 		            	this.loading=false;
 		            	if(res.data.customerDetail){
 		            		this.customerDetail=res.data.customerDetail;
-		            		this.customerDetail.nearestDMTime=res.data.nearestDMTime;
+		            		if(res.data.nearestDMTime){
+		            			this.customerDetail.nearestDMTime=res.data.nearestDMTime;
+		            		}else{
+		            			this.customerDetail.nearestDMTime=0;
+		            		}
+		            		
+		            		// alert(this.customerDetail.nearestDMTime)
 		            		if(this.customerDetail.followupId==0){
 		            			this.customerDetail.followupId=1;
+		            		}
+		            		if(this.customerDetail.classId==99 || this.customerDetail.classId==0){
+		            			this.customerDetail.classId=null;
 		            		}
 		            	}else{
 		            		this.customerDetail.registedTime=0;
