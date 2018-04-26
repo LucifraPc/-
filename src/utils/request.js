@@ -4,6 +4,8 @@ import store from '../store'
 import { getToken } from '@/utils/auth'
 import router from '../router'
 
+import Cookies from 'vue-cookies'
+
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
@@ -24,6 +26,7 @@ const service = axios.create({
 // })
 
 // respone拦截器
+let num = 0;
 service.interceptors.response.use(
   response => {
   /**
@@ -31,14 +34,19 @@ service.interceptors.response.use(
   */
     const res = response.data
     if(res.code==102){
-          console.log(res.msg)
+          num++;
+          console.log(res.msg+'aaaaaaaaaa'+num)
           router.replace({
               path: '/login'
           });
-            Message({
-                message: res.msg,
-                type: 'error'
-            })
+          Cookies.set("formwhere", "formLoginOut");
+          if(num==1){
+              Message({
+                  message: res.msg,
+                  type: 'error'
+              })
+          }
+            
     }
     return response.data
     
