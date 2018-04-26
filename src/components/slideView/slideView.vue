@@ -581,6 +581,15 @@
 			                message: '解除绑定成功!'
 		                });
 		                this.getCustomerOrderList();
+
+		                // 绑定订单无数据
+				    	getCustomerOrder(username).then((res)=>{
+				            if(res.msg=='success'){
+				            	if(res.data.length==0){
+				            		this.changeListView()
+				            	}
+				            }
+				        })
 		            }else{
 		            	this.$message({
 			                type: 'error',
