@@ -35,7 +35,10 @@ service.interceptors.response.use(
           router.replace({
               path: '/login'
           });
-          Message.Message.error(res.msg);
+            Message({
+                message: res.msg,
+                type: 'error'
+            })
     }
     return response.data
     

@@ -535,6 +535,7 @@
 		    },
 		    resetcustomerDetail(formName) {
 		        // this.$refs[formName].resetFields();
+		        this.showDetialBoxConfalse();
 		    },
 		    // 根据编号搜索订单
 		    searchNumBtn(searchNum){
@@ -559,6 +560,7 @@
 				                message: '绑定成功!'
 			                });
 			                this.getCustomerOrderList();
+			                this.changeListView();
 			            }else{
 			            	this.$message({
 				                type: 'error',

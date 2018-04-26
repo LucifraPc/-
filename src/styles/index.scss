@@ -155,6 +155,9 @@ a:hover {
         height: calc(100vh - 200px);
         overflow-y: auto;
       }
+      .el-table__body-wrapper{
+        height:auto!important;
+      }
       .el-icon-close{
           font-size:22px;
           color:#000;
