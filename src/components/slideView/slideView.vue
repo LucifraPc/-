@@ -51,9 +51,9 @@
 					<hr style="height:1px;border:none;border-top:1px dashed #ccc;" />
 					<div class="historyBox">
 						<p class="fontW">历史跟进记录</p>
-						<div  v-if="followupLog.length>0" style="max-height: 300px;overflow-y: auto">
+						<div  v-if="followupLog.length>0" style="max-height: 300px;overflow-y: auto;word-break:break-all;padding-right: 10px">
 							<div  v-for="item in followupLog">
-								<p><span>{{item.followupTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span><span>{{item.classId}}</span><span>{{callResult[item.followupId]}}</span></p>
+								<p><span>{{item.followupTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span><span>{{type[item.classId]}}</span><span>{{callResult[item.followupId]}}</span></p>
 								<p>{{item.followupExplain}}</p>
 							</div>
 						</div>
@@ -260,14 +260,14 @@
 	      	return {
 		        loading: true,
 		        type: { // 客户分类结果集
-		          "新客户": 1,
-		          "高意向": 2,
-		          "可跟进": 3,
-		          "成交客户": 4,
-		          "即将到期客户": -1,
-		          "到期未续费": -2,
-		          "无法接通": 5,
-		          "无效线索": 6
+		          "1":"新客户",
+		          "2":"高意向",
+		          "3":"可跟进",
+		          "4":"成交客户",
+		          "97":"即将到期客户",
+		          "98":"到期未续费",
+		          "5":"无法接通",
+		          "6":"无效线索"
 		        },
 		        callResult: { // 客户分类结果集
 		          "0": "无",
@@ -523,7 +523,7 @@
 				            }else{
 				            	this.$message({
 					                type: 'error',
-					                message: '修改失败!'
+					                message: res.msg
 				                });
 				            }
 				        })
@@ -657,7 +657,7 @@
 		            }else{
 		            	this.$message({
 			                type: 'error',
-			                message: '查询失败!'
+			                message: res.msg
 		                });
 		            }
 		        })
@@ -751,7 +751,7 @@
 		            }else{
 		            	this.$message({
 			                type: 'error',
-			                message: '获取失败!'
+			                message: res.msg
 		                });
 		            }
 		        })
