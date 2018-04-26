@@ -58,8 +58,6 @@ export default {
     this.getSettingsDetail('res_alloc_count_max');
     this.getSettingsDetail('datamining_expireTime');
   },
-  watch: {
-  },
   methods: {
       formatDuring(mss) {
         var days = parseInt(mss / (1000 * 60 * 60 * 24));
@@ -93,6 +91,7 @@ export default {
         this.isIndeterminate = false;
       },
       handleCheckedCitiesChange(value) {
+
         let checkedCount = value.length;
         this.checkAll = checkedCount === this.getCustomerItem.length;
         this.isIndeterminate = checkedCount > 0 && checkedCount < this.getCustomerItem.length;
@@ -141,7 +140,7 @@ export default {
                 if(item.classId==0){
                   this.getCustomerItem.splice(i,1)
                 }
-              } )
+              })
             }
           } 
         })

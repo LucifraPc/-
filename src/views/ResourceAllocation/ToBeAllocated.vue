@@ -86,6 +86,9 @@
 </template>
 <script>
   import * as api from "@/api/ppc";
+  import {
+    getCustomerClassification,getSystemSettingsDetail
+  } from '@/api/table.js'
   export default {
     data() {
       return {
@@ -134,7 +137,8 @@
           label: '北京烤鸭'
         }],
         userId: 0,
-        isResourcesByPeople: true
+        isResourcesByPeople: true,
+        hasNewCustormClass: true, //是否勾选新客户分类
       }
     },
     computed: {
@@ -183,10 +187,18 @@
         if (!reg.test(event.target.value) && event.target.value) {
           this.$message.error('请输入正确的数字！');
         }
-        if (event.target.value) {
+
+        if (event.target.value&&this.hasNewCustormClass) {
           this.getRemainConut(username, event.target.value)
         }
-
+      },
+      getSettingsDetail(key){
+          getSystemSettingsDetail(key).then((res)=>{
+              if(res.msg=='success'){
+               /* 1表示系统设置的新客户有没有勾选 */
+               res.data.calcClasses.indexOf(1)==-1?this.hasNewCustormClass=false:this.hasNewCustormClass=true                
+              }
+          })
       },
       getMembers() {
         api.getMembers().then(res => {
@@ -329,9 +341,11 @@
       }
     },
     mounted() {
+      this.getSettingsDetail('res_alloc_count_max');
       this.getAllocatedByPeopleList()
       this.getCurToAllocateNum()
-      this.getMembers()
+      this.getMembers();
+      
     }
   }
 
