@@ -129,8 +129,8 @@
         this.$refs[formName].validate(valid => {
           if (valid) {
             changePass({
-              "newPassword": md5(this.ruleForm.password),
-              "oldPassword": md5(this.ruleForm.newPassword)
+              "newPassword": md5(this.ruleForm.newPassword),
+              "oldPassword": md5(this.ruleForm.password)
             }).then(res => {
               if (res.code == 0||res.code == 102) {
                 this.$message.error(res.msg);
