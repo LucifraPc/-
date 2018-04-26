@@ -16,7 +16,7 @@
                     <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
                     <div style="margin: 15px 0;"></div>
                     <el-checkbox-group v-model="checkedItem" @change="handleCheckedCitiesChange">
-                      <el-checkbox v-for="item in getCustomerItem" :label="item.classId" :key="item.classId">{{item.className}}</el-checkbox>
+                      <el-checkbox v-for="item in getCustomerItem" v-if="item.classId!=99" :label="item.classId" :key="item.classId">{{item.className}}</el-checkbox>
                     </el-checkbox-group>
                 </el-form-item>
               </el-form>
