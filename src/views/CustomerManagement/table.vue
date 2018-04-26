@@ -598,18 +598,28 @@ export default {
       let vm = this ;
       vm.multipleSelection.forEach((item,index,arr) => {
           let obj={};
-          obj.currentStaff=item.service
-          obj.customerPassport=item.userName
-          vm.assignedCount.push(item.service)
-          vm.assignedCountList.push(obj)
+          if(item.service!=""){
+              obj.currentStaff=item.service
+              obj.customerPassport=item.userName
+              vm.assignedCount.push(item.service)
+              vm.assignedCountList.push(obj)
+          }
       })
 
       vm.assignedCount=Array.from(new Set(vm.assignedCount));
     },
     // 提交部分指派
     submitAssignment(){
+        if(!this.assignedOptionsValue){
+            this.$message({
+              type: 'error',
+              message: '请选择指派人员'
+            });
+            return false;
+        }
         let forceAllocParam = this.assignedCountList;
         let toStuff = Base64.encodeURI(this.assignedOptionsValue);
+        // console.log(forceAllocParam,toStuff)
         getSubmitAssignment(toStuff,forceAllocParam).then((res)=>{
             if(res.msg=='success'){
                 this.$message({
