@@ -19,8 +19,8 @@
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
-    <el-dialog title="修改密码" :visible.sync="changePasswordDialogVisible" size='tiny' custom-class="repeat-pass" :close-on-click-modal="false">
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+    <el-dialog title="修改密码" :visible.sync="changePasswordDialogVisible" size='tiny' class="widthDialog500" custom-class="repeat-pass" :close-on-click-modal="false">
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm"  label-position="left">
         <el-form-item label="当前密码：" prop="password">
           <el-input type="password" v-model="ruleForm.password" auto-complete="off" :minlength="6"></el-input>
         </el-form-item>
