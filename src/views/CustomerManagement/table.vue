@@ -85,10 +85,10 @@
               style="width: 100%;padding-top:10px"
               @selection-change="handleSelectionChange">
               <el-table-column type="selection" width="55" align="center"></el-table-column>
-              <el-table-column label="通行证账号" align="center" show-overflow-tooltip>
+              <el-table-column label="通行证账号" align="left" show-overflow-tooltip>
                 <template slot-scope="scope">{{ scope.row.userName}}</template>
               </el-table-column>
-              <el-table-column prop="customerName" label="姓名" align="center" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="customerName" label="姓名" align="left" show-overflow-tooltip></el-table-column>
               <el-table-column prop="mobile" label="手机号码" align="center" show-overflow-tooltip>
                   <template slot-scope="scope">{{ scope.row.mobile?scope.row.mobile:'-'}}</template>
               </el-table-column>
@@ -598,18 +598,28 @@ export default {
       let vm = this ;
       vm.multipleSelection.forEach((item,index,arr) => {
           let obj={};
-          obj.currentStaff=item.service
-          obj.customerPassport=item.userName
-          vm.assignedCount.push(item.service)
-          vm.assignedCountList.push(obj)
+          if(item.service!=""){
+              obj.currentStaff=item.service
+              obj.customerPassport=item.userName
+              vm.assignedCount.push(item.service)
+              vm.assignedCountList.push(obj)
+          }
       })
 
       vm.assignedCount=Array.from(new Set(vm.assignedCount));
     },
     // 提交部分指派
     submitAssignment(){
+        if(!this.assignedOptionsValue){
+            this.$message({
+              type: 'error',
+              message: '请选择指派人员'
+            });
+            return false;
+        }
         let forceAllocParam = this.assignedCountList;
         let toStuff = Base64.encodeURI(this.assignedOptionsValue);
+        // console.log(forceAllocParam,toStuff)
         getSubmitAssignment(toStuff,forceAllocParam).then((res)=>{
             if(res.msg=='success'){
                 this.$message({
@@ -656,10 +666,16 @@ export default {
     },
     // 表头筛选  专员   拨打
     filterChange(filters){
-        filters.serviceName?this.customerParam.serviceName=filters.serviceName:this.customerParam.serviceName=[];
-        filters.tag?this.customerParam.followupResult=filters.tag:this.customerParam.followupResult=[];
-        console.log(this.customerParam.serviceName)
-        console.log(this.customerParam.followupResult)
+        this.customerParam.page=1;
+        // console.log(filters)
+        if(filters.serviceName){
+            this.customerParam.serviceName=filters.serviceName;
+        }
+        if(filters.tag){
+            this.customerParam.followupResult=filters.tag;
+        }
+        // console.log(this.customerParam.serviceName)
+        // console.log(this.customerParam.followupResult)
         this.getCustomerList();
     },
     // 格式化时间

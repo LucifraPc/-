@@ -98,13 +98,14 @@
         this.$cookies.get("automaticLogin")?this.automaticLogin=true:this.automaticLogin=false;
         this.$cookies.get("usernameCrm")?this.loginForm.username=this.$cookies.get("usernameCrm"):this.loginForm.username='';
         this.$cookies.get("passwordCrm")?this.loginForm.password=this.$cookies.get("passwordCrm"):this.loginForm.password='';
-        
+
         if(this.$cookies.get("formwhere") && this.$cookies.get("automaticLogin") && this.$cookies.get("usernameCrm") && this.$cookies.get("passwordCrm")){
             if(this.$cookies.get("formwhere")=='formLogin'){
                 // this.$router.push({
                 //     path: '/'
                 // })
                 this.handleLogin()
+                
             }
         }else{
             this.$cookies.set("passwordCrm",'');

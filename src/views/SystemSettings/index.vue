@@ -71,7 +71,19 @@ export default {
                 // 客户总数上限设置
                   if(key=='res_alloc_count_max'){
                     this.curtomerCount1=res.data.maxCustomerCount;
+                    res.data.calcClasses.forEach((item,i) =>{
+                      if(item==0 || item==99){
+                        res.data.calcClasses.splice(i,1)
+                      }
+                    } )
                     this.checkedItem=res.data.calcClasses;
+                    if(this.checkedItem.length==6 && this.getCustomerItem.length==6){
+                        this.handleCheckedCitiesChange(this.checkedItem)
+                    }else if(this.checkedItem.length==0 && this.getCustomerItem.length==0){
+                         this.isIndeterminate = false;
+                         this.checkAll=false;
+                    }
+                    
                   }
                 // 到期时间设置
                   if(key=='datamining_expireTime'){
@@ -86,7 +98,6 @@ export default {
         this.getCustomerClass.forEach((item,index,arr) => {
             id.push(item.classId)
         })
-        // console.log(id)
         this.checkedItem = val ? id : [];
         this.isIndeterminate = false;
       },
@@ -101,6 +112,13 @@ export default {
       settingsSave(status){
         // alert(status)
           if(status=='res_alloc_count_max'){
+              if(this.checkedItem.length==0){
+                  this.$message({
+                    type: 'info',
+                    message:"请至少选择一种分类！"
+                  });
+                  return false
+              }
               let saveParam ={
                 "maxCustomerCount": this.curtomerCount1 , 
                 "calcClasses": this.checkedItem
@@ -134,13 +152,19 @@ export default {
         getCustomerClassification().then((res)=>{
           if(res.msg=='success'){
             if(res.data){
+              res.data.forEach((item,i) =>{
+                if(item.classId==0 || item.classId==99){
+                  res.data.splice(i,1)
+                }
+              } )
               this.getCustomerClass=res.data;
               this.getCustomerItem=this.getCustomerClass;
-              this.getCustomerItem.forEach((item,i) =>{
-                if(item.classId==0){
-                  this.getCustomerItem.splice(i,1)
-                }
-              })
+              if(this.checkedItem.length==6 && this.getCustomerItem.length==6){
+                  this.handleCheckedCitiesChange(this.checkedItem)
+              }else if(this.checkedItem.length==0 && this.getCustomerItem.length==0){
+                   this.isIndeterminate = false;
+                   this.checkAll=false;
+              }
             }
           } 
         })

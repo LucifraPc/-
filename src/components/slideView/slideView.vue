@@ -51,9 +51,9 @@
 					<hr style="height:1px;border:none;border-top:1px dashed #ccc;" />
 					<div class="historyBox">
 						<p class="fontW">历史跟进记录</p>
-						<div  v-if="followupLog.length>0" style="max-height: 300px;overflow-y: auto">
+						<div  v-if="followupLog.length>0" style="max-height: 300px;overflow-y: auto;word-break:break-all;padding-right: 10px">
 							<div  v-for="item in followupLog">
-								<p><span>{{item.followupTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span><span>{{item.classId}}</span><span>{{callResult[item.followupId]}}</span></p>
+								<p><span>{{item.followupTime/1000 | moment("YYYY-MM-DD HH:mm:ss")}}</span><span>{{type[item.classId]}}</span><span>{{callResult[item.followupId]}}</span></p>
 								<p>{{item.followupExplain}}</p>
 							</div>
 						</div>
@@ -68,7 +68,7 @@
 								<p v-for="item in allowanceCloud">
 									<span class="width168 ellipsis" :title="item.packageServiceName">套餐：{{item.packageServiceName}}</span>
 									<span class="width90 ellipsis">状态：{{allowanceStatus[item.status]}}</span>
-									<span class="width290 ellipsis" :title="changeTimeDifference(item.endTime)">服务时间：{{item.startTime/1000 | moment("YYYY-MM-DD")}}~{{item.endTime/1000 | moment("YYYY-MM-DD")}}<span >({{changeTimeDifference(item.endTime)}})</span></span>
+									<span class="width290 ellipsis" >服务时间：{{item.startTime/1000 | moment("YYYY-MM-DD")}}~{{item.endTime/1000 | moment("YYYY-MM-DD")}}<span v-if="item.status!=2">({{changeTimeDifference(item.endTime)}})</span><span v-if="item.status==2">(剩余{{item.serviceDay}})</span></span>
 								</p>
 							</div>
 						</div>
@@ -79,7 +79,7 @@
 								<p v-for="item in allowanceBim">
 									<span class="width168 ellipsis" :title="item.packageServiceName">套餐：{{item.packageServiceName}}</span>
 									<span class="width90 ellipsis">状态：{{allowanceStatus[item.status]}}</span>
-									<span class="width290 ellipsis" :title="changeTimeDifference(item.endTime)">服务时间：{{item.startTime/1000 | moment("YYYY-MM-DD")}}~{{item.endTime/1000 | moment("YYYY-MM-DD")}}<span >({{changeTimeDifference(item.endTime)}})</span></span>
+									<span class="width290 ellipsis">服务时间：{{item.startTime/1000 | moment("YYYY-MM-DD")}}~{{item.endTime/1000 | moment("YYYY-MM-DD")}}<span v-if="item.status!=2">({{changeTimeDifference(item.endTime)}})</span><span v-if="item.status==2">(剩余{{item.serviceDay}})</span></span>
 								</p>
 							</div>
 						</div>
@@ -260,14 +260,14 @@
 	      	return {
 		        loading: true,
 		        type: { // 客户分类结果集
-		          "新客户": 1,
-		          "高意向": 2,
-		          "可跟进": 3,
-		          "成交客户": 4,
-		          "即将到期客户": -1,
-		          "到期未续费": -2,
-		          "无法接通": 5,
-		          "无效线索": 6
+		          "1":"新客户",
+		          "2":"高意向",
+		          "3":"可跟进",
+		          "4":"成交客户",
+		          "97":"即将到期客户",
+		          "98":"到期未续费",
+		          "5":"无法接通",
+		          "6":"无效线索"
 		        },
 		        callResult: { // 客户分类结果集
 		          "0": "无",
@@ -523,7 +523,7 @@
 				            }else{
 				            	this.$message({
 					                type: 'error',
-					                message: '修改失败!'
+					                message: res.msg
 				                });
 				            }
 				        })
@@ -581,6 +581,15 @@
 			                message: '解除绑定成功!'
 		                });
 		                this.getCustomerOrderList();
+
+		                // 绑定订单无数据
+				    	getCustomerOrder(username).then((res)=>{
+				            if(res.msg=='success'){
+				            	if(res.data.length==0){
+				            		this.changeListView()
+				            	}
+				            }
+				        })
 		            }else{
 		            	this.$message({
 			                type: 'error',
@@ -613,9 +622,18 @@
 		            	this.loading=false;
 		            	if(res.data.customerDetail){
 		            		this.customerDetail=res.data.customerDetail;
-		            		this.customerDetail.nearestDMTime=res.data.nearestDMTime;
+		            		if(res.data.nearestDMTime){
+		            			this.customerDetail.nearestDMTime=res.data.nearestDMTime;
+		            		}else{
+		            			this.customerDetail.nearestDMTime=0;
+		            		}
+		            		
+		            		// alert(this.customerDetail.nearestDMTime)
 		            		if(this.customerDetail.followupId==0){
 		            			this.customerDetail.followupId=1;
+		            		}
+		            		if(this.customerDetail.classId==99 || this.customerDetail.classId==0){
+		            			this.customerDetail.classId=null;
 		            		}
 		            	}else{
 		            		this.customerDetail.registedTime=0;
@@ -648,7 +666,7 @@
 		            }else{
 		            	this.$message({
 			                type: 'error',
-			                message: '查询失败!'
+			                message: res.msg
 		                });
 		            }
 		        })
@@ -742,7 +760,7 @@
 		            }else{
 		            	this.$message({
 			                type: 'error',
-			                message: '获取失败!'
+			                message: res.msg
 		                });
 		            }
 		        })

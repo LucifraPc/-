@@ -30,14 +30,14 @@
               :data="customerData"
               tooltip-effect="dark"
               style="width: 100%">
-              <el-table-column label="客户姓名" prop="customerName"  show-overflow-tooltip></el-table-column>
-              <el-table-column prop="stuff" label="员工姓名" show-overflow-tooltip></el-table-column>
-              <el-table-column prop="outTradeId" label="订单号"  show-overflow-tooltip></el-table-column>
-              <el-table-column label="下单时间"  show-overflow-tooltip>
+              <el-table-column label="客户姓名" prop="customerName" align="left"  show-overflow-tooltip></el-table-column>
+              <el-table-column prop="stuff" label="员工姓名" align="left"  show-overflow-tooltip></el-table-column>
+              <el-table-column prop="outTradeId" label="订单号" align="center"  show-overflow-tooltip></el-table-column>
+              <el-table-column label="下单时间"  align="center" show-overflow-tooltip>
                 <template slot-scope="scope">{{ scope.row.enterTime/1000 |moment("YYYY-MM-DD HH:mm:ss") }}</template>
               </el-table-column>
-              <el-table-column prop="totalPrice" label="订单金额" width="150" show-overflow-tooltip></el-table-column>
-              <el-table-column label="购买内容" width="300">
+              <el-table-column prop="totalPrice" label="订单金额" width="150" align="right"  show-overflow-tooltip></el-table-column>
+              <el-table-column label="购买内容" width="400">
 
                 <template slot-scope="scope">
                       <div class="ellipsis" :title="scope.row.contentInner">
