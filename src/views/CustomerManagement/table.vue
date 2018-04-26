@@ -85,10 +85,10 @@
               style="width: 100%;padding-top:10px"
               @selection-change="handleSelectionChange">
               <el-table-column type="selection" width="55" align="center"></el-table-column>
-              <el-table-column label="通行证账号" align="center" show-overflow-tooltip>
+              <el-table-column label="通行证账号" align="left" show-overflow-tooltip>
                 <template slot-scope="scope">{{ scope.row.userName}}</template>
               </el-table-column>
-              <el-table-column prop="customerName" label="姓名" align="center" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="customerName" label="姓名" align="left" show-overflow-tooltip></el-table-column>
               <el-table-column prop="mobile" label="手机号码" align="center" show-overflow-tooltip>
                   <template slot-scope="scope">{{ scope.row.mobile?scope.row.mobile:'-'}}</template>
               </el-table-column>
