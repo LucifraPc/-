@@ -20,7 +20,7 @@
     data() {
       return {
         miningId: '',
-        src: global.baseHost+`static/dataMining/showCondition.html`
+        src: window.baseHost+`static/dataMining/showCondition.html`
         // src: `/static/dataMining/showCondition.html`
       }
     },

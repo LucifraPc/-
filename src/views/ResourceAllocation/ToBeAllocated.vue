@@ -3,7 +3,7 @@
     <el-row style="margin-bottom:15px;" class="el-row-wrap">
       <!-- 搜索 -->
       <el-col :span="24">
-        <el-badge :value="CurToAllocateNum" class="el-row-wrap--badge">
+        <el-badge :value="CurToAllocateNum" class="el-row-wrap--badge" v-show='CurToAllocateNum!=0'>
           <bread-crumb style="float:left;line-height:40px"></bread-crumb>
         </el-badge>
         <el-input class="search-input-box" placeholder="请输入通行证/手机号搜索" @keyup.enter.native="isResourcesByPeople?getAllocatedByPeopleList():getAllocatedByResourceList()"

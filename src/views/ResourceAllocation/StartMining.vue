@@ -11,7 +11,7 @@
   export default {
     data () {
       return {
-         src: global.baseHost+`static/dataMining/searchStart.html`
+         src: window.baseHost+`static/dataMining/searchStart.html`
       }
     },
     methods: {

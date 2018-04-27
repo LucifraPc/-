@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-var basePath = global.baseHost;
+var basePath = window.baseHost;
 var mid = window.parent.miningId
 $(document).ready(function () {
   var condition = {

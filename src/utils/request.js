@@ -24,6 +24,13 @@ const service = axios.create({
 //   console.log(error) // for debug
 //   Promise.reject(error)
 // })
+service.interceptors.request.use(function (config) {
+  config.url += '?v='+Math.random();
+  return config;
+}, function (error) {
+  return Promise.reject(error);
+});
+
 
 // respone拦截器
 let num = 0;

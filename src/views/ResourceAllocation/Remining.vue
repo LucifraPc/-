@@ -40,7 +40,7 @@
   export default {
     data() {
       return {
-         src:global.baseHost+`static/dataMining/searchAgain.html`
+         src:window.baseHost+`static/dataMining/searchAgain.html`
       }
     },
     methods: {

@@ -141,7 +141,7 @@
 						</div>
 				    	<el-form v-if="$route.name!=='客户公海'" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 				    		<el-form-item label="订单编号：" prop="name">
-							    <el-input placeholder="请输入内容" v-model="searchNum" class="input-with-select select-clear" style="width:390px;">
+							    <el-input placeholder="请输入内容" v-model="searchNum"  @blur="checkNum" class="input-with-select select-clear" style="width:390px;">
 							    	<i slot="append" class="el-icon-circle-close" v-show="searchNum.length>0" @click="searchNum='';searchNumBtn(searchNum)"></i>
 								    <el-button slot="append" icon="el-icon-search" @click="searchNumBtn(searchNum)"></el-button>
 								</el-input>
@@ -537,21 +537,42 @@
 		        // this.$refs[formName].resetFields();
 		        this.showDetialBoxConfalse();
 		    },
+		    checkNum(){
+		    	// console.log((/^\+?[0-9][0-9]*$/.test(this.searchNum)))
+		    	if(!(/^\+?[0-9][0-9]*$/.test(this.searchNum))){
+		    		this.$message({
+		                type: 'error',
+		                message: '订单号格式错误！'
+	                });
+	                return false;
+		    	}else{
+		    		return true;
+		    	}
+		    },
 		    // 根据编号搜索订单
 		    searchNumBtn(searchNum){
-		    	if(searchNum!=''){
-		    		let orderMsg=searchNum;
-		    		this.getCustomerOrderSearchNumberMsg(orderMsg);
+		    	// console.log((/^\+?[0-9][0-9]*$/.test(this.searchNum)))
+		    	if(this.checkNum()){
+		    		if(searchNum!=''){
+			    		let orderMsg=searchNum;
+			    		this.getCustomerOrderSearchNumberMsg(orderMsg);
+			    	}else{
+			    		this.ruleForm={};
+			            this.showDetialOrder=false;
+			    	}	
 		    	}else{
-		    		this.ruleForm={};
-		            this.showDetialOrder=false;
+		    		this.$message({
+		                type: 'error',
+		                message: '订单号格式错误！'
+	                });
 		    	}
+		    	
 		    },
 		    // 绑定订单
 		    bindingOrders(){
-
 		    	let username = Base64.encodeURI(this.passwordId);
 		    	let oid = this.searchNum;
+
 		    	if(username!='' && oid!=''){
 		    		bindingOrdersFun(username,oid).then((res)=>{
 			            if(res.msg=='success'){

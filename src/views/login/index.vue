@@ -100,12 +100,12 @@
         this.$cookies.get("passwordCrm")?this.loginForm.password=this.$cookies.get("passwordCrm"):this.loginForm.password='';
 
         if(this.$cookies.get("formwhere") && this.$cookies.get("automaticLogin") && this.$cookies.get("usernameCrm") && this.$cookies.get("passwordCrm")){
-            if(this.$cookies.get("formwhere")=='formLogin'){
-                // this.$router.push({
-                //     path: '/'
-                // })
-                this.handleLogin()
-                
+            let baseUrlForm = window.location.origin;
+            if(this.$cookies.get("formwhere")=='formLogin' && baseUrlForm==this.$cookies.get("formwhereUrl")){
+                let vm =this;
+                setTimeout(function(){
+                    vm.handleLogin()
+                })
             }
         }else{
             this.$cookies.set("passwordCrm",'');
@@ -164,6 +164,7 @@
                       this.$cookies.set("passwordCrm", this.loginForm.password);
                       this.$cookies.set("automaticLogin", this.automaticLogin);
                       this.$cookies.set("formwhere", "formLogin");
+                      this.$cookies.set("formwhereUrl", window.location.origin);
                   }else{
                       this.$cookies.set("automaticLogin","");
                   }
@@ -172,7 +173,7 @@
                     type: 'success'
                   })
                   this.$router.push({
-                      path: '/'
+                      path: '/customer-management'
                   })
               }else{
                   this.$message({

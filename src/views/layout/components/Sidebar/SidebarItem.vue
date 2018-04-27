@@ -22,7 +22,7 @@
             <el-menu-item :index="item.path+'/'+child.path">
               <!-- <svg-icon v-if="child.meta&&child.meta.icon" :icon-class="child.meta.icon"></svg-icon> -->
               <span v-if="child.meta&&child.meta.title">{{child.meta.title}}</span>
-              <el-badge :value="curToAllocateNum" class="el-row-wrap--badge" v-if="child.meta.title=='待分配资源'" style="margin-top:10px;margin-left:5px">
+              <el-badge :value="curToAllocateNum" class="el-row-wrap--badge" v-if="child.meta.title=='待分配资源'&&curToAllocateNum!=0" style="margin-top:10px;margin-left:5px">
               </el-badge>
             </el-menu-item>
           </router-link>

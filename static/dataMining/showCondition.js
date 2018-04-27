@@ -6,7 +6,7 @@
 //分页对象
 var LBSMSSendInnerTestAccountMgt = {};
 LBSMSSendInnerTestAccountMgt.pagebar = new Array();
-var basePath = global.baseHost;
+var basePath = window.baseHost;
 // console.log(window.parent.miningId)
 $(document).ready(function () {
   // var mid = $("#mid").val();

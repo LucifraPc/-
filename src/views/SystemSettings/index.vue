@@ -29,7 +29,7 @@
               </div>
               <el-form  label-width="140px">
                 <el-form-item label="即将到期时间：" class="label-top">
-                    <p>最近一个套餐到期时间与当前时间的差，小于<el-input v-model="curtomerCount2" style="width:100px;margin:0px 10px"></el-input>天时，算作到期客户以天为最小单位计算，每天凌晨2：00批处理，也保存后，第二天生效</p>
+                    <p>最近一个套餐到期时间与当前时间的差，小于<el-input v-model="curtomerCount2" style="width:100px;margin:0px 10px"></el-input>天时，算作即将到期客户，以天为最小单位计算，每天凌晨2：00批处理，也保存后，第二天生效</p>
                 </el-form-item>
               </el-form>
           </el-card>

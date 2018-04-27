@@ -409,6 +409,7 @@ export default {
     },
     // 检测搜索全部操作
     'searchAll'(){
+        this.customerParam.searchCondition=this.searcKey;
         if(this.searchAll){
             this.customerParam.isAll="2";
         }else{
