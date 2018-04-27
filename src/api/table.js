@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// let base = global.baseHost;
+let base = global.baseHost;
 // import axios from 'axios'
 
 // ------客户管理------
@@ -8,7 +8,7 @@ import request from '@/utils/request'
 // ---客户列表
 export function getCustomerManagementList(params) {
   return request({
-    url: 'rest/customer/list',
+    url: base+'rest/customer/list',
     method: 'post',
     data: params
   })
@@ -18,7 +18,7 @@ export function getCustomerManagementList(params) {
 // ---获取客户分类
 export function getCustomerClassification(params) {
   return request({
-    url: 'rest/customer/classes',
+    url: base+'rest/customer/classes',
     method: 'get',
     params
   })
@@ -28,7 +28,7 @@ export function getCustomerClassification(params) {
 
 export function getCustomerDetail(passwordId) {
   return request({
-    url: `rest/customer/detail/followup/${passwordId}`,
+    url: base+`rest/customer/detail/followup/${passwordId}`,
     method: 'get',
   })
 }
@@ -37,7 +37,7 @@ export function getCustomerDetail(passwordId) {
 // ---获取客户详情--基本情况--提交客户跟进详情
 export function getCustomerDetailSubmint(params) {
   return request({
-    url: `rest/customer/detail/followup`,
+    url: base+`rest/customer/detail/followup`,
     method: 'post',
     data:params
   })
@@ -47,7 +47,7 @@ export function getCustomerDetailSubmint(params) {
 // ---获取客户详情--查询套餐余量
 export function getCustomerPackage(username) {
   return request({
-    url:`rest/customer/detail/comboMargin/${username}`,
+    url: base+`rest/customer/detail/comboMargin/${username}`,
     method: 'get',
   })
 }
@@ -56,7 +56,7 @@ export function getCustomerPackage(username) {
 // ---获取客户详情--分页查询指定客户的功能使用日志
 export function getCustomerFun(params) {
   return request({
-    url: 'rest/customer/function',
+    url: base+'rest/customer/function',
     method: 'post',
     data:params
   })
@@ -65,7 +65,7 @@ export function getCustomerFun(params) {
 // ---获取客户详情--查询功能使用次数
 export function getCustomerFunCount(username) {
   return request({
-    url: `rest/customer/detail/useTime/${username}`,
+    url: base+`rest/customer/detail/useTime/${username}`,
     method: 'get',
   })
 }
@@ -75,7 +75,7 @@ export function getCustomerFunCount(username) {
 // ---获取客户详情--客户详情订单记录
 export function getCustomerOrder(username) {
   return request({
-    url: `rest/customer/detail/orderRecord/${username}`,
+    url: base+`rest/customer/detail/orderRecord/${username}`,
     method: 'get'
   })
 }
@@ -85,7 +85,7 @@ export function getCustomerOrder(username) {
 // ---获取客户详情--订单记录--编号搜索查询订单详细信息
 export function getCustomerOrderSearchNumber(oid) {
   return request({
-    url: `rest/customer/detail/order/${oid}`,
+    url: base+`rest/customer/detail/order/${oid}`,
     method: 'get'
   })
 }
@@ -93,14 +93,14 @@ export function getCustomerOrderSearchNumber(oid) {
 // ---获取客户详情--订单记录---绑定订单到客户
 export function bindingOrdersFun(username,oid) {
   return request({
-    url: `rest/customer/detail/orderRecord/${username}/${oid}`,
+    url: base+`rest/customer/detail/orderRecord/${username}/${oid}`,
     method: 'post'
   })
 }
 // ---获取客户详情--订单记录---解除绑定订单到客户
 export function delbindingOrdersFun(username,oid) {
   return request({
-    url: `rest/customer/detail/orderRecord/${username}/${oid}`,
+    url: base+`rest/customer/detail/orderRecord/${username}/${oid}`,
     method: 'delete'
   })
 }
@@ -111,7 +111,7 @@ export function delbindingOrdersFun(username,oid) {
 // ---获取客户详情--客户详情挖掘记录
 export function getCustomerMining(customerId) {
   return request({
-    url: `rest/customer/detail/miningRecords/${customerId}`,
+    url: base+`rest/customer/detail/miningRecords/${customerId}`,
     method: 'get'
   })
 }
@@ -125,7 +125,7 @@ export function getCustomerMining(customerId) {
 // ---查询跟进结果集 / 拨打
 export function getCustomerFollowUpResult() {
   return request({
-    url: `rest/customer/followup`,
+    url: base+`rest/customer/followup`,
     method: 'get',
   })
 }
@@ -136,7 +136,7 @@ export function getCustomerFollowUpResult() {
 // ---客户删除,批量删除接口
 export function deleteCustomer(params) {
   return request({
-    url: `/rest/highseas/list`,
+    url: base+`/rest/highseas/list`,
     method: 'put',
     data:params
   })
@@ -147,7 +147,7 @@ export function deleteCustomer(params) {
 // ---客户指派  获取销售人员查询下拉列表  客户专员
 export function getCommissionerList(customerState) {
   return request({
-    url: `rest/customer/sales/list/${customerState}`,
+    url: base+`rest/customer/sales/list/${customerState}`,
     method: 'get'
   })
 }
@@ -157,7 +157,7 @@ export function getCommissionerList(customerState) {
 // ---客户指派  客户专员手下客户量查询
 export function getCommissionerListCount(servceName) {
   return request({
-    url: `rest/customer/queryCustomeNumbers/${servceName}`,
+    url: base+`rest/customer/queryCustomeNumbers/${servceName}`,
     method: 'get',
   })
 }
@@ -167,7 +167,7 @@ export function getCommissionerListCount(servceName) {
 // ---客户指派  获取专员下所有客户
 export function getCommissionerCustomerList(params) {
   return request({
-    url: `rest/common/members`,
+    url: base+`rest/common/members`,
     method: 'post',
     data:params
   })
@@ -176,7 +176,7 @@ export function getCommissionerCustomerList(params) {
 // ---客户指派  获取专员下客户数
 export function getCommissionerCustomerCount(stuff) {
   return request({
-    url: `rest/resAlloc/count/total/${stuff}`,
+    url: base+`rest/resAlloc/count/total/${stuff}`,
     method: 'get'
   })
 }
@@ -185,7 +185,7 @@ export function getCommissionerCustomerCount(stuff) {
 
 export function getSubmitAssignment(toStuff,params) {
   return request({
-    url: `rest/resAlloc/submit/force/${toStuff}`,
+    url: base+`rest/resAlloc/submit/force/${toStuff}`,
     method: 'post',
     data:params
   })
@@ -194,7 +194,7 @@ export function getSubmitAssignment(toStuff,params) {
 //提交全部指派操作，返回指派成功的数量
 export function getSubmitAssignmentAll(fromStuff,toStuff) {
   return request({
-    url: `rest/resAlloc/submit/forceAll/${fromStuff}/${toStuff}`,
+    url: base+`rest/resAlloc/submit/forceAll/${fromStuff}/${toStuff}`,
     method: 'post'
   })
 }
@@ -218,7 +218,7 @@ export function getSubmitAssignmentAll(fromStuff,toStuff) {
 // ---列表获取
 export function getCustomerPublicList(params) {
   return request({
-    url: `rest/highseas/list`,
+    url: base+`rest/highseas/list`,
     method: 'post',
     data: params
   })
@@ -227,7 +227,7 @@ export function getCustomerPublicList(params) {
 // ---客户认领 /从公海中认领指定的客户
 export function getCustomerClaim(customerPspts) {
   return request({
-    url: `rest/resAlloc/submit/self`,
+    url: base+`rest/resAlloc/submit/self`,
     method: 'post',
     data: customerPspts
   })
@@ -244,7 +244,7 @@ export function getCustomerClaim(customerPspts) {
 // ---详情获取
 export function getSystemSettingsDetail(key) {
   return request({
-    url: `rest/config/${key}`,
+    url: base+`rest/config/${key}`,
     method: 'get'
   })
 }
@@ -253,7 +253,7 @@ export function getSystemSettingsDetail(key) {
 // ---设置保存
 export function getSystemSettingsSave(key,params) {
   return request({
-    url: `rest/config/${key}`,
+    url: base+`rest/config/${key}`,
     method: 'post',
     data:params
   })
@@ -268,7 +268,7 @@ export function getSystemSettingsSave(key,params) {
 // ---列表获取  查询数据报表列表
 export function getDataReportList(params) {
   return request({
-    url: `rest/datareport/list`,
+    url: base+`rest/datareport/list`,
     method: 'post',
     data:params
   })
@@ -277,7 +277,7 @@ export function getDataReportList(params) {
 // ---导出 导出数据报表
 export function getExportRemove(startTime,endTime) {
   return request({
-    url: `rest/datareport/list/export/${startTime}/${endTime}`,
+    url: base+`rest/datareport/list/export/${startTime}/${endTime}`,
     method: 'get'
   })
 }

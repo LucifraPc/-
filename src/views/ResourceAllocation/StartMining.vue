@@ -11,7 +11,7 @@
   export default {
     data () {
       return {
-         src:`${process.env.BASE_API}static/dataMining/searchStart.html`
+         src: global.baseHost+`static/dataMining/searchStart.html`
       }
     },
     methods: {

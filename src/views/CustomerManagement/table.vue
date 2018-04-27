@@ -574,7 +574,7 @@ export default {
     },
     // 获取全部人员
     qeryStaffList(){
-        let roles=[65,66];
+        let roles=['STUFF','MANAGER'];
         getCommissionerCustomerList(roles).then((res)=>{
             if(res.msg=='success'){
                 if(res.data){

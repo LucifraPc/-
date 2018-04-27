@@ -20,7 +20,7 @@
     data() {
       return {
         miningId: '',
-        src: `${process.env.BASE_API}static/dataMining/showCondition.html`
+        src: global.baseHost+`static/dataMining/showCondition.html`
         // src: `/static/dataMining/showCondition.html`
       }
     },

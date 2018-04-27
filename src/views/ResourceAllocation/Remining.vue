@@ -40,7 +40,7 @@
   export default {
     data() {
       return {
-         src:`${process.env.BASE_API}static/dataMining/searchAgain.html`
+         src:global.baseHost+`static/dataMining/searchAgain.html`
       }
     },
     methods: {
