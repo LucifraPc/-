@@ -68,7 +68,7 @@
 								<p v-for="item in allowanceCloud">
 									<span class="width168 ellipsis" :title="item.packageServiceName">套餐：{{item.packageServiceName}}</span>
 									<span class="width90 ellipsis">状态：{{allowanceStatus[item.status]}}</span>
-									<span class="width290 ellipsis" >服务时间：{{item.startTime/1000 | moment("YYYY-MM-DD")}}~{{item.endTime/1000 | moment("YYYY-MM-DD")}}<span v-if="item.status!=2">({{changeTimeDifference(item.endTime)}})</span><span v-if="item.status==2">(剩余{{item.serviceDay}})</span></span>
+									<span class="width290 ellipsis" >服务时间：{{item.startTime/1000 | moment("YYYY-MM-DD")}}~{{item.endTime/1000 | moment("YYYY-MM-DD")}}<span v-if="item.status==1">({{changeTimeDifference(item.endTime)}})</span><span v-if="item.status==2">(剩余{{item.serviceDay}})</span><span v-if="item.status==0">(已过期)</span></span>
 								</p>
 							</div>
 						</div>
@@ -79,7 +79,7 @@
 								<p v-for="item in allowanceBim">
 									<span class="width168 ellipsis" :title="item.packageServiceName">套餐：{{item.packageServiceName}}</span>
 									<span class="width90 ellipsis">状态：{{allowanceStatus[item.status]}}</span>
-									<span class="width290 ellipsis">服务时间：{{item.startTime/1000 | moment("YYYY-MM-DD")}}~{{item.endTime/1000 | moment("YYYY-MM-DD")}}<span v-if="item.status!=2">({{changeTimeDifference(item.endTime)}})</span><span v-if="item.status==2">(剩余{{item.serviceDay}})</span></span>
+									<span class="width290 ellipsis" >服务时间：{{item.startTime/1000 | moment("YYYY-MM-DD")}}~{{item.endTime/1000 | moment("YYYY-MM-DD")}}<span v-if="item.status==1">({{changeTimeDifference(item.endTime)}})</span><span v-if="item.status==2">(剩余{{item.serviceDay}})</span><span v-if="item.status==0">(已过期)</span></span>
 								</p>
 							</div>
 						</div>
@@ -800,11 +800,7 @@
 		    	let now = new Date().getTime();
                 endTime = new Date().setTime((endTime/1000+24*60*60-1)*1000);
 		    	let days=moment(endTime).diff(now, 'days');
-		    	if(days<0){
-					days='已过期'
-		    	}else{
-		    		days=('剩余'+days+'天')
-		    	}
+		    	days=('剩余'+(days+1)+'天')
 		    	return days;
 		    }
 	    }
