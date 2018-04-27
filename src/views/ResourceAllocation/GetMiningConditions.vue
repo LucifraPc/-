@@ -62,7 +62,7 @@
     mounted() {
       window.mainFrame.miningId = this.$route.params.id;
       window.miningId = this.$route.params.id;
-      window.basePath = process.env.BASE_API
+      // window.basePath = process.env.BASE_API
       this.setIframeHeight('mainFrame')  
     }
   }

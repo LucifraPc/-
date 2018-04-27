@@ -22,7 +22,7 @@
       }
     },
     mounted() {
-      window.basePath = process.env.BASE_API;
+      // window.basePath = process.env.BASE_API;
       console.log(this.$route,'startmining')
     }
   }

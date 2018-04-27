@@ -141,7 +141,7 @@
 						</div>
 				    	<el-form v-if="$route.name!=='客户公海'" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
 				    		<el-form-item label="订单编号：" prop="name">
-							    <el-input placeholder="请输入内容" v-model="searchNum"  @blur="checkNum" class="input-with-select select-clear" style="width:390px;">
+							    <el-input placeholder="请输入内容" v-model="searchNum"  class="input-with-select select-clear" style="width:390px;">
 							    	<i slot="append" class="el-icon-circle-close" v-show="searchNum.length>0" @click="searchNum='';searchNumBtn(searchNum)"></i>
 								    <el-button slot="append" icon="el-icon-search" @click="searchNumBtn(searchNum)"></el-button>
 								</el-input>
@@ -551,21 +551,14 @@
 		    },
 		    // 根据编号搜索订单
 		    searchNumBtn(searchNum){
-		    	// console.log((/^\+?[0-9][0-9]*$/.test(this.searchNum)))
-		    	if(this.checkNum()){
-		    		if(searchNum!=''){
-			    		let orderMsg=searchNum;
-			    		this.getCustomerOrderSearchNumberMsg(orderMsg);
-			    	}else{
-			    		this.ruleForm={};
-			            this.showDetialOrder=false;
-			    	}	
+		    	console.log(searchNum)
+	    		if(searchNum!=''){
+		    		let orderMsg=searchNum;
+		    		this.getCustomerOrderSearchNumberMsg(orderMsg);
 		    	}else{
-		    		this.$message({
-		                type: 'error',
-		                message: '订单号格式错误！'
-	                });
-		    	}
+		    		this.ruleForm={};
+		            this.showDetialOrder=false;
+		    	}	
 		    	
 		    },
 		    // 绑定订单
@@ -574,21 +567,29 @@
 		    	let oid = this.searchNum;
 
 		    	if(username!='' && oid!=''){
-		    		bindingOrdersFun(username,oid).then((res)=>{
-			            if(res.msg=='success'){
-			            	this.$message({
-				                type: 'success',
-				                message: '绑定成功!'
-			                });
-			                this.getCustomerOrderList();
-			                this.changeListView();
-			            }else{
-			            	this.$message({
-				                type: 'error',
-				                message: res.msg
-			                });
-			            }
-			        })
+		    		if(!(/^\+?[0-9][0-9]*$/.test(oid))){
+			    		this.$message({
+			                type: 'error',
+			                message: '订单号格式错误！'
+		                });
+			    	}else{
+			    		bindingOrdersFun(username,oid).then((res)=>{
+				            if(res.msg=='success'){
+				            	this.$message({
+					                type: 'success',
+					                message: '绑定成功!'
+				                });
+				                this.getCustomerOrderList();
+				                this.changeListView();
+				            }else{
+				            	this.$message({
+					                type: 'error',
+					                message: res.msg
+				                });
+				            }
+				        })
+			    	}
+		    		
 		    	}
 		    	
 		    },
@@ -621,19 +622,27 @@
 		    },
 		    // 获取订单详情
 		    getCustomerOrderSearchNumberMsg(orderMsg){
-		    	getCustomerOrderSearchNumber(orderMsg).then((res)=>{
-		            if(res.msg=='success'){
-		            	if(res.data){
-		            		this.ruleForm=res.data;
-		            		this.showDetialOrder=true;
-		            	}
-		            }else{
-		            	this.$message({
-			                type: 'error',
-			                message: res.msg
-		                });
-		            }
-		        })
+		    	if(!(/^\+?[0-9][0-9]*$/.test(orderMsg))){
+		    		this.$message({
+		                type: 'error',
+		                message: '订单号格式错误！'
+	                });
+		    	}else{
+		    		getCustomerOrderSearchNumber(orderMsg).then((res)=>{
+			            if(res.msg=='success'){
+			            	if(res.data){
+			            		this.ruleForm=res.data;
+			            		this.showDetialOrder=true;
+			            	}
+			            }else{
+			            	this.$message({
+				                type: 'error',
+				                message: res.msg
+			                });
+			            }
+			        })
+		    	}
+		    	
 		    },
 		    // 获取基本情况
 	    	getCustomerDetailFun(){
@@ -789,6 +798,7 @@
 		    // 时间差
 		    changeTimeDifference(endTime){
 		    	let now = new Date().getTime();
+                endTime = new Date().setTime((endTime/1000+24*60*60-1)*1000);
 		    	let days=moment(endTime).diff(now, 'days');
 		    	if(days<0){
 					days='已过期'
