@@ -42,7 +42,7 @@ service.interceptors.response.use(
     const res = response.data
     if(res.code==102){
           num++;
-          console.log(res.msg+'aaaaaaaaaa'+num)
+          // console.log(res.msg+'aaaaaaaaaa'+num)
           router.replace({
               path: '/login'
           });
