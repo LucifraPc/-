@@ -246,7 +246,6 @@ $(document).ready(function () {
 
           //功能使用情况
           if (result[i].ct == 6) {
-            debugger
             var funUse = result[i].dc6;
             var url = basePath + "rest/dataming/functionType";
             funList(url, funUse, k, condition);

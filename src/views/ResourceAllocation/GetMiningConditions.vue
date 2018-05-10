@@ -45,7 +45,7 @@
               var _div =_iframe.document.getElementById('cenditionListWrap');
               setTimeout(() => {
                 iframe.height=getComputedStyle(_div,false)['height'];
-                console.log(getComputedStyle(_div,false)['height']);
+                // console.log(getComputedStyle(_div,false)['height']);
               }, 50);              
             };
             return;

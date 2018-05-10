@@ -12,26 +12,28 @@
   <script type="text/javascript" src="common.js"></script>
   <script type="text/javascript" src="conditionSelect.js"></script>
   <style>
-     select{
-        height:40px;
-        line-height:40px;
-        border: 1px solid #dcdfe6;
-        min-width:70px;
-        margin-right:5px;
-        border-radius:4px;
-     }
-     .funTimes.el-input__inner{
-        padding:0px!important;
-     }
-     .Wdate{
-        width:130px;
-        padding:0px 5px;
-        border: 1px solid #dcdfe6;
-        height:32px;
-        line-height:32px;
-        border-radius:4px;
-        margin-bottom: 5px;
-     }
+    select {
+      height: 40px;
+      line-height: 40px;
+      border: 1px solid #dcdfe6;
+      min-width: 70px;
+      margin-right: 5px;
+      border-radius: 4px;
+    }
+
+    .funTimes.el-input__inner {
+      padding: 0px!important;
+    }
+
+    .Wdate {
+      width: 130px;
+      padding: 0px 5px;
+      border: 1px solid #dcdfe6;
+      height: 32px;
+      line-height: 32px;
+      border-radius: 4px;
+      margin-bottom: 5px;
+    }
   </style>
   <title></title>
   <style>
@@ -103,7 +105,43 @@
 
     </div>
   </div>
-
+    <div class="el-message-box" id="el-message-box" style="z-index:99999;position: absolute;display:none;right:0;left:0;margin:auto;top:0px">
+      <div class="el-message-box__header">
+        <div class="el-message-box__title">
+          <!---->
+          <span>提示</span>
+        </div>
+        <button type="button" aria-label="Close" class="el-message-box__headerbtn makeSureClose">
+          <i class="el-message-box__close el-icon-close"></i>
+        </button>
+      </div>
+      <div class="el-message-box__content">
+        <!---->
+        <div class="el-message-box__message">
+          <p id='el-message-box__message'></p>
+        </div>
+        <div class="el-message-box__input" style="display: none;">
+          <div class="el-input">
+            <!---->
+            <input type="text" autocomplete="off" placeholder="" class="el-input__inner">
+            <!---->
+            <!---->
+            <!---->
+          </div>
+          <div class="el-message-box__errormsg" style="visibility: hidden;"></div>
+        </div>
+      </div>
+      <div class="el-message-box__btns">
+        <!---->
+        <button type="button" class="el-button el-button--default el-button--small el-button--primary makeSureClose" >
+          <!---->
+          <!---->
+          <span >
+            确定
+          </span>
+        </button>
+      </div>
+    </div>
 
 </body>
 

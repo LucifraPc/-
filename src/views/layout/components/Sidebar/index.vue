@@ -1,8 +1,8 @@
 <template>
   <scroll-bar>
     <el-menu mode="vertical" :unique-opene='true'  :default-active="$route.path" 
-      :collapse="isCollapse" background-color="#000" text-color="#fff"
-      active-text-color="#409EFF">
+      :collapse="isCollapse" text-color="#fff"
+     >
       <sidebar-item :routes="routes" :curToAllocateNum='curToAllocateNum'></sidebar-item>
     </el-menu>
   </scroll-bar>
@@ -36,3 +36,11 @@
   }
 
 </script>
+
+
+<style>
+.el-menu{
+  background:none;
+}
+</style>
+

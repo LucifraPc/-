@@ -5,8 +5,14 @@
  */
 
 var basePath = window.baseHost;
+// console.log(basePath)
 
 $(document).ready(function () {
+
+  
+  $(".makeSureClose").click(function(){
+    $("#el-message-box").css("display","none")
+  })
   $(".fdd").hide();
   var condition = {
     "product": "登录产品",
@@ -213,15 +219,26 @@ $(document).ready(function () {
       }
     }
     if (taskName == "") {
-      alert("请填写任务名称");
+      
+      $('#el-message-box').css("display","block")
+      $('#el-message-box__message').text("请填写任务名称")
+      // alert("请填写任务名称");
     } else if (w == 0) {
-      alert("条件不能为空");
+      $('#el-message-box').css("display","block")
+      $('#el-message-box__message').text("条件不能为空")
+      // alert("条件不能为空");
     } else if (btc > 1) {
-      alert("个人套餐购买情况条件只能选择一个");
+      $('#el-message-box').css("display","block")
+      $('#el-message-box__message').text("个人套餐购买情况条件只能选择一个")
+      // alert("个人套餐购买情况条件只能选择一个");
     } else if (err != "") {
-      alert(err);
+      $('#el-message-box').css("display","block")
+      $('#el-message-box__message').text(err)
+      // alert(err);
     } else if (lt == "" || isNaN(lt) || lt <= 0) {
-      alert("请正确填写时间范围限制");
+      $('#el-message-box').css("display","block")
+      $('#el-message-box__message').text("请正确填写时间范围限制")
+      // alert("请正确填写时间范围限制");
     } else {
 
       $("#start").attr({
@@ -695,6 +712,7 @@ var funChange = function funChange(cthis, k) {
     url: basePath + "rest/dataming/functionType",
     type: 'get',
     success: function (res) {
+      
       // debugger
       var result = res.data
       var addcont = "<div style='width:710px;float:right'>";
@@ -707,6 +725,9 @@ var funChange = function funChange(cthis, k) {
         "<input type='text' maxlength='9' class='funTimes el-input__inner' style='width:30px' />次</div></div></div>";
       addcont += "<div id='left" + k + "' style='float:left;width:236px;line-height:40px;'></div><div id='center" + k + "' style='float:left;width:236px;line-height:40px;'></div><div id='right" + k + "' style='float:left;width:236px;line-height:40px;'></div>"
       addcont += "</div>";
+      
+      
+      $(cthis).next().html("")
       $(cthis).next().html(addcont);
       var results = new Array();
       var a = 0;
@@ -719,6 +740,9 @@ var funChange = function funChange(cthis, k) {
       results.sort(function (x, y) {
         return (x.functionName).localeCompare(y.functionName);
       });
+      $("#left" + k).html("");
+      $("#center" + k).html("");
+      $("#right" + k).html("");
       for (var i = 0; i < results.length; i++) {
         var funName = results[i].functionName + "(" + results[i].productAlias + ")";
         var funNames = "";
@@ -732,10 +756,13 @@ var funChange = function funChange(cthis, k) {
           "<input type='text' maxlength='9' class='funTimes el-input__inner' style='width:30px' />次</div></div>";
         $.cookie("ckb" + (i), null)
         if (results[i].productId == 3) {
+          // $("#left" + k).html("");
           $("#left" + k).append(addconts);
         } else if (results[i].productId == 2) {
+          // $("#center" + k).html("");
           $("#center" + k).append(addconts);
         } else if (results[i].productId == 5) {
+          // $("#right" + k).html("");
           $("#right" + k).append(addconts);
         } else {
           $("#left" + k).append(addconts);

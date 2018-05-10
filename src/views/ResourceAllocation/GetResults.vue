@@ -321,7 +321,7 @@
           pageSize: 5
         }
         api.getUserFunctionUsingLog(param).then(res => {
-          console.log(JSON.parse(res)[0].result.data)
+          // console.log(JSON.parse(res)[0].result.data)
           this.cloudCountData = JSON.parse(res)[0].result.data
           this.loading_cloudCountData = false
         })

@@ -23,7 +23,7 @@
     },
     mounted() {
       // window.basePath = process.env.BASE_API;
-      console.log(this.$route,'startmining')
+      // console.log(this.$route,'startmining')
     }
   }
 

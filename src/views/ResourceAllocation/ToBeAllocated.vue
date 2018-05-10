@@ -18,7 +18,7 @@
         <el-tabs v-model="activeName" @tab-click="handleClick">
           <el-tab-pane label="按人员分配" name="first">
             <div style="text-align:right">
-              <el-button type="text" @click="handleAllocateData(1)">提交分配数据</el-button>
+              <el-button type="text" @click="handleAllocateData(1)" :disabled="debouncehHandleAllocateData">提交分配数据</el-button>
             </div>
             <el-table :data="allocationMemberData" style="width: 100%" @sort-change="tableSort">
               <el-table-column prop="username" label="员工姓名">
@@ -35,11 +35,11 @@
                 </template>
               </el-table-column>
             </el-table>
-            <div class="block">
+            <!-- <div class="block">
               <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 25, 50]"
                 :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
               </el-pagination>
-            </div>
+            </div> -->
           </el-tab-pane>
           <el-tab-pane label="按资源分配" name="second">
             <div style="text-align:right;padding:15px 0">
@@ -47,7 +47,7 @@
                 <el-option v-for="item in members" :key="item.userId" :label="item.username" :value="item.userId">
                 </el-option>
               </el-select>
-              <el-button type="text" @click="handleAllocateData(2)">提交分配数据</el-button>
+              <el-button type="text" @click="handleAllocateData(2)" :disabled="debouncehHandleAllocateData">提交分配数据</el-button>
             </div>
             <el-table :data="allocationResourceData" style="width: 100%">
               <el-table-column prop="passport" label="通行证账号">
@@ -85,276 +85,303 @@
   </div>
 </template>
 <script>
-  import * as api from "@/api/ppc";
-  import {
-    getCustomerClassification,getSystemSettingsDetail
-  } from '@/api/table.js'
-  export default {
-    data() {
-      return {
-        searchValue: '',
-        form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
+import * as api from "@/api/ppc";
+import {
+  getCustomerClassification,
+  getSystemSettingsDetail
+} from "@/api/table.js";
+export default {
+  data() {
+    return {
+      searchValue: "",
+      form: {
+        name: "",
+        region: "",
+        date1: "",
+        date2: "",
+        delivery: false,
+        type: [],
+        resource: "",
+        desc: ""
+      },
+      direction: 0,
+      activeName: "first",
+      CurToAllocateNum: "",
+      currentPage: 1,
+      currentPage_: 1,
+      pageSize: 10,
+      pageSize_: 10,
+      total: 10,
+      total_: 10,
+      members: [],
+      members_: [],
+      allocationMemberData: [],
+      allocationResourceData: [],
+      options: [
+        {
+          value: "选项1",
+          label: "黄金糕"
         },
-        direction: 0,
-        activeName: 'first',
-        CurToAllocateNum: '',
-        currentPage: 1,
-        currentPage_: 1,
-        pageSize: 10,
-        pageSize_: 10,
-        total: 10,
-        total_: 10,
-        members: [
-
-        ],
-        members_: [
-
-        ],
-        allocationMemberData: [],
-        allocationResourceData: [],
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        userId: 0,
-        isResourcesByPeople: true,
-        hasNewCustormClass: true, //是否勾选新客户分类
-      }
-    },
-    computed: {
-      //是否使用批量分配
-      isUseAllocate: function () {
-        return this.userId != 0
-      }
-    },
-    methods: {
-      showTimeNull(time) {
-        if (time < 946656000000) {
-          time = '0'
+        {
+          value: "选项2",
+          label: "双皮奶"
+        },
+        {
+          value: "选项3",
+          label: "蚵仔煎"
+        },
+        {
+          value: "选项4",
+          label: "龙须面"
+        },
+        {
+          value: "选项5",
+          label: "北京烤鸭"
         }
-        return time
-      },
-      tableSort(column) {
-        console.log(column)
-        column.order == "descending" ? (this.direction = 1) : (this.direction = 0);
-        this.property = column.prop ? column.prop : 'allocatedToday';
-        getAllocatedByPeopleList
-
-      },
-      handleClick(tab, event) {
-        this.searchValue = '';
-        this.isResourcesByPeople = tab.label == "按人员分配";
-        this.getAllocatedByResourceList()
-      },
-      handleSizeChange(val) {
-        this.pageSize = val
-        this.getResourcesByPeopleList()
-      },
-      handleCurrentChange(val) {
-        this.currentPage = val
-        this.getResourcesByPeopleList()
-      },
-      handleSizeChange_(val) {
-        this.pageSize_ = val
-        this.getAllocatedByResourceList()
-      },
-      handleCurrentChange_(val) {
-        this.currentPage_ = val
-        this.getAllocatedByResourceList()
-      },
-      handleBlur(event, username) {
-        let reg = /^\+?[1-9]\d*$/
-        if (!reg.test(event.target.value) && event.target.value) {
-          this.$message.error('请输入正确的数字！');
-        }
-
-        if (event.target.value&&this.hasNewCustormClass) {
-          this.getRemainConut(username, event.target.value)
-        }
-      },
-      getSettingsDetail(key){
-          getSystemSettingsDetail(key).then((res)=>{
-              if(res.msg=='success'){
-               /* 1表示系统设置的新客户有没有勾选 */
-               res.data.calcClasses.indexOf(1)==-1?this.hasNewCustormClass=false:this.hasNewCustormClass=true                
-              }
-          })
-      },
-      getMembers() {
-        api.getMembers().then(res => {
-          this.members = res.data;
-          this.members_ = this.members.slice(); //copy一份
-          this.members.unshift({
-            userId: 0,
-            username: '请选择全部分给谁'
-          })
-          console.log(this.members, 'members')
-        })
-      },
-      getCurToAllocateNum() {
-        api.getCurToAllocateNum().then(res => {
-          this.CurToAllocateNum = res.data;
-          this.$store.dispatch('setCurToAllocateNum', this.CurToAllocateNum)
-        })
-      },
-      /*查询指定电销人员剩余可分配的人员数量*/
-      getRemainConut(username, value) {
-        api.getRemainConut(username).then(res => {
-          if (res.data < 0) {
-            this.$message.error(`当前时刻剩余待分配客户数为0，小于申请的数量，无法分配`);
-          }
-          if (value > res.data) {
-            this.$message.error(`当前时刻剩余待分配客户数为 ${res.data>0?res.data:0}，大于申请的数量，无法分配`);
-          }
-        })
-      },
-      /*获取按人员分配列表*/
-      getAllocatedByPeopleList() {
-        let param = {
-          "orders": [{
-            "direction": this.direction,
-            "ignoreCase": false,
-            "property": "allocatedToday"
-          }],
-          "page": this.currentPage,
-          "size": this.pageSize
-        }
-        api.getAllocatedByPeopleList(param).then(res => {
-          this.allocationMemberData = res.data.content;
-          this.allocationMemberData.forEach(item => {
-            this.$set(item, 'allocatedThisTime', null)
-          })
-          console.log(this.allocationMemberData)
-          this.total = res.data.totalElements
-        })
-      },
-      /*获取按资源分配列表*/
-      getAllocatedByResourceList() {
-        let param = {
-          "orders": [{
-            "direction": 0,
-            "ignoreCase": false,
-            "property": "miningDate"
-          }],
-          "query": this.searchValue,
-          "page": this.currentPage_,
-          "size": this.pageSize_
-        }
-        api.getAllocatedByResourceList(param).then(res => {
-          console.log(res, 'sssssssssssssssss')
-          this.allocationResourceData = res.data.content;
-          this.allocationResourceData.forEach(item => {
-            this.$set(item, 'username', null);
-          })
-          this.total_ = res.data.totalElements
-        })
-      },
-      /*提交按资源分配*/
-      handleAllocateData(type) {
-        //按人员分配
-        if (type == 1) {
-          let params = []
-          this.allocationMemberData.forEach(item => {
-            if (item.allocatedThisTime) {
-              params.push({
-                "allocCount": item.allocatedThisTime,
-                "username": item.username
-              })
-            }
-          })
-          api.handleAllocateDateByPeople(params).then(res => {
-            if (res.code == '1') {
-              this.$message({
-                message: res.msg,
-                type: 'success'
-              });
-              this.getAllocatedByPeopleList()
-            } else {
-              this.$message.error(res.msg)
-            }
-          })
-        } else {
-          //按资源分配
-          let params = []
-          if (this.isUseAllocate) {
-            let useAllocateName = ''
-            this.members.forEach(item => {
-              if (item.userId == this.userId) {
-                useAllocateName = item.username
-              }
-            })
-            this.allocationResourceData.forEach(item => {
-              params.push({
-                "customerPassport": item.passport,
-                "employeeUsername": useAllocateName
-              })
-            })
-          } else {
-            this.allocationResourceData.forEach(item => {
-              if (item.username) {
-                params.push({
-                  "customerPassport": item.passport,
-                  "employeeUsername": item.username
-                })
-              }
-
-            })
-          }
-          if (params.length == 0) {
-            return
-          }
-          console.log(params)
-
-
-          api.handleAllocateDateByResource(params).then(res => {
-            if (res.code == '1') {
-              this.$message({
-                message: res.msg,
-                type: 'success'
-              });
-              this.getAllocatedByResourceList()
-            } else {
-              this.$message.error(res.msg)
-            }
-          })
-        }
-      }
-    },
-    mounted() {
-      this.getSettingsDetail('res_alloc_count_max');
-      this.getAllocatedByPeopleList()
-      this.getCurToAllocateNum()
-      this.getMembers();
-      
+      ],
+      userId: 0,
+      isResourcesByPeople: true,
+      hasNewCustormClass: true, //是否勾选新客户分类
+      debouncehHandleAllocateData:false,
+    };
+  },
+  computed: {
+    //是否使用批量分配
+    isUseAllocate: function() {
+      return this.userId != 0;
     }
-  }
+  },
+  methods: {
+    debounce(fn, time) {
+      // 防抖动 控制空闲时间 用户输入频繁
+      let stattime = 0;
+      return function(...args) {
+        let curTime = new Date();
+        if (curTime - stattime >= time) {
+          fn.apply(this, args);
+          stattime = curTime;
+        }
+      };
+    },
+    showTimeNull(time) {
+      if (time < 946656000000) {
+        time = "0";
+      }
+      return time;
+    },
+    tableSort(column) {
+      column.order == "descending"
+        ? (this.direction = 1)
+        : (this.direction = 0);
+      this.property = column.prop ? column.prop : "allocatedToday";
+      getAllocatedByPeopleList;
+    },
+    handleClick(tab, event) {
+      this.searchValue = "";
+      this.isResourcesByPeople = tab.label == "按人员分配";
+      this.debouncehHandleAllocateData=false
+      this.getAllocatedByResourceList();
+    },
+    handleSizeChange(val) {
+      this.pageSize = val;
+      this.getResourcesByPeopleList();
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val;
+      this.getResourcesByPeopleList();
+    },
+    handleSizeChange_(val) {
+      this.pageSize_ = val;
+      this.getAllocatedByResourceList();
+    },
+    handleCurrentChange_(val) {
+      this.currentPage_ = val;
+      this.getAllocatedByResourceList();
+    },
+    handleBlur(event, username) {
+      let reg = /^\+?[1-9]\d*$/;
+      if (!reg.test(event.target.value) && event.target.value) {
+        this.$message.error("请输入正确的数字！");
+      }
 
+      if (event.target.value && this.hasNewCustormClass) {
+        this.getRemainConut(username, event.target.value);
+      }
+    },
+    getSettingsDetail(key) {
+      getSystemSettingsDetail(key).then(res => {
+        if (res.msg == "success") {
+          /* 1表示系统设置的新客户有没有勾选 */
+          res.data.calcClasses.indexOf(1) == -1
+            ? (this.hasNewCustormClass = false)
+            : (this.hasNewCustormClass = true);
+        }
+      });
+    },
+    getMembers() {
+      api.getMembers().then(res => {
+        this.members = res.data;
+        this.members_ = this.members.slice(); //copy一份
+        this.members.unshift({
+          userId: 0,
+          username: "请选择全部分给谁"
+        });
+        // console.log(this.members, "members");
+      });
+    },
+    getCurToAllocateNum() {
+      api.getCurToAllocateNum().then(res => {
+        this.CurToAllocateNum = res.data;
+        this.$store.dispatch("setCurToAllocateNum", this.CurToAllocateNum);
+      });
+    },
+    /*查询指定电销人员剩余可分配的人员数量*/
+    getRemainConut(username, value) {
+      api.getRemainConut(username).then(res => {
+        if (res.data < 0) {
+          this.$message.error(
+            `当前时刻剩余待分配客户数为0，小于申请的数量，无法分配`
+          );
+        }
+        if (value > res.data) {
+          this.$message.error(
+            `当前时刻剩余待分配客户数为 ${
+              res.data > 0 ? res.data : 0
+            }，大于申请的数量，无法分配`
+          );
+        }
+      });
+    },
+    /*获取按人员分配列表*/
+    getAllocatedByPeopleList() {
+      let param = {
+        orders: [
+          {
+            direction: this.direction,
+            ignoreCase: false,
+            property: "allocatedToday"
+          }
+        ],
+        page: this.currentPage,
+        size: 1000
+      };
+      api.getAllocatedByPeopleList(param).then(res => {
+        this.allocationMemberData = res.data.content;
+        this.allocationMemberData.forEach(item => {
+          this.$set(item, "allocatedThisTime", null);
+        });
+        this.total = res.data.totalElements;
+      });
+    },
+    /*获取按资源分配列表*/
+    getAllocatedByResourceList() {
+      let param = {
+        orders: [
+          {
+            direction: 0,
+            ignoreCase: false,
+            property: "miningDate"
+          }
+        ],
+        query: this.searchValue,
+        page: this.currentPage_,
+        size: this.pageSize_
+      };
+      api.getAllocatedByResourceList(param).then(res => {
+        this.allocationResourceData = res.data.content;
+        this.allocationResourceData.forEach(item => {
+          this.$set(item, "username", null);
+        });
+        this.total_ = res.data.totalElements;
+      });
+    },
+    /*提交按资源分配*/
+    handleAllocateData(type) {
+      this.debouncehHandleAllocateData=true;
+      //按人员分配
+      if (type == 1) {
+        let params = [];
+        this.allocationMemberData.forEach(item => {
+          if (item.allocatedThisTime) {
+            params.push({
+              allocCount: item.allocatedThisTime,
+              username: item.username
+            });
+          }
+        });
+        api.handleAllocateDateByPeople(params).then(res => {
+           this.debouncehHandleAllocateData=false;
+          
+          if (res.code == "1") {
+            this.$message({
+              message: res.msg,
+              type: "success"
+            });
+            
+            this.getAllocatedByPeopleList();
+          } else {
+            this.$message.error(res.msg);
+           
+          }
+        });
+      } else {
+        //按资源分配
+        let params = [];
+        if (this.isUseAllocate) {
+          let useAllocateName = "";
+          this.members.forEach(item => {
+            if (item.userId == this.userId) {
+              useAllocateName = item.username;
+            }
+          });
+          this.allocationResourceData.forEach(item => {
+            params.push({
+              customerPassport: item.passport,
+              employeeUsername: useAllocateName
+            });
+          });
+        } else {
+          this.allocationResourceData.forEach(item => {
+            if (item.username) {
+              params.push({
+                customerPassport: item.passport,
+                employeeUsername: item.username
+              });
+            }
+          });
+        }
+        // if (params.length == 0) {
+        //   return;
+        // }
+        api.handleAllocateDateByResource(params).then(res => {
+          this.debouncehHandleAllocateData=false;
+          if (res.code == "1") {
+            this.$message({
+              message: res.msg,
+              type: "success"
+            });
+            this.getAllocatedByResourceList();
+          } else {
+            this.$message.error(res.msg);
+            
+          }
+        });
+      }
+    }
+  },
+  mounted() {
+    this.getSettingsDetail("res_alloc_count_max");
+    this.getAllocatedByPeopleList();
+    this.getCurToAllocateNum();
+    this.getMembers();
+    this.handleAllocateData = this.debounce(this.handleAllocateData, 500)
+  }
+};
 </script>
 
 <style scoped>
-  .block {
-    margin-top: 20px;
-    text-align: center
-  }
-
+.block {
+  margin-top: 20px;
+  text-align: center;
+}
 </style>

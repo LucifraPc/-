@@ -196,10 +196,10 @@
           status: this.status
         };
         api.getDataMiningInfo(taskParam).then(res => {
-          console.log(res)
+          // console.log(res)
           this.tableData = res.data.content;
           this.total = res.data.totalElements
-          console.log(this.tableData);
+          // console.log(this.tableData);
         });
       },
       getMiningConditions(row) {

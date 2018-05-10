@@ -181,7 +181,7 @@ export default {
     },
     // 单个查看组件传值
     showDetialBoxConfalse(value){
-      console.log(value)
+      // console.log(value)
       this.showDetialBox=value;
     },
     // 批量认领操作

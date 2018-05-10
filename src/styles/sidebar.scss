@@ -27,7 +27,7 @@
       width: 100%;
     }
     .el-menu-item.is-active.submenu-title-noDropdown {
-      background: #5f5f5f !important;
+      background: #3c1616 !important;
     }
 
   }
@@ -94,15 +94,23 @@
   .nest-menu .el-submenu>.el-submenu__title,
   .el-submenu .el-menu-item {
     min-width: 180px !important;
-    background-color: $subMenuBg !important;
+    background:none;
     &:hover {
-      background-color: $menuHover !important;
+      background: #3c1616 !important;
     }
     &.is-active {
-      background: #5f5f5f !important;
+      background: #3c1616 !important;
     }
   }
   .el-menu--collapse .el-menu .el-submenu {
     min-width: 180px !important;
   }
+}
+
+#app .el-submenu__title:hover {
+  background: #3c1616 !important;
+}
+
+#app .sidebar-container .el-menu-item:hover{
+  background: #3c1616 !important;
 }

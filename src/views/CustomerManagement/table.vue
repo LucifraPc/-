@@ -70,7 +70,7 @@
                     end-placeholder="结束日期">
                   </el-date-picker>
               </div>
-          </el-col>
+          </el-col>   
       
 
           <!-- 表格数据 -->
@@ -489,7 +489,7 @@ export default {
       for(var i  in arr){
          obj[arr[i]] = true;
       }
-      console.log(obj);
+    //   console.log(obj);
     },
     // 列表选择操作
     handleSelectionChange(val) {
@@ -518,8 +518,7 @@ export default {
       this.$confirm('确定将客户转入公海?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning',
-        center: true
+        type: 'warning'
       }).then(() => {
         deleteCustomer(idArr).then((res)=>{
             if(res.msg=='success'){
@@ -547,7 +546,7 @@ export default {
     },
     // 单个跟进组件传值
     showDetialBoxConfalse(value){
-      console.log(value)
+    //   console.log(value)
       this.showDetialBox=value;
     },
     changeListView(value){
@@ -687,21 +686,21 @@ export default {
     // 改变时间
     // 改变注册时间
     changeRegist(val){
-      console.log(val)
+    //   console.log(val)
       val?this.customerParam.startRegisterDate=val[0]:this.customerParam.startRegisterDate='';//起始注册时间
       val?this.customerParam.endRegisterDate=val[1]:this.customerParam.endRegisterDate='';//截止注册时间
       this.getCustomerList();
     },
     // 改变跟进时间
     changeFollow(val){
-      console.log(val)
+    //   console.log(val)
       val?this.customerParam.startFollowupDate=val[0]:this.customerParam.startFollowupDate='';//起始跟进时间
       val?this.customerParam.endFollowupDate=val[1]:this.customerParam.endFollowupDate='';//截止跟进时间 
       this.getCustomerList();
     },
     // 改变成交时间
     changeClinchAdeal(val){
-      console.log(val)
+    //   console.log(val)
       val?this.customerParam.startDealDate=val[0]:this.customerParam.startDealDate='';//起始成交时间 
       val?this.customerParam.endDealDate=val[1]:this.customerParam.endDealDate='';//截止成交时间
       this.getCustomerList();
